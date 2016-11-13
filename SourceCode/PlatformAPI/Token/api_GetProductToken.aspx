@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="api_GetProductToken.aspx.cs" Inherits="Token_api_GetProductToken" %>
