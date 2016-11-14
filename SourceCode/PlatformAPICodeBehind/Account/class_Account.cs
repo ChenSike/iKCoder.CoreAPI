@@ -13,16 +13,22 @@ namespace PlatformAPICodeBehind.Account
     {
 
         SqlConnection _activeSqlConnection;
+        Dictionary<string, class_Data_SqlSPEntry> _activeSPList;
         
-        public class_Account(SqlConnection activeSqlConnection)
+        public class_Account(SqlConnection activeSqlConnection,Dictionary<string,class_Data_SqlSPEntry> activeSPList)
         {
-            _activeSqlConnection=activeSqlConnection;
+            _activeSqlConnection = activeSqlConnection;
+            _activeSPList = activeSPList;
         }
 
         public bool Action_CreateNewAccount(string userName , string userPassword)
         {
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(userPassword))
                 return false;
+            else
+            {
+                return true;
+            }
         }
     }
 }
