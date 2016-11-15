@@ -57,6 +57,12 @@ public class class_CommonLogic
         set;
         get;
     }
+
+    public XmlNodeList productsItemList
+    {
+        set;
+        get;
+    }
     
 
     public bool InitServices(string rootPath)
@@ -68,7 +74,8 @@ public class class_CommonLogic
         this.dbServer = Object_BaseConfig.GetAttrValue(platformDBConfig, "dbserver", false, Const_DESKey);
         this.dbuid = Object_BaseConfig.GetAttrValue(platformDBConfig, "uidname", false, Const_DESKey);
         this.dbpwd = Object_BaseConfig.GetAttrValue(platformDBConfig, "password", false, Const_DESKey);
-        this.dbdata = Object_BaseConfig.GetAttrValue(platformDBConfig, "db", false, Const_DESKey);       
+        this.dbdata = Object_BaseConfig.GetAttrValue(platformDBConfig, "db", false, Const_DESKey);
+        this.productsItemList = Object_BaseConfig.GetItemNodes("regproduct");
         return true;
     }
 
