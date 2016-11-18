@@ -11,7 +11,7 @@ namespace PlatformAPICodeBehind.Token
 {
     public class class_ProductToken
     {        
-        public string RegistryToken(System.Web.SessionState.HttpSessionState refSessionPool, XmlDocument requestDoc ,XmlNodeList benchmarkTokensList)
+        public string RegistryToken(System.Web.SessionState.HttpSessionState refSessionPool, XmlDocument requestDoc ,XmlNodeList benchmarkTokensList,class_Base_Config refObjectConfig)
         {
             class_Token_Controller _objectTokenController = new class_Token_Controller(refSessionPool);
             if (refSessionPool == null || requestDoc == null || benchmarkTokensList == null || benchmarkTokensList.Count <= 0 )
@@ -19,19 +19,16 @@ namespace PlatformAPICodeBehind.Token
             class_TokenItem tokenFromClient = new class_TokenItem();
             string productNameFromClient = class_XmlHelper.GetNodeValue(requestDoc, "/root/name");
             string productCodeFromClient = class_XmlHelper.GetNodeValue(requestDoc, "/root/code");
-            string productKeyFromClient = class_XmlHelper.GetNodeValue(requestDoc, "/root/key");
             tokenFromClient.productName = productNameFromClient;
             tokenFromClient.productCode = productCodeFromClient;
-            tokenFromClient.productKey = productKeyFromClient;
             foreach (XmlNode benchmarkTokenNode in benchmarkTokensList)
             {
-                string productName = class_XmlHelper.GetAttrValue(benchmarkTokenNode, "name");
-                string productCode = class_XmlHelper.GetAttrValue(benchmarkTokenNode, "code");
-                string productKey = class_XmlHelper.GetAttrValue(benchmarkTokenNode, "key");
+                string productName = refObjectConfig.GetAttrValue(benchmarkTokenNode, "name");
+                string productCode = refObjectConfig.GetAttrValue(benchmarkTokenNode, "code");
                 string productExpired = class_XmlHelper.GetAttrValue(benchmarkTokenNode, "expired");
                 int intExpiredValue = 0;
                 int.TryParse(productExpired, out intExpiredValue);
-                _objectTokenController.AddBenchmarkToken(productName, productCode, productKey, intExpiredValue);
+                _objectTokenController.AddBenchmarkToken(productName, productCode, intExpiredValue);
             }
             return _objectTokenController.GetToken(tokenFromClient);
         }

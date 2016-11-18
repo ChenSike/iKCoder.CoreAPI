@@ -5,10 +5,10 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class Account_api_OperationUserAccount : System.Web.UI.Page
+public partial class Account_api_OperationUserAccount : class_WebClass_WA
 {
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void ExtenedFunction()
     {
 
-    }
+    }    
 }
