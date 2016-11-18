@@ -58,7 +58,7 @@ public class class_CommonLogic
         get;
     }
 
-    public XmlNodeList productsItemList
+    public XmlNodeList productBenchmarkNodes
     {
         set;
         get;
@@ -75,9 +75,9 @@ public class class_CommonLogic
         this.dbuid = Object_BaseConfig.GetAttrValue(platformDBConfig, "uidname", false, Const_DESKey);
         this.dbpwd = Object_BaseConfig.GetAttrValue(platformDBConfig, "password", false, Const_DESKey);
         this.dbdata = Object_BaseConfig.GetAttrValue(platformDBConfig, "db", false, Const_DESKey);
-        this.productsItemList = Object_BaseConfig.GetItemNodes("regproduct");
+        this.productBenchmarkNodes = Object_BaseConfig.GetItemNodes("regproduct");
         return true;
-    }
+    }    
 
     public bool ConnectToDatabase()
     {
