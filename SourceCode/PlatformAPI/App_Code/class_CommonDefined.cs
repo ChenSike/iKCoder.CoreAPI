@@ -9,8 +9,13 @@ using System.Web;
 public class class_CommonDefined
 {
 
-    public const string ExecutedUserOperation = "ExecutedUserOperation";
-    public const string BadToken = "BadToken";
-    public const string Token = "Token";   
+    public const string _Faild_Execute_Api = "Faild to execute api : ";
+    public const string _Executed_Api = "Executed api : ";
+
+    public enum enumExecutedCode
+    {
+        executed=1001,
+        failedExecuted=4001
+    }
        
 }
