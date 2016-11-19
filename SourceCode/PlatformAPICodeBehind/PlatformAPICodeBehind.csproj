@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\..\BinaryPackage\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="iKCoder_Platform_SDK_Kit">
       <HintPath>..\..\..\BinaryPackage\iKCoder_Platform_SDK_Kit.dll</HintPath>
     </Reference>

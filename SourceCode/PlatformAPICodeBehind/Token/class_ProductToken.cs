@@ -23,9 +23,11 @@ namespace PlatformAPICodeBehind.Token
             tokenFromClient.productCode = productCodeFromClient;
             foreach (XmlNode benchmarkTokenNode in benchmarkTokensList)
             {
+                refObjectConfig.SwitchToDESModeOFF();
                 string productName = refObjectConfig.GetAttrValue(benchmarkTokenNode, "name");
-                string productCode = refObjectConfig.GetAttrValue(benchmarkTokenNode, "code");
                 string productExpired = class_XmlHelper.GetAttrValue(benchmarkTokenNode, "expired");
+                refObjectConfig.SwitchToDESModeON();                
+                string productCode = refObjectConfig.GetAttrValue(benchmarkTokenNode, "code");                
                 int intExpiredValue = 0;
                 int.TryParse(productExpired, out intExpiredValue);
                 _objectTokenController.AddBenchmarkToken(productName, productCode, intExpiredValue);
