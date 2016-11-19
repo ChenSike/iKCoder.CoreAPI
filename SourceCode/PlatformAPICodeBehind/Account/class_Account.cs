@@ -21,6 +21,19 @@ namespace PlatformAPICodeBehind.Account
             _activeSPList = activeSPList;
         }
 
+        public void Action_DoOperation(string operation,string userName,string userPassword)
+        {
+            switch(operation)
+            {
+                case "insert":
+                case "Insert":
+                case "new":
+                case "New":
+                    Action_CreateNewAccount(userName, userPassword);
+                    break;
+            }
+        }
+
         public bool Action_CreateNewAccount(string userName , string userPassword)
         {
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(userPassword))

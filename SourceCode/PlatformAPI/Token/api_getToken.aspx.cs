@@ -14,9 +14,9 @@ public partial class Token_api_getToken : class_WebBase_NWA
         object_CommonLogic.Object_BaseConfig.SwitchToDESModeON(class_CommonLogic.Const_DESKey);
         string result = _objectLogicForToken.RegistryToken(Session, REQUESTDOCUMENT, object_CommonLogic.productBenchmarkNodes,object_CommonLogic.Object_BaseConfig);
         if (result == "")
-            AddErrMessageToResponseDOC("BadToken", "Your token is invalidated", "");
+            AddErrMessageToResponseDOC(class_CommonDefined.BadToken, "Your token is invalidated", "");
         else
-            AddResponseMessageToResponseDOC("Token", result, result, "");
+            AddResponseMessageToResponseDOC(class_CommonDefined.Token, result, result, "");
                     
     }
 }

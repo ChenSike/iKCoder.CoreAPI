@@ -15,9 +15,12 @@ public class class_WebClass_WA:class_Base_WebBaseclass
 
     protected override void DoAction()
     {
+        ISRESPONSEDOC = true;
         object_CommonLogic.InitServices(APPFOLDERPATH);
         if (object_TokenLogic.CheckRegistiedToken(Session, REQUESTDOCUMENT))        
-            ExtenedFunction();        
+            ExtenedFunction();   
+        else
+            AddErrMessageToResponseDOC("BadToken", "Your token is invalidated", "");
     }
 
     protected virtual void ExtenedFunction()
