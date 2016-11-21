@@ -77,7 +77,22 @@ public class class_CommonLogic
         get;
     }
 
-    
+    public class_Data_SqlSPEntry GetActiveSP(string dbServer, string SPName)
+    {
+        if (storeProceduresList.ContainsKey(dbServer))
+        {
+            if (storeProceduresList.ContainsKey(SPName))
+                return storeProceduresList[dbServer][SPName];
+            else
+                return null;
+        }
+        else
+        {
+            return null;
+        }
+
+    }
+        
 
     public bool InitServices(string rootPath)
     {
@@ -85,10 +100,11 @@ public class class_CommonLogic
         if(!Object_BaseConfig.DoOpen(rootPath + "\\" + "normaldata.xml"))
             return false;
         XmlNode platformDBConfig = Object_BaseConfig.GetSessionNode("platformDBConfig");
-        this.dbServer = Object_BaseConfig.GetAttrValue(platformDBConfig, "dbserver", false, Const_DESKey);
-        this.dbuid = Object_BaseConfig.GetAttrValue(platformDBConfig, "uidname", false, Const_DESKey);
-        this.dbpwd = Object_BaseConfig.GetAttrValue(platformDBConfig, "password", false, Const_DESKey);
-        this.dbdata = Object_BaseConfig.GetAttrValue(platformDBConfig, "db", false, Const_DESKey);
+        Object_BaseConfig.SwitchToDESModeON(Const_DESKey);
+        this.dbServer = Object_BaseConfig.GetAttrValue(platformDBConfig, "dbserver");
+        this.dbuid = Object_BaseConfig.GetAttrValue(platformDBConfig, "uidname");
+        this.dbpwd = Object_BaseConfig.GetAttrValue(platformDBConfig, "password");
+        this.dbdata = Object_BaseConfig.GetAttrValue(platformDBConfig, "db");
         this.productBenchmarkNodes = Object_BaseConfig.GetItemNodes("regproduct");
         return true;
     }    

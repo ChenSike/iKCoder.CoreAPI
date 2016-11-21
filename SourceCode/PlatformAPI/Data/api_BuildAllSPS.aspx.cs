@@ -17,17 +17,17 @@ public partial class Data_api_BuildAllSPS : class_WebBase_NWA
             {
                 class_Data_SqlHelper objectSqlHelper = new class_Data_SqlHelper();
                 if (objectSqlHelper.ActionAutoCreateSPS(object_CommonLogic.Object_SqlConnectionHelper.Get_ActiveConnection(class_CommonLogic.Const_PlatformDBSymbol)))
-                    AddResponseMessageToResponseDOC("response_from_api", "execute_buildALLSPS", "complete executing api.", "");
+                    AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + "execute_buildALLSPS", class_CommonDefined.enumExecutedCode.executed.ToString(), "complete executing api.", "");
                 else
-                    AddErrMessageToResponseDOC("faild to execut api ： execute_buildALLSPS", "Please check the api : Data_api_BuildAllSPS", "");
+                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "api_buildALLSPS", "failed to execute task : build all SPS.", "");
                 object_CommonLogic.CloseDBConnection();
             }
             else
             {
-                AddErrMessageToResponseDOC("faild to execut api ： execute_buildALLSPS", "Can not connect to Data Center.", "");
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "api_buildALLSPS", "Can not connect to Data Center.", "");
             }
         }
         else
-            AddErrMessageToResponseDOC("Invalidate operation from client.", "Invalidate operation", "");
+            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api+ "Invalidate operation from client.", "Invalidate operation", "");
     }
 }

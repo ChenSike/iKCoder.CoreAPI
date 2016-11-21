@@ -8,7 +8,6 @@ using System.Web;
 /// </summary>
 public class class_CommonDefined
 {
-
     public const string _Faild_Execute_Api = "Faild to execute api : ";
     public const string _Executed_Api = "Executed api : ";
 

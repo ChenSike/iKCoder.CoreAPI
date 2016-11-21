@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="api_EncodeText.aspx.cs" Inherits="Data_api_EncodeText" %>
