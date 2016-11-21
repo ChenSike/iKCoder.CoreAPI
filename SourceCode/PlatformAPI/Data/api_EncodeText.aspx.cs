@@ -15,7 +15,11 @@ public partial class Data_api_EncodeText : class_WebClass_WA
         if (REQUESTDOCUMENT != null)
         {             
             string data = class_XmlHelper.GetNodeValue(REQUESTDOCUMENT, "/root/data");
-            AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api, class_CommonDefined.enumExecutedCode.executed.ToString(), data, "");
+            string result = class_CommonUtil.Decoder_Base64(data);
+            if(!string.IsNullOrEmpty(result))
+                AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api, class_CommonDefined.enumExecutedCode.executed.ToString(), result, "");
+            else
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "api_OperationMetaTextData", "Invalidated data to be convered to base64.", "");
         }
         else
         {

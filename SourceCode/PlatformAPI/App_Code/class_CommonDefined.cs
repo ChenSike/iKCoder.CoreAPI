@@ -13,8 +13,22 @@ public class class_CommonDefined
 
     public enum enumExecutedCode
     {
-        executed=1001,
-        failedExecuted=4001
+        executed = 1001,
+        failedExecuted = 4001
+    }
+
+    public enum enumDataItemType
+    {
+        text = 2001,
+        bin = 2002
+    }
+
+    public enum enumDataOperaqtionType
+    {
+        insert = 3001,
+        update = 3002,
+        delete = 3003,
+        select = 3004
     }
        
 }

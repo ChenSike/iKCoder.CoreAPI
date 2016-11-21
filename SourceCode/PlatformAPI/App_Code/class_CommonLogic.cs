@@ -116,7 +116,7 @@ public class class_CommonLogic
         this.storeProceduresList = new Dictionary<string, Dictionary<string, class_Data_SqlSPEntry>>();
         foreach(string activeKeyName in Object_SqlConnectionHelper.ActiveSqlConnectionCollection.Keys)
         {
-            Dictionary<string, class_Data_SqlSPEntry> resuleList = this.Object_SqlHelper.Action_AutoLoadingAllSPS(Object_SqlConnectionHelper.Get_ActiveConnection(activeKeyName), "*");
+            Dictionary<string, class_Data_SqlSPEntry> resuleList = this.Object_SqlHelper.ActionAutoLoadingAllSPS(Object_SqlConnectionHelper.Get_ActiveConnection(activeKeyName), "*");
             this.storeProceduresList.Add(activeKeyName, resuleList);
         }
         return true;

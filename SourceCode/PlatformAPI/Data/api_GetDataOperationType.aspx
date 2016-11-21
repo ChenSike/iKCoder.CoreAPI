@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="api_GetDataOperationType.aspx.cs" Inherits="Data_api_GetDataOperationType" %>
