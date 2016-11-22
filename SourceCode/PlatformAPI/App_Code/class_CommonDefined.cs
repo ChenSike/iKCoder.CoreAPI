@@ -28,7 +28,8 @@ public class class_CommonDefined
         insert = 3001,
         update = 3002,
         delete = 3003,
-        select = 3004
+        select = 3004,
+        selectkey = 3005
     }
        
 }

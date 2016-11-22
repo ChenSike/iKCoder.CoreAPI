@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using iKCoder_Platform_SDK_Kit;
 using System.Xml;
+using System.Data;
 
 /// <summary>
 /// class_CommonLogic 的摘要说明
@@ -16,6 +17,11 @@ public class class_CommonLogic
     public const string Const_PlatformDBSymbol = "PlatformAPIDatabase";
     public const string Const_OperationQueryString = "AllowPlatformOperation";
 
+    public delegate void addErrMsgFunction (string header, string message,string link);
+    public delegate void addMsgFunction (string header, string code, string message,string link);
+
+    
+   
     public class_Base_Config Object_BaseConfig
     {
         set;
@@ -106,6 +112,7 @@ public class class_CommonLogic
         this.dbpwd = Object_BaseConfig.GetAttrValue(platformDBConfig, "password");
         this.dbdata = Object_BaseConfig.GetAttrValue(platformDBConfig, "db");
         this.productBenchmarkNodes = Object_BaseConfig.GetItemNodes("regproduct");
+        Object_SqlHelper = new class_Data_SqlHelper();
         return true;
     }    
 
@@ -128,6 +135,64 @@ public class class_CommonLogic
         if (!Object_SqlConnectionHelper.Set_NewConnectionItem(Const_PlatformDBSymbol, this.dbServer, dbuid, dbpwd, dbdata)) 
             return false;
         return true;
+    }
+
+    public void CommonSPOperation(addErrMsgFunction refAddErrMsgFunction, addMsgFunction refAddMsgFunction,class_Data_SqlSPEntry activeSPEntry,string operation,Type activeType)
+    {
+        if (class_CommonDefined.enumDataOperaqtionType.insert.ToString() == operation)
+        {
+            if (Object_SqlHelper.ExecuteInsertSP(activeSPEntry, Object_SqlConnectionHelper, dbServer))
+                refAddMsgFunction(class_CommonDefined._Executed_Api + activeType.FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), activeType.FullName, "");
+            else
+                refAddErrMsgFunction(class_CommonDefined._Faild_Execute_Api + activeType.FullName, "failed to do action : insert.", "");
+        }
+        else if (class_CommonDefined.enumDataOperaqtionType.select.ToString() == operation)
+        {
+            DataTable selectResultDT = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+            if (selectResultDT != null)
+            {
+                string strXMLResult = class_Data_SqlDataHelper.ActionConvertDTtoXMLString(selectResultDT);
+                RESPONSEDOCUMENT.LoadXml(strXMLResult);
+            }
+            else
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "api_OperationMetaTextData", "failed to do action : select.", "");
+
+        }
+        else if (class_CommonDefined.enumDataOperaqtionType.delete.ToString() == operation)
+        {
+            string id = class_XmlHelper.GetNodeValue(REQUESTDOCUMENT, "/root/id");
+            if (!string.IsNullOrEmpty(id))
+            {
+                activeSPEntry.ModifyParameterValue("@id", id);
+                if (object_CommonLogic.Object_SqlHelper.ExecuteDeleteSP(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer))
+                    AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + "Data_api_OperationMetaTextData", class_CommonDefined.enumExecutedCode.executed.ToString(), "Delete action complete.", "");
+            }
+            else
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "api_OperationMetaTextData", "failed to do action : delete -> empty ID.", "");
+        }
+        else if (class_CommonDefined.enumDataOperaqtionType.update.ToString() == operation)
+        {
+            if (!string.IsNullOrEmpty(type))
+                activeSPEntry.ModifyParameterValue("@type", type);
+            if (!string.IsNullOrEmpty(data))
+                activeSPEntry.ModifyParameterValue("@data", data);
+            if (object_CommonLogic.Object_SqlHelper.ExecuteUpdateSP(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer))
+                AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + "Data_api_OperationMetaTextData", class_CommonDefined.enumExecutedCode.executed.ToString(), "Update action complete.", "");
+            else
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "api_OperationMetaTextData", "failed to do action : update.", "");
+        }
+        else if (class_CommonDefined.enumDataOperaqtionType.selectkey.ToString() == operation)
+        {
+            DataTable selectResultDT = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPKeyForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+            if (selectResultDT != null)
+            {
+                string strXMLResult = class_Data_SqlDataHelper.ActionConvertDTtoXMLString(selectResultDT);
+                RESPONSEDOCUMENT.LoadXml(strXMLResult);
+            }
+            else
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "api_OperationMetaTextData", "failed to do action : select.", "");
+
+        }
     }
 
     public void CloseDBConnection()

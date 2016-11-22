@@ -11,7 +11,7 @@ public class class_WebClass_WA:class_Base_WebBaseclass
 {
 
     protected class_CommonLogic object_CommonLogic = new class_CommonLogic();
-    protected PlatformAPICodeBehind.Token.class_ProductToken object_TokenLogic = new PlatformAPICodeBehind.Token.class_ProductToken();
+    protected class_ProductToken object_TokenLogic = new class_ProductToken();
 
     protected override void DoAction()
     {

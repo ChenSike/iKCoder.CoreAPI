@@ -34,6 +34,11 @@ public partial class Data_api_GetDataOperationType : class_WebClass_WA
             case "UPDATE":
                 operationType = class_CommonDefined.enumDataOperaqtionType.update;
                 break;
+            case "selectkey":
+            case "Selectkey":
+            case "SELECTKEY":
+                operationType = class_CommonDefined.enumDataOperaqtionType.selectkey;
+                break;
             default:
                 operationType = class_CommonDefined.enumDataOperaqtionType.select;
                 break;

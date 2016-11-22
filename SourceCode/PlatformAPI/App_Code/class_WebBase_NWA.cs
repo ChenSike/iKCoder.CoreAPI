@@ -15,6 +15,7 @@ public class class_WebBase_NWA:class_Base_WebBaseclass
     protected override void DoAction()
     {
         object_CommonLogic.InitServices(APPFOLDERPATH);
+       
         ExtenedFunction();
     }
 
