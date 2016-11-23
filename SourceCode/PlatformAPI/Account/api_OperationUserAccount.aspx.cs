@@ -39,26 +39,30 @@ public partial class Account_api_OperationUserAccount : class_WebClass_WA
         if(operation == class_CommonDefined.enumDataOperaqtionType.insert.ToString())
         {
             activeSPEntry.ModifyParameterValue("@name", username);
-            activeSPEntry.ModifyParameterValue("@password", password);
-            if (object_CommonLogic.Object_SqlHelper. ExecuteInsertSP(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer))
-                AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + "Account_api_OperationUserAccount", class_CommonDefined.enumExecutedCode.executed.ToString(), "", "");
-            else
-                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "Account_api_OperationUserAccount", "failed to do action : insert.", "");
-
+            activeSPEntry.ModifyParameterValue("@password", password);          
         }
         else if (class_CommonDefined.enumDataOperaqtionType.delete.ToString() == operation)
         {
             string id = class_XmlHelper.GetNodeValue(REQUESTDOCUMENT, "/root/id");
-            if (!string.IsNullOrEmpty(id))
-            {
+            if (!string.IsNullOrEmpty(id))            
                 activeSPEntry.ModifyParameterValue("@id", id);
-                if (object_CommonLogic.Object_SqlHelper.ExecuteDeleteSP(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer))
-                    AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + "Account_api_OperationUserAccount", class_CommonDefined.enumExecutedCode.executed.ToString(), "Delete action complete.", "");
-            }
             else
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "api_OperationMetaTextData", "failed to do action : delete -> empty ID.", "");
         }
-        AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + "api_OperationUserAccount", class_CommonDefined.enumExecutedCode.executed.ToString(), "Executed Api", "");
+        else if (class_CommonDefined.enumDataOperaqtionType.update.ToString() == operation)
+        {
+            string id = class_XmlHelper.GetNodeValue(REQUESTDOCUMENT, "/root/id");
+            if (!string.IsNullOrEmpty(id))
+                activeSPEntry.ModifyParameterValue("@id", id);
+            activeSPEntry.ModifyParameterValue("@password", password); 
+        }
+        else if (class_CommonDefined.enumDataOperaqtionType.selectkey.ToString() == operation)
+        {
+            string id = class_XmlHelper.GetNodeValue(REQUESTDOCUMENT, "/root/id");
+            if (!string.IsNullOrEmpty(id))
+                activeSPEntry.ModifyParameterValue("@id", id);
+        }
+        object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, operation, this.GetType());
         object_CommonLogic.CloseDBConnection();
     }    
 }
