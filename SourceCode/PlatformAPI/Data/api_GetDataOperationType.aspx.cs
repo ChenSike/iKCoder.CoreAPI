@@ -43,7 +43,7 @@ public partial class Data_api_GetDataOperationType : class_WebClass_WA
                 operationType = class_CommonDefined.enumDataOperaqtionType.select;
                 break;
         }
-        AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + "Data_api_GetDataItemType", class_CommonDefined.enumExecutedCode.executed.ToString(), operationType.ToString(), "");
+        AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), operationType.ToString(), "");
 
     }
 }

@@ -35,7 +35,7 @@ public partial class Data_api_OperationMetaTextData : class_WebClass_WA
                 if (!string.IsNullOrEmpty(id))                
                     activeSPEntry.ModifyParameterValue("@id", id);                   
                 else
-                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "api_OperationMetaTextData", "failed to do action : delete -> empty ID.", "");
+                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : delete -> empty ID.", "");
             }
             else if (class_CommonDefined.enumDataOperaqtionType.update.ToString() == operation)
             {
@@ -58,7 +58,7 @@ public partial class Data_api_OperationMetaTextData : class_WebClass_WA
         }
         else
         {
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "api_OperationMetaTextData", "failed to execute api : api_OperationMetaTextData.", "");
+            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to execute api : api_OperationMetaTextData.", "");
         }
     }    
 }
