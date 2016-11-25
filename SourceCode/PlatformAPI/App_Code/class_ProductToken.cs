@@ -34,15 +34,16 @@ public class class_ProductToken
         return _objectTokenController.GetToken(tokenFromClient);
     }
 
-    public bool CheckRegistiedToken(System.Web.SessionState.HttpSessionState refSessionPool, XmlDocument requestDoc)
+    public bool CheckRegistiedToken(System.Web.SessionState.HttpSessionState refSessionPool, XmlDocument requestDoc,out string productName)
     {
+        productName = "";
         if (refSessionPool == null || requestDoc == null)
             return false;
         else
         {
             string tokenGuid = class_XmlHelper.GetNodeValue(requestDoc, "/root/token");
             class_Token_Controller _objectTokenController = new class_Token_Controller(refSessionPool);
-            return _objectTokenController.VerifyToken(tokenGuid);
+            return _objectTokenController.VerifyToken(tokenGuid, out productName);
         }
     }
 

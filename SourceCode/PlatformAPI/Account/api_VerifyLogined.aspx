@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="api_VerifyLogined.aspx.cs" Inherits="Account_api_VerifyLogined" %>
