@@ -182,7 +182,6 @@ public class class_CommonLogic
             }
             else
                 refAddErrMsgFunction(class_CommonDefined._Faild_Execute_Api + activeType.FullName, "failed to do action : select.", "");
-
         }
     }
 

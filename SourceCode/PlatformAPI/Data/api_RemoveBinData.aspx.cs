@@ -26,7 +26,7 @@ public partial class Data_api_RemoveBinData : class_WebClass_WA
         }
         else
         {
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to execute api : symbol existed or guid existed.", "");
+            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to execute api : id not existed.", "");
         }
         object_CommonLogic.CloseDBConnection();
     }

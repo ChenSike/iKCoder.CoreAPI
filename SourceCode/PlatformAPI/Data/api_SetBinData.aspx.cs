@@ -30,9 +30,9 @@ public partial class Data_api_SetBinData : class_WebClass_WA
             string guid = symbol;
             if (guid == "")
                 guid = Guid.NewGuid().ToString();
-            class_Data_SqlSPEntry activeSPEntry_binData = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Data_Basic");            
-            activeSPEntry.ModifyParameterValue("@symbol", guid);
-            DataTable binDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+            class_Data_SqlSPEntry activeSPEntry_binData = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Data_Basic");
+            activeSPEntry_binData.ModifyParameterValue("@symbol", guid);
+            DataTable binDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_binData, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
             if (binDataTable.Rows.Count == 0)
             {
                 activeSPEntry.ModifyParameterValue("@symbol", guid);

@@ -5,10 +5,10 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class Account_api_VerifyLogined : class_WebClass_WA
+public partial class Data_api_SetMetaTextData : System.Web.UI.Page
 {
-    protected override void ExtenedFunction()
+    protected void Page_Load(object sender, EventArgs e)
     {
-        
+
     }
 }
