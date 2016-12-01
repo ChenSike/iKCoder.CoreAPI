@@ -47,5 +47,18 @@ public class class_ProductToken
         }
     }
 
+    public bool CheckRegistiedToken(System.Web.SessionState.HttpSessionState refSessionPool, HttpCookie tokenCookie, out string productName)
+    {
+        productName = "";
+        if (refSessionPool == null || tokenCookie == null)
+            return false;
+        else
+        {
+            string tokenGuid = tokenCookie.Value;
+            class_Token_Controller _objectTokenController = new class_Token_Controller(refSessionPool);
+            return _objectTokenController.VerifyToken(tokenGuid, out productName);
+        }
+    }
+
 }
 

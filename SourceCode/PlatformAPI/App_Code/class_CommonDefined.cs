@@ -10,6 +10,7 @@ public class class_CommonDefined
 {
     public const string _Faild_Execute_Api = "Faild to execute api : ";
     public const string _Executed_Api = "Executed api : ";
+    public const int _MaxCount_AccountLogined = 5000;
 
     public enum enumExecutedCode
     {
@@ -30,6 +31,14 @@ public class class_CommonDefined
         delete = 3003,
         select = 3004,
         selectkey = 3005
+    }
+
+    public enum enumDevices
+    {
+        pc = 4001,
+        mobil = 4002,
+        pad = 4003,
+        other = 4004
     }
        
 }

@@ -16,7 +16,11 @@ public partial class Token_api_getToken : class_WebBase_NWA
         if (result == "")
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "api_getToken", "Your token is invalidated", "");
         else
+        {
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + "api_getToken", class_CommonDefined.enumExecutedCode.executed.ToString(), result, "");
+            HttpCookie tokenCookie = new HttpCookie("token", result);
+            Response.Cookies.Add(tokenCookie);
+        }
                     
     }
 }

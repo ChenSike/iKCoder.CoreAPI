@@ -18,8 +18,9 @@ public class class_WebClass_WA:class_Base_WebBaseclass
     {
         ISRESPONSEDOC = true;
         object_CommonLogic.InitServices(APPFOLDERPATH);
-        if (object_TokenLogic.CheckRegistiedToken(Session, REQUESTDOCUMENT,out _fromProduct))
-            ExtenedFunction(); 
+        HttpCookie cookieFromRequest = GetRequestCookie("token");
+        if (cookieFromRequest == null ? object_TokenLogic.CheckRegistiedToken(Session, REQUESTDOCUMENT, out _fromProduct) : object_TokenLogic.CheckRegistiedToken(Session, cookieFromRequest, out _fromProduct))
+            ExtenedFunction();
         else
             AddErrMessageToResponseDOC("BadToken", "Your token is invalidated", "");
     }
