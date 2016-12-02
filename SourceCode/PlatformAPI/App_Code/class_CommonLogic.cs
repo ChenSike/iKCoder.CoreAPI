@@ -83,6 +83,19 @@ public class class_CommonLogic
         get;
     }
 
+    public int maxCountOfLoginedAccount
+    {
+        set;
+        get;
+    }
+
+    public int expiredPeriodOfLoginedAccount
+    {
+        set;
+        get;
+    }
+        
+
     public class_Data_SqlSPEntry GetActiveSP(string dbServer, string SPName)
     {
         if (storeProceduresList.ContainsKey(dbServer))
@@ -97,8 +110,7 @@ public class class_CommonLogic
             return null;
         }
 
-    }
-        
+    }        
 
     public bool InitServices(string rootPath)
     {
@@ -106,12 +118,20 @@ public class class_CommonLogic
         if(!Object_BaseConfig.DoOpen(rootPath + "\\" + "normaldata.xml"))
             return false;
         XmlNode platformDBConfig = Object_BaseConfig.GetSessionNode("platformDBConfig");
+        XmlNode applicationConfig = Object_BaseConfig.GetSessionNode("appConfig");
         Object_BaseConfig.SwitchToDESModeON(Const_DESKey);
         this.dbServer = Object_BaseConfig.GetAttrValue(platformDBConfig, "dbserver");
         this.dbuid = Object_BaseConfig.GetAttrValue(platformDBConfig, "uidname");
         this.dbpwd = Object_BaseConfig.GetAttrValue(platformDBConfig, "password");
         this.dbdata = Object_BaseConfig.GetAttrValue(platformDBConfig, "db");
         this.productBenchmarkNodes = Object_BaseConfig.GetItemNodes("regproduct");
+        int iMaxCountOfLoginedAccount = 5000;
+        int.TryParse(Object_BaseConfig.GetAttrValue(applicationConfig, "maxCountOfLoginedAccount"), out iMaxCountOfLoginedAccount);
+        this.maxCountOfLoginedAccount = iMaxCountOfLoginedAccount;
+        class_CommonDefined.CountOfLoginedAccount = iMaxCountOfLoginedAccount;
+        int iExpiredPeriodOfLoginedAccount = 60;
+        int.TryParse(Object_BaseConfig.GetAttrValue(applicationConfig, "expiredPeriodOfLoginedAccount"), out iExpiredPeriodOfLoginedAccount);
+        class_CommonDefined.ExperiedPeriodOfLoginedAccount = iExpiredPeriodOfLoginedAccount;
         Object_SqlHelper = new class_Data_SqlHelper();
         return true;
     }    

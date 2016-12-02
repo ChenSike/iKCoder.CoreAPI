@@ -10,7 +10,8 @@ public class class_CommonDefined
 {
     public const string _Faild_Execute_Api = "Faild to execute api : ";
     public const string _Executed_Api = "Executed api : ";
-    public const int _MaxCount_AccountLogined = 5000;
+    public static int CountOfLoginedAccount = 5000;
+    public static int ExperiedPeriodOfLoginedAccount = 60;
 
     public enum enumExecutedCode
     {
@@ -39,6 +40,13 @@ public class class_CommonDefined
         mobil = 4002,
         pad = 4003,
         other = 4004
+    }
+
+    public enum euumAccountStatus
+    {
+        normal = 5001,
+        tmplocked = 5002,
+        locked = 5003
     }
        
 }

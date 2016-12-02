@@ -20,13 +20,7 @@ public class class_AccountItem
     {
         set;
         get;
-    }
-
-    public string LoginTime
-    {
-        set;
-        get;
-    }
+    }    
 
     public string LastRequestIP
     {
@@ -38,7 +32,7 @@ public class class_AccountItem
     {
         set;
         get;
-    }
+    }   
 
     public int ExperiedPeriod
     {
@@ -56,9 +50,19 @@ public class class_AccountItem
     {
         set;
         get;
-    }  
-    
-    
+    }
+
+    public List<string> AllowsProduce
+    {
+        set;
+        get;
+    }
+
+    public class_AccountItem()
+    {
+        this.AllowsProduce = new List<string>();
+    }
+
 }
 
 
@@ -68,17 +72,62 @@ public static class class_LoginedPool
 
     private static Dictionary<string, class_AccountItem> _accountLoginedPool = new Dictionary<string, class_AccountItem>();
 
-	public static class_LoginedPool()
-	{
-		
-	}
-
     public static bool insertNewLoginAccountItem(class_AccountItem activeAccountItem)
     {
-        if(activeAccountItem!=null)
+        if (activeAccountItem != null && _accountLoginedPool.Count < class_CommonDefined.CountOfLoginedAccount)
         {
-
+            lock (_accountLoginedPool)
+            {
+                if (_accountLoginedPool.ContainsKey(activeAccountItem.UserNmae))
+                {
+                    _accountLoginedPool.Add(activeAccountItem.UserNmae, activeAccountItem);
+                    return true;
+                }
+                else
+                    return false;
+            }
         }
+        else
+            return false;
+    }
+
+    public static void clearLoginedAccountPool()
+    {
+        _accountLoginedPool.Clear();
+    }
+
+    public static void removeLoginedAccount(string userName)
+    {
+        if(_accountLoginedPool.ContainsKey(userName))        
+            _accountLoginedPool.Remove(userName);        
+    }
+
+    public static bool verifyLoginedAccountExisted(string userName)
+    {
+        if (_accountLoginedPool.ContainsKey(userName))
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public static int getCountOfLoginedAccount()
+    {
+        return _accountLoginedPool.Count;
+    }
+
+    public static bool verifyLoginedAccount(string userName,string loginedID,string requestIP)
+    {
+        if (verifyLoginedAccountExisted(userName))
+        {
+            if (_accountLoginedPool[userName].LoginedID == loginedID && _accountLoginedPool[userName].LastRequestIP == requestIP)
+                return true;
+            else
+                return false;
+        }
+        else
+            return false;
     }
 
 }

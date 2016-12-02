@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="api_ReportCurrentStatus.aspx.cs" Inherits="Dis_api_ReportCurrentStatus" %>

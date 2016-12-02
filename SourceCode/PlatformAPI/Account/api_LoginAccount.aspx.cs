@@ -23,7 +23,6 @@ public partial class Account_api_LoginAccount : class_WebClass_WA
         }
         else
             username = class_XmlHelper.GetNodeValue("", usernameNode);
-
         XmlNode passwordNode = REQUESTDOCUMENT.SelectSingleNode("/root/password");
         if (passwordNode == null)
         {
@@ -31,6 +30,8 @@ public partial class Account_api_LoginAccount : class_WebClass_WA
         }
         else
             password = class_XmlHelper.GetNodeValue("", passwordNode);
+        if (class_LoginedPool.verifyLoginedAccountExisted(username))
+            class_LoginedPool.removeLoginedAccount(username);
         class_Data_SqlSPEntry activeSPEntry_Basic = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Account_Basic");
         DataTable selectResultDT = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_Basic, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if (selectResultDT != null && selectResultDT.Rows.Count >= 1)
@@ -50,36 +51,29 @@ public partial class Account_api_LoginAccount : class_WebClass_WA
             {
                 if (password == valuePasswordFromDB)
                 {
-                    string newGuid = Guid.NewGuid().ToString();
-                    decimal id = 0;
                     string strId = string.Empty;
+                    string newGuid = Guid.NewGuid().ToString();
                     class_Data_SqlDataHelper.GetColumnData(activeUserRow, "id", out strId);
-                    decimal.TryParse(strId, out id);
-                    class_Data_SqlSPEntry activeSPEntry_userLoginInfo = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Account_LoginInfo");
-                    activeSPEntry_userLoginInfo.ModifyParameterValue("@username", username);
-                    DataTable dtLoginInfo = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_userLoginInfo, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
-                    activeSPEntry_userLoginInfo.ClearAllParamsValues();
-                    activeSPEntry_userLoginInfo.ModifyParameterValue("@username", username);
-                    activeSPEntry_userLoginInfo.ModifyParameterValue("@regtime", DateTime.Now.ToString());
-                    activeSPEntry_userLoginInfo.ModifyParameterValue("@requestip", REQUESTIP);
-                    activeSPEntry_userLoginInfo.ModifyParameterValue("@loginguid", newGuid);
-                    activeSPEntry_userLoginInfo.ModifyParameterValue("@userid", id);
-                    if (dtLoginInfo == null || dtLoginInfo.Rows.Count == 0)
-                        object_CommonLogic.Object_SqlHelper.ExecuteInsertSP(activeSPEntry_userLoginInfo, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
-                    else
-                    {
-                        decimal loginid = 0;
-                        string strLoginId = string.Empty;
-                        class_Data_SqlDataHelper.GetColumnData(dtLoginInfo.Rows[0], "id", out strLoginId);
-                        decimal.TryParse(strLoginId, out loginid);
-                        activeSPEntry_userLoginInfo.ModifyParameterValue("@id", loginid);
-                        object_CommonLogic.Object_SqlHelper.ExecuteUpdateSP(activeSPEntry_userLoginInfo, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
-                    }
+                    class_AccountItem newLoginedAccount = new class_AccountItem();
+                    newLoginedAccount.UserNmae = username;
+                    newLoginedAccount.UserID = strId;
+                    newLoginedAccount.LoginedID = newGuid;
+                    newLoginedAccount.LastRequestIP = Request.UserHostAddress.ToString();
+                    newLoginedAccount.LastLoginedTime = DateTime.Now;
+                    newLoginedAccount.ExperiedPeriod = class_CommonDefined.ExperiedPeriodOfLoginedAccount;
+                    class_LoginedPool.insertNewLoginAccountItem(newLoginedAccount);
+                    HttpCookie newLoginIDCookie = new HttpCookie("loginedID");
+                    newLoginIDCookie.Value = newGuid;
+                    Response.Cookies.Add(newLoginIDCookie);
+                    HttpCookie newLoginUsrCookie = new HttpCookie("userName");
+                    newLoginUsrCookie.Value = username;
+                    Response.Cookies.Add(newLoginUsrCookie);
                     AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), newGuid, "");
                 }
                 else
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "Bad Login:user info is not matched.", "");
             }
+
         }
         else
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : select.", "");

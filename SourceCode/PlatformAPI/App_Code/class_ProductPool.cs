@@ -25,14 +25,6 @@ public static class class_ProductPool
                 _activeProductList.Add(productName);
             }
         }
-    }
-
-    
-
-	public static class_ProductPool()
-	{
-		//
-		// TODO: 在此处添加构造函数逻辑
-		//
-	}
+    }   
+	
 }
