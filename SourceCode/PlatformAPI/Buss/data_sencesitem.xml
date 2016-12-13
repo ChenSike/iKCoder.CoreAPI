@@ -1,0 +1,32 @@
+﻿<root>
+  <basic>
+    <cover>
+      <images>
+        <bitem key="1">ID</bitem>
+        <bitem key="2">ID</bitem>
+      </images>
+    </cover>    
+    <id></id>
+    <name></name>
+    <author></author>
+    <level>g1</level>
+    <create>2016-12-12</create>
+    <last>2016-12-12</last>
+    <subjects>
+      <item>maths</item>
+      <item>computer</item>
+    </subjects>
+    <executed>12000</executed>
+    <shared>5000</shared>
+    <qrcode bitem="id"></qrcode>
+  </basic>
+  <des>    
+  </des>
+  <video>
+    <bitem key="1">ID</bitem>
+  </video>
+  <data>
+    <fileentry entry="" folder=""></fileentry>
+    <binentry id="" entry=""></binentry>
+  </data>
+</root>
