@@ -12,6 +12,8 @@
     <account_head>      
         <bitem key="1">ID</bitem>             
     </account_head>
+    <score>1000</score>
+    <grade>1</grade>
   </usrbasic>
   <lessions>
     <begin>

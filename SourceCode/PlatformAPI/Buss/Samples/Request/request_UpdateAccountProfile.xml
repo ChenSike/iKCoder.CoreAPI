@@ -1,0 +1,22 @@
+﻿<root>
+  <usrbasic>
+    <usr_name></usr_name>
+    <usr_nickname></usr_nickname>
+    <coins></coins>
+    <account_status>l1</account_status>
+    <account_limited>2017-12-01</account_limited>
+    <account_head>
+      <bitem key="1">ID</bitem>
+    </account_head>
+  </usrbasic>
+  <lessions>
+    <begin>
+      <item id="" progress="2" released="0"></item>
+    </begin>
+    <intermediate></intermediate>
+    <senior></senior>
+  </lessions>
+  <friends>
+    <item user="" nickname="" mask="0"></item>
+  </friends>
+</root>

@@ -28,5 +28,7 @@
   <data>
     <fileentry entry="" folder=""></fileentry>
     <binentry id="" entry=""></binentry>
-  </data>
+    <blockly>      
+    </blockly>
+  </data>  
 </root>
