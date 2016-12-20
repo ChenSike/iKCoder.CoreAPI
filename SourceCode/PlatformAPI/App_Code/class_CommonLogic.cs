@@ -152,7 +152,7 @@ public class class_CommonLogic
     public bool ConnectToDatabase()
     {
         Object_SqlConnectionHelper = new class_Data_SqlConnectionHelper();
-        if (!Object_SqlConnectionHelper.Set_NewConnectionItem(Const_PlatformDBSymbol, this.dbServer, dbuid, dbpwd, dbdata)) 
+        if (!Object_SqlConnectionHelper.Set_NewConnectionItem(Const_PlatformDBSymbol, this.dbServer, dbuid, dbpwd, dbdata,enum_DatabaseType.SqlServer)) 
             return false;
         return true;
     }
