@@ -94,6 +94,12 @@ public class class_CommonLogic
         set;
         get;
     }
+
+    public enum_DatabaseType dataBaseType
+    {
+        set;
+        get;
+    }
         
 
     public class_Data_SqlSPEntry GetActiveSP(string dbServer, string SPName)
@@ -124,6 +130,7 @@ public class class_CommonLogic
         this.dbuid = Object_BaseConfig.GetAttrValue(platformDBConfig, "uidname");
         this.dbpwd = Object_BaseConfig.GetAttrValue(platformDBConfig, "password");
         this.dbdata = Object_BaseConfig.GetAttrValue(platformDBConfig, "db");
+        this.dataBaseType = Object_BaseConfig.GetAttrValue(platformDBConfig, "dbtype") == "mysql" ? enum_DatabaseType.MySql : enum_DatabaseType.SqlServer;
         this.productBenchmarkNodes = Object_BaseConfig.GetItemNodes("regproduct");
         int iMaxCountOfLoginedAccount = 5000;
         int.TryParse(Object_BaseConfig.GetAttrValue(applicationConfig, "maxCountOfLoginedAccount"), out iMaxCountOfLoginedAccount);
@@ -152,7 +159,7 @@ public class class_CommonLogic
     public bool ConnectToDatabase()
     {
         Object_SqlConnectionHelper = new class_Data_SqlConnectionHelper();
-        if (!Object_SqlConnectionHelper.Set_NewConnectionItem(Const_PlatformDBSymbol, this.dbServer, dbuid, dbpwd, dbdata,enum_DatabaseType.SqlServer)) 
+        if (!Object_SqlConnectionHelper.Set_NewConnectionItem(Const_PlatformDBSymbol, this.dbServer, dbuid, dbpwd, dbdata,dataBaseType)) 
             return false;
         return true;
     }
