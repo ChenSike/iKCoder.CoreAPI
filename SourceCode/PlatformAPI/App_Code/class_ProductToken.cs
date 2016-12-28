@@ -27,7 +27,7 @@ public class class_ProductToken
             string productExpired = class_XmlHelper.GetAttrValue(benchmarkTokenNode, "expired");
             refObjectConfig.SwitchToDESModeON();
             string productCode = refObjectConfig.GetAttrValue(benchmarkTokenNode, "code");
-            int intExpiredValue = 0;
+            int intExpiredValue = 30;
             int.TryParse(productExpired, out intExpiredValue);
             _objectTokenController.AddBenchmarkToken(productName, productCode, intExpiredValue);
         }
