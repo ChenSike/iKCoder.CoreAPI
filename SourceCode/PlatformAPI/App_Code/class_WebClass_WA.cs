@@ -17,7 +17,7 @@ public class class_WebClass_WA:class_Base_WebBaseclass
     protected override void DoAction()
     {
         ISRESPONSEDOC = true;
-        object_CommonLogic.InitServices(APPFOLDERPATH);
+        object_CommonLogic.InitServices(APPFOLDERPATH,ref RSDoamin);
         HttpCookie cookieFromRequest = GetRequestCookie("token");
         if (cookieFromRequest == null ? object_TokenLogic.CheckRegistiedToken(Session, REQUESTDOCUMENT, out _fromProduct) : object_TokenLogic.CheckRegistiedToken(Session, cookieFromRequest, out _fromProduct))
             ExtenedFunction();

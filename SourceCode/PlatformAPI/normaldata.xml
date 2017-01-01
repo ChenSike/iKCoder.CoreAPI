@@ -5,4 +5,7 @@
     <item name="iKCoder" code="QTDVqg477e5vSG2YEicIS8Vjlh99z/NW" expired="60">
     </item>
   </session>
+  <session name="RSDomain">
+    <item name="carl" domain="carl.morningstar.com"></item>
+  </session>
 </root>

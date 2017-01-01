@@ -100,7 +100,7 @@ public class class_CommonLogic
         set;
         get;
     }
-        
+             
 
     public class_Data_SqlSPEntry GetActiveSP(string dbServer, string SPName)
     {
@@ -118,13 +118,14 @@ public class class_CommonLogic
 
     }        
 
-    public bool InitServices(string rootPath)
+    public bool InitServices(string rootPath,ref Dictionary<string,string> refBaseDomainLst)
     {
         Object_BaseConfig = new class_Base_Config();        
         if(!Object_BaseConfig.DoOpen(rootPath + "\\" + "normaldata.xml"))
             return false;
         XmlNode platformDBConfig = Object_BaseConfig.GetSessionNode("platformDBConfig");
         XmlNode applicationConfig = Object_BaseConfig.GetSessionNode("appConfig");
+        XmlNode rsDomain = Object_BaseConfig.GetSessionNode("RSDomain");
         Object_BaseConfig.SwitchToDESModeON(Const_DESKey);
         this.dbServer = Object_BaseConfig.GetAttrValue(platformDBConfig, "dbserver");
         this.dbuid = Object_BaseConfig.GetAttrValue(platformDBConfig, "uidname");
@@ -132,6 +133,15 @@ public class class_CommonLogic
         this.dbdata = Object_BaseConfig.GetAttrValue(platformDBConfig, "db");
         this.dataBaseType = Object_BaseConfig.GetAttrValue(platformDBConfig, "dbtype") == "mysql" ? enum_DatabaseType.MySql : enum_DatabaseType.SqlServer;
         this.productBenchmarkNodes = Object_BaseConfig.GetItemNodes("regproduct");
+        XmlNodeList RSDomainItems = Object_BaseConfig.GetItemNodes("RSDomain");        
+        Object_BaseConfig.SwitchToDESModeOFF();
+        foreach(XmlNode activeDomainItem in RSDomainItems)
+        {
+            string itemName = Object_BaseConfig.GetAttrValue(activeDomainItem, "name");
+            string domainValue = Object_BaseConfig.GetAttrValue(activeDomainItem, "domain");
+            if (!refBaseDomainLst.ContainsKey(itemName))
+                refBaseDomainLst.Add(itemName, domainValue);
+        }
         int iMaxCountOfLoginedAccount = 5000;
         int.TryParse(Object_BaseConfig.GetAttrValue(applicationConfig, "maxCountOfLoginedAccount"), out iMaxCountOfLoginedAccount);
         this.maxCountOfLoginedAccount = iMaxCountOfLoginedAccount;
