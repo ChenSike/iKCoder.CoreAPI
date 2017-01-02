@@ -38,6 +38,7 @@ public partial class Data_api_SetBinData : class_WebClass_WA
                 activeSPEntry.ModifyParameterValue("@symbol", guid);
                 activeSPEntry.ModifyParameterValue("@type", type);
                 activeSPEntry.ModifyParameterValue("@data", data);
+                activeSPEntry.ModifyParameterValue("@produce", _fromProduct);
                 object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, operation, this.GetType());
             }
             else

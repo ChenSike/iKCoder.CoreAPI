@@ -32,7 +32,7 @@ public partial class Account_api_LoginAccount : class_WebClass_WA
             password = class_XmlHelper.GetNodeValue("", passwordNode);
         if (class_LoginedPool.verifyLoginedAccountExisted(username))
             class_LoginedPool.removeLoginedAccount(username);
-        class_Data_SqlSPEntry activeSPEntry_Basic = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Account_Basic");
+        class_Data_SqlSPEntry activeSPEntry_Basic = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_basic");
         DataTable selectResultDT = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_Basic, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if (selectResultDT != null && selectResultDT.Rows.Count >= 1)
         {

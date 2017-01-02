@@ -23,7 +23,7 @@ public partial class Account_api_OperationUserAccount : class_WebClass_WA
         string password = class_XmlHelper.GetNodeValue("", passwordNode);
         if (string.IsNullOrEmpty(operation))
             operation = "select";
-        class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Account_Basic");        
+        class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_basic");        
         if(operation == class_CommonDefined.enumDataOperaqtionType.insert.ToString())
         {
             activeSPEntry.ModifyParameterValue("@name", username);
