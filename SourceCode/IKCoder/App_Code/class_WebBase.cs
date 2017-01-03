@@ -39,7 +39,8 @@ public class class_WebBase : class_Base_WebBaseclass
                 HttpCookie activeCookie = Request.Cookies[activeCookieKey];
                 Cookie newNetCookie = new Cookie();
                 newNetCookie.Name = activeCookie.Name;
-                newNetCookie.Value = activeCookie.Value;                
+                newNetCookie.Value = activeCookie.Value;
+                newNetCookie.Domain = "iKCoder";
                 requestCookieLst.Add(newNetCookie);
             }
             string resultDocFromServer = Object_NetRemote.getRemoteRequestToString(verifyTokenDoc, requestURL, 1000, 10000, requestCookieLst);
@@ -47,8 +48,7 @@ public class class_WebBase : class_Base_WebBaseclass
             responseFromServerDoc.LoadXml(resultDocFromServer);
             if (responseFromServerDoc.SelectSingleNode("/root/err") != null)
             {
-                Request.Cookies.Remove("token");
-                Response.Cookies.Remove("token");
+                Request.Cookies.Remove("token");                
                 regToken();
             }
             else
