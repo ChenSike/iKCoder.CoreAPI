@@ -7,6 +7,6 @@
   </session>
   <session name="RSDomain">
     <item name="carl" domain="http://carl.morningstar.com"></item>
-    <item name="sikehome" domain="http://ikcoder.iok.la/"></item>
+    <item name="sikehome" domain="http://ikcoder.iok.la:24525"></item>
   </session>
 </root>

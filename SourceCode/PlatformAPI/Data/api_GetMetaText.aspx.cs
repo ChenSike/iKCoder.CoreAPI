@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using iKCoder_Platform_SDK_Kit;
+using System.Data;
+using System.Xml;
 
 public partial class Data_api_GetMetaText : class_WebClass_WA
 {

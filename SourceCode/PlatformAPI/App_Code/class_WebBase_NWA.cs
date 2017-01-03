@@ -11,6 +11,8 @@ public class class_WebBase_NWA:class_Base_WebBaseclass
 {
 
     protected class_CommonLogic object_CommonLogic = new class_CommonLogic();
+    protected class_ProductToken object_TokenLogic = new class_ProductToken();
+    protected string _fromProduct = "iKCoder";
 
     protected override void DoAction()
     {
