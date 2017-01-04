@@ -19,8 +19,9 @@ public partial class Token_api_getToken : class_WebBase_NWA
         {
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + "api_getToken", class_CommonDefined.enumExecutedCode.executed.ToString(), result, "");
             HttpCookie tokenCookie = new HttpCookie("token", result);
-            tokenCookie.Domain = "iKCoder";
+            tokenCookie.Domain = HttpContext.Current.Request.Url.ToString();
             Response.Cookies.Add(tokenCookie);
+
         }
                     
     }

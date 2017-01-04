@@ -12,12 +12,14 @@ using System.Xml;
 public class class_WebBase : class_Base_WebBaseclass
 {
 
-    protected string Server_API = "http://ikcoder.iok.la:24525/";
+    //protected string Server_API = "http://ikcoder.iok.la:24525/";
+    protected string Server_API = "http://localhost/";
     protected string Virtul_Folder_API = "PlatformAPI";
     protected string Produce_Name = "iKCoder";
     protected string Produce_Code = "12345678";
     protected class_Net_RemoteRequest Object_NetRemote = new class_Net_RemoteRequest();
-    protected string Token = "";
+    protected static Store_DomainPersistance Object_DomainPersistance = new Store_DomainPersistance();
+      
 
 	public class_WebBase()
 	{
@@ -29,26 +31,26 @@ public class class_WebBase : class_Base_WebBaseclass
     protected override void DoAction()
     {
         ISRESPONSEDOC = true;
-        if (Request.Cookies["token"] != null)
+        string requestURL = Server_API + Virtul_Folder_API + "/Token/api_verifyActiveToken.aspx";
+        string requestGetTokenURL = Server_API + Virtul_Folder_API + "/Token/api_getToken.aspx";
+        foreach(Cookie activeCookie in class_Net_RemoteRequest.active_Cookies.GetCookies(new Uri(requestGetTokenURL)))
         {
-            string requestURL = Server_API + Virtul_Folder_API + "/Token/api_verifyActiveToken.aspx";
-            string verifyTokenDoc = "<root><token>" + Request.Cookies["token"].Value + "</token></root>";
-            List<Cookie> requestCookieLst = new List<Cookie>();
-            foreach(string activeCookieKey in Request.Cookies.Keys)
-            {
-                HttpCookie activeCookie = Request.Cookies[activeCookieKey];
-                Cookie newNetCookie = new Cookie();
-                newNetCookie.Name = activeCookie.Name;
-                newNetCookie.Value = activeCookie.Value;
-                newNetCookie.Domain = "iKCoder";
-                requestCookieLst.Add(newNetCookie);
-            }
-            string resultDocFromServer = Object_NetRemote.getRemoteRequestToString(verifyTokenDoc, requestURL, 1000, 10000, requestCookieLst);
+            HttpCookie newHttpCookie = new HttpCookie(activeCookie.Name);
+            newHttpCookie.Domain = activeCookie.Domain;
+            newHttpCookie.Value = activeCookie.Value;
+            if (Request.Cookies[activeCookie.Name] != null)
+                Request.Cookies.Set(newHttpCookie);
+            else
+                Request.Cookies.Add(newHttpCookie);
+        }
+        if (Object_DomainPersistance.Get(Page.Request.UserHostAddress, "token") != null)
+        {
+            string verifyTokenDoc = "<root><token>" + Object_DomainPersistance.Get(Page.Request.UserHostAddress, "token") + "</token></root>";
+            string resultDocFromServer = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(verifyTokenDoc, requestURL, 1000, 10000);
             XmlDocument responseFromServerDoc = new XmlDocument();
             responseFromServerDoc.LoadXml(resultDocFromServer);
             if (responseFromServerDoc.SelectSingleNode("/root/err") != null)
-            {
-                Request.Cookies.Remove("token");                
+            {             
                 regToken();
             }
             else
@@ -63,14 +65,11 @@ public class class_WebBase : class_Base_WebBaseclass
     {
         string getTokenDoc = "<root><name>" + Produce_Name + "</name><code>" + Produce_Code + "</code></root>";
         string requestURL = Server_API + Virtul_Folder_API + "/Token/api_getToken.aspx";
-        List<Cookie> activeCookies = Object_NetRemote.getRemoteServerCookie(requestURL, getTokenDoc);
-        foreach (Cookie activeNetCookie in activeCookies)
-        {
-            HttpCookie newCookie = new HttpCookie(activeNetCookie.Name);
-            newCookie.Value = activeNetCookie.Value;
-            newCookie.Domain = activeNetCookie.Domain;
-            Response.Cookies.Add(newCookie);
-        }
+        string strResultDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(getTokenDoc, requestURL, 1000 * 20, 1000 * 50);
+        XmlDocument resultDoc = new XmlDocument();
+        resultDoc.LoadXml(strResultDoc);
+        XmlNode msgNode = resultDoc.SelectSingleNode("/root/msg");
+        Object_DomainPersistance.Add(Page.Request.UserHostAddress, "token", 1440, class_XmlHelper.GetAttrValue(msgNode, "msg"));        
     }
 
     protected virtual void ExtendedAction()
