@@ -1,0 +1,7 @@
+<root>
+  <session name="RSDomain">
+    <item name="carl" domain="http://carl.morningstar.com"></item>
+    <item name="sikehome" domain="http://ikcoder.iok.la:24525"></item>
+    <item name="carlhome" domain="http://ikcoder.vicp.io:20596"></item>
+  </session>
+</root>

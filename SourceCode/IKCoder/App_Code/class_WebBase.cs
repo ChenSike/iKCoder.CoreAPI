@@ -12,52 +12,65 @@ using System.Xml;
 public class class_WebBase : class_Base_WebBaseclass
 {
 
-    //protected string Server_API = "http://ikcoder.iok.la:24525/";
-    protected string Server_API = "http://localhost/";
+    protected string Server_API = "http://ikcoder.iok.la:24525/";
+    //public static string Server_API = "http://localhost/";
     protected string Virtul_Folder_API = "PlatformAPI";
     protected string Produce_Name = "iKCoder";
     protected string Produce_Code = "12345678";
-    protected class_Net_RemoteRequest Object_NetRemote = new class_Net_RemoteRequest();
+    protected string CookieContainer_Name = "CommonCookieContainer";
+    protected string HostAddress = "";
+    protected class_Net_RemoteRequest Object_NetRemote;
+    protected class_Base_Config Object_BaseConfig;
     protected static Store_DomainPersistance Object_DomainPersistance = new Store_DomainPersistance();
       
 
 	public class_WebBase()
 	{
-		//
-		// TODO: 在此处添加构造函数逻辑
-		//
-	}
+    }
+
+    protected void initServices()
+    {
+        Object_BaseConfig = new class_Base_Config();
+        if (!Object_BaseConfig.DoOpen(APPFOLDERPATH + "\\" + "normaldata.xml"))
+            return;
+        XmlNodeList RSDomainItems = Object_BaseConfig.GetItemNodes("RSDomain");
+        Object_BaseConfig.SwitchToDESModeOFF();
+        foreach (XmlNode activeDomainItem in RSDomainItems)
+        {
+            string itemName = Object_BaseConfig.GetAttrValue(activeDomainItem, "name");
+            string domainValue = Object_BaseConfig.GetAttrValue(activeDomainItem, "domain");
+            if (!RSDoamin.ContainsKey(itemName))
+                RSDoamin.Add(itemName, domainValue);
+            else
+                RSDoamin[itemName] = domainValue;
+        }
+
+    }
 
     protected override void DoAction()
     {
+        initServices();
+        HostAddress = Page.Request.UserHostAddress;
+        CookieContainer activeCookieContainerObject = new CookieContainer();
+        Object_DomainPersistance.AddSingle(Object_DomainPersistance.GetKeyName(HostAddress, Produce_Name), CookieContainer_Name, -999, activeCookieContainerObject);
+        CookieContainer activeCookieContainer = (CookieContainer)Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(HostAddress, Produce_Name), CookieContainer_Name);
+        Object_NetRemote = new class_Net_RemoteRequest(ref activeCookieContainer);
         ISRESPONSEDOC = true;
         string requestURL = Server_API + Virtul_Folder_API + "/Token/api_verifyActiveToken.aspx";
         string requestGetTokenURL = Server_API + Virtul_Folder_API + "/Token/api_getToken.aspx";
-        foreach(Cookie activeCookie in class_Net_RemoteRequest.active_Cookies.GetCookies(new Uri(requestGetTokenURL)))
+        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(HostAddress, Produce_Name), "token") != null)
         {
-            HttpCookie newHttpCookie = new HttpCookie(activeCookie.Name);
-            newHttpCookie.Domain = activeCookie.Domain;
-            newHttpCookie.Value = activeCookie.Value;
-            if (Request.Cookies[activeCookie.Name] != null)
-                Request.Cookies.Set(newHttpCookie);
-            else
-                Request.Cookies.Add(newHttpCookie);
-        }
-        if (Object_DomainPersistance.Get(Page.Request.UserHostAddress, "token") != null)
-        {
-            string verifyTokenDoc = "<root><token>" + Object_DomainPersistance.Get(Page.Request.UserHostAddress, "token") + "</token></root>";
+            string verifyTokenDoc = "<root><token>" + Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(HostAddress, Produce_Name), "token") + "</token></root>";
             string resultDocFromServer = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(verifyTokenDoc, requestURL, 1000, 10000);
             XmlDocument responseFromServerDoc = new XmlDocument();
             responseFromServerDoc.LoadXml(resultDocFromServer);
-            if (responseFromServerDoc.SelectSingleNode("/root/err") != null)
-            {             
-                regToken();
-            }
-            else
-                ExtendedAction();
+            if (responseFromServerDoc.SelectSingleNode("/root/err") != null)            
+                regToken();           
+                
         }
         else
             regToken();
+        ExtendedAction();
 
     }
 
@@ -69,7 +82,7 @@ public class class_WebBase : class_Base_WebBaseclass
         XmlDocument resultDoc = new XmlDocument();
         resultDoc.LoadXml(strResultDoc);
         XmlNode msgNode = resultDoc.SelectSingleNode("/root/msg");
-        Object_DomainPersistance.Add(Page.Request.UserHostAddress, "token", 1440, class_XmlHelper.GetAttrValue(msgNode, "msg"));        
+        Object_DomainPersistance.Add(Object_DomainPersistance.GetKeyName(HostAddress, Produce_Name), "token", 1440, class_XmlHelper.GetAttrValue(msgNode, "msg"));        
     }
 
     protected virtual void ExtendedAction()
