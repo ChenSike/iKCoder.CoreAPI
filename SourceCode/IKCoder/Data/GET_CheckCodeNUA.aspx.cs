@@ -49,7 +49,7 @@ public partial class Data_GET_CheckCode : class_WebBase_NUA
         int.TryParse(strImageHeight, out imageHeight);
         _objectCheckCode.NextCode(activeCodeLength);
         RESPONSEBUFFER = _objectCheckCode.CreateImage(Color.DarkGray, imageWidth, imageHeight);
-        Object_DomainPersistance.Add(Object_DomainPersistance.GetKeyName(HostAddress, Produce_Name), codeName, -1, _objectCheckCode.CheckCode);
+        Object_DomainPersistance.Add(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name), codeName, -1, _objectCheckCode.CheckCode);
         Response.ContentType = "image/Gif";
     }
 }

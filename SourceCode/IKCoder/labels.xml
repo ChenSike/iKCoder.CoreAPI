@@ -2,4 +2,7 @@
   <group type="labels">
     <item code="" chinese="" english=""></item>
   </group>
+  <group type="message">
+    <item code="Empty_Param_Reg_Symbol" chinese="注册失败，您的手机号码或者EMAIL地址不可为空" english=""></item>
+  </group>
 </root>
