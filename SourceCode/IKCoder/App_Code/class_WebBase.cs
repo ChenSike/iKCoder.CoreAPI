@@ -12,15 +12,15 @@ using System.Xml;
 public class class_WebBase : class_Base_WebBaseclass
 {
 
-    protected string Server_API = "http://ikcoder.iok.la:24525/";
-    //public static string Server_API = "http://localhost/";
+    //protected string Server_API = "http://ikcoder.iok.la:24525/";
+    public static string Server_API = "http://localhost/";
     protected string Virtul_Folder_API = "PlatformAPI";
     protected string Produce_Name = "iKCoder";
     protected string Produce_Code = "12345678";
     protected string CookieContainer_Name = "CommonCookieContainer";
     protected class_Net_RemoteRequest Object_NetRemote;
     protected class_Base_Config Object_BaseConfig;
-    protected static Store_DomainPersistance Object_DomainPersistance = new Store_DomainPersistance();
+    protected static class_Store_DomainPersistance Object_DomainPersistance = new class_Store_DomainPersistance();
     protected class_Util_LabelsController Object_LabelController;
     
 

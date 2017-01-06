@@ -17,7 +17,7 @@ public class class_CommonLogic
     public const string Const_PlatformDBSymbol = "PlatformAPIDatabase";
     public const string Const_OperationQueryString = "AllowPlatformOperation";
 
-    public delegate void addErrMsgFunction (string header, string message,string link);
+    public delegate void addErrMsgFunction (string header, string message,string link,enum_MessageType activeType);
     public delegate void addMsgFunction (string header, string code, string message,string link);
 
     
@@ -183,7 +183,7 @@ public class class_CommonLogic
             if (Object_SqlHelper.ExecuteInsertSP(activeSPEntry, Object_SqlConnectionHelper, dbServer))
                 refAddMsgFunction(class_CommonDefined._Executed_Api + activeType.FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), activeType.FullName, "");
             else
-                refAddErrMsgFunction(class_CommonDefined._Faild_Execute_Api + activeType.FullName, "failed to do action : insert.", "");
+                refAddErrMsgFunction(class_CommonDefined._Faild_Execute_Api + activeType.FullName, "failed to do action : insert.", "",enum_MessageType.Exception);
         }
         else if (class_CommonDefined.enumDataOperaqtionType.select.ToString() == operation)
         {
@@ -194,7 +194,7 @@ public class class_CommonLogic
                 responseDoc.LoadXml(strXMLResult);
             }
             else
-                refAddErrMsgFunction(class_CommonDefined._Faild_Execute_Api + activeType.FullName, "failed to do action : select.", "");
+                refAddErrMsgFunction(class_CommonDefined._Faild_Execute_Api + activeType.FullName, "failed to do action : select.", "",enum_MessageType.Exception);
 
         }
         else if (class_CommonDefined.enumDataOperaqtionType.delete.ToString() == operation)
@@ -207,7 +207,7 @@ public class class_CommonLogic
             if (Object_SqlHelper.ExecuteUpdateSP(activeSPEntry, Object_SqlConnectionHelper, dbServer))
                 refAddMsgFunction(class_CommonDefined._Executed_Api + activeType.FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "Update action complete.", "");
             else
-                refAddErrMsgFunction(class_CommonDefined._Faild_Execute_Api + activeType.FullName, "failed to do action : update.", "");
+                refAddErrMsgFunction(class_CommonDefined._Faild_Execute_Api + activeType.FullName, "failed to do action : update.", "",enum_MessageType.Exception);
         }
         else if (class_CommonDefined.enumDataOperaqtionType.selectkey.ToString() == operation)
         {
@@ -218,7 +218,7 @@ public class class_CommonLogic
                 responseDoc.LoadXml(strXMLResult);
             }
             else
-                refAddErrMsgFunction(class_CommonDefined._Faild_Execute_Api + activeType.FullName, "failed to do action : select.", "");
+                refAddErrMsgFunction(class_CommonDefined._Faild_Execute_Api + activeType.FullName, "failed to do action : select.", "",enum_MessageType.Exception);
         }
     }
 
