@@ -17,10 +17,12 @@ public partial class Account_api_OperationUserAccount : class_WebClass_WA
         object_CommonLogic.LoadStoreProcedureList();
         XmlNode operationNode = REQUESTDOCUMENT.SelectSingleNode("/root/operation");       
         XmlNode usernameNode = REQUESTDOCUMENT.SelectSingleNode("/root/username");       
-        XmlNode passwordNode = REQUESTDOCUMENT.SelectSingleNode("/root/password");       
+        XmlNode passwordNode = REQUESTDOCUMENT.SelectSingleNode("/root/password");           
         string username = class_XmlHelper.GetNodeValue("", usernameNode);
         string operation = class_XmlHelper.GetNodeValue("", operationNode);
         string password = class_XmlHelper.GetNodeValue("", passwordNode);
+        class_Security_DES object_DES = new class_Security_DES(class_CommonLogic.Const_DESKey);
+        
         if (string.IsNullOrEmpty(operation))
             operation = "select";
         class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_basic");        

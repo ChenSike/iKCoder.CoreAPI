@@ -27,7 +27,7 @@ public partial class Account_SET_Reg : class_WebBase_NUA
             if (userSymbolNode == null)
             {
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName,Object_LabelController.GetString("message","Empty_Param_Reg_Symbol"), "");
-                return;
+                return;                
             }
             else
             {
@@ -86,6 +86,7 @@ public partial class Account_SET_Reg : class_WebBase_NUA
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Equal_Param_Reg_Code"), "");
                 return;
             }
+            
             StringBuilder inputDoc = new StringBuilder();
             inputDoc.Append("<root>");
             inputDoc.Append("<operation>insert</operation>");

@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="GET_SignStatus.aspx.cs" Inherits="Account_GET_SignStatus" %>

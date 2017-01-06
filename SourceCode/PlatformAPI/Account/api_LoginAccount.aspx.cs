@@ -65,9 +65,9 @@ public partial class Account_api_LoginAccount : class_WebClass_WA
                     HttpCookie newLoginIDCookie = new HttpCookie("loginedID");
                     newLoginIDCookie.Value = newGuid;
                     Response.Cookies.Add(newLoginIDCookie);
-                    HttpCookie newLoginUsrCookie = new HttpCookie("userName");
-                    newLoginUsrCookie.Value = username;
-                    Response.Cookies.Add(newLoginUsrCookie);
+                    Dictionary<string, string> returnDoc = new Dictionary<string, string>();
+                    returnDoc.Add("logined_username", username);
+                    //returnDoc.Add("")
                     AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), newGuid, "");
                 }
                 else
