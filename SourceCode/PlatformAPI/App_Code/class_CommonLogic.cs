@@ -6,6 +6,7 @@ using iKCoder_Platform_SDK_Kit;
 using System.Xml;
 using System.Data;
 
+
 /// <summary>
 /// class_CommonLogic 的摘要说明
 /// </summary>
@@ -106,7 +107,7 @@ public class class_CommonLogic
     {
         if (storeProceduresList.ContainsKey(dbServer))
         {
-            if (storeProceduresList.ContainsKey(SPName))
+            if (storeProceduresList[dbServer].ContainsKey(SPName))
                 return storeProceduresList[dbServer][SPName];
             else
                 return null;
@@ -169,7 +170,7 @@ public class class_CommonLogic
     public bool ConnectToDatabase()
     {
         Object_SqlConnectionHelper = new class_Data_SqlConnectionHelper();
-        if (!Object_SqlConnectionHelper.Set_NewConnectionItem(Const_PlatformDBSymbol, this.dbServer, dbuid, dbpwd, dbdata,dataBaseType)) 
+        if (!Object_SqlConnectionHelper.Set_NewConnectionItem(this.dbServer, this.dbServer, dbuid, dbpwd, dbdata,dataBaseType)) 
             return false;
         return true;
     }

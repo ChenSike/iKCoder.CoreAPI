@@ -1,1 +1,1 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="GET_CheckCodeNUA.aspx.cs" Inherits="Data_GET_CheckCode" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="GET_CheckCodeNUA.aspx.cs" Inherits="Data_GET_CheckCode" ValidateRequest="false" %>

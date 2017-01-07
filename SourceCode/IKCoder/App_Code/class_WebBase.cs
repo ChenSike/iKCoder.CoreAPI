@@ -12,8 +12,8 @@ using System.Xml;
 public class class_WebBase : class_Base_WebBaseclass
 {
 
-    //protected string Server_API = "http://ikcoder.iok.la:24525/";
-    public static string Server_API = "http://localhost/";
+    protected string Server_API = "http://ikcoder.iok.la:24525/";
+    //public static string Server_API = "http://localhost/";
     protected string Virtul_Folder_API = "PlatformAPI";
     protected string Produce_Name = "iKCoder";
     protected string Produce_Code = "12345678";
@@ -47,6 +47,11 @@ public class class_WebBase : class_Base_WebBaseclass
                 RSDoamin[itemName] = domainValue;
         }
 
+    }
+
+    protected override void InitAction()
+    {
+        initServices();
     }
 
     protected override void DoAction()

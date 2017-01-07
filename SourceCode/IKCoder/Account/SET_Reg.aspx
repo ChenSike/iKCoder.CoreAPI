@@ -1,1 +1,1 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="SET_Reg.aspx.cs" Inherits="Account_SET_Reg" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="SET_Reg.aspx.cs" Inherits="Account_SET_Reg" ValidateRequest="false" %>

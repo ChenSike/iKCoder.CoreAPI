@@ -1,1 +1,1 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="GET_Sign.aspx.cs" Inherits="Account_GET_Sign" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="GET_Sign.aspx.cs" Inherits="Account_GET_Sign" ValidateRequest="false" %>

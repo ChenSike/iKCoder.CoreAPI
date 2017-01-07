@@ -21,22 +21,21 @@ public partial class Account_api_OperationUserAccount : class_WebClass_WA
         string username = class_XmlHelper.GetNodeValue("", usernameNode);
         string operation = class_XmlHelper.GetNodeValue("", operationNode);
         string password = class_XmlHelper.GetNodeValue("", passwordNode);
-        class_Security_DES object_DES = new class_Security_DES(class_CommonLogic.Const_DESKey);
-        
+        class_Security_DES object_DES = new class_Security_DES(class_CommonLogic.Const_DESKey);        
         if (string.IsNullOrEmpty(operation))
             operation = "select";
         class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_basic");        
         if(operation == class_CommonDefined.enumDataOperaqtionType.insert.ToString())
         {
-            activeSPEntry.ModifyParameterValue("@name", username);
-            DataTable selectResultDT = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPKeyForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+            activeSPEntry.ModifyParameterValue("@username", username);
+            DataTable selectResultDT = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
             if (selectResultDT != null && selectResultDT.Rows.Count == 1)
             {
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : delete -> username existed.", "");
                 return;
             }
             activeSPEntry.ClearAllParamsValues();
-            activeSPEntry.ModifyParameterValue("@name", username);
+            activeSPEntry.ModifyParameterValue("@username", username);
             activeSPEntry.ModifyParameterValue("@password", password);          
         }
         else if (class_CommonDefined.enumDataOperaqtionType.delete.ToString() == operation)

@@ -32,7 +32,7 @@ public partial class Account_api_LoginAccount : class_WebClass_WA
             password = class_XmlHelper.GetNodeValue("", passwordNode);
         if (class_LoginedPool.verifyLoginedAccountExisted(username))
             class_LoginedPool.removeLoginedAccount(username);
-        class_Data_SqlSPEntry activeSPEntry_Basic = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_basic");
+        class_Data_SqlSPEntry activeSPEntry_Basic = object_CommonLogic.GetActiveSP(object_CommonLogic.dbdata, "spa_operation_account_basic");
         DataTable selectResultDT = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_Basic, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if (selectResultDT != null && selectResultDT.Rows.Count >= 1)
         {
@@ -66,9 +66,12 @@ public partial class Account_api_LoginAccount : class_WebClass_WA
                     newLoginIDCookie.Value = newGuid;
                     Response.Cookies.Add(newLoginIDCookie);
                     Dictionary<string, string> returnDoc = new Dictionary<string, string>();
-                    returnDoc.Add("logined_username", username);
-                    //returnDoc.Add("")
-                    AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), newGuid, "");
+                    returnDoc.Add("logined_username", newLoginedAccount.UserNmae);
+                    returnDoc.Add("logined_userid", newLoginedAccount.UserID);
+                    returnDoc.Add("logined_loginid", newLoginedAccount.LoginedID);
+                    returnDoc.Add("logined_loginedtime", newLoginedAccount.LastLoginedTime.ToString());
+                    returnDoc.Add("logined_experied", newLoginedAccount.ExperiedPeriod.ToString());
+                    AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), returnDoc);
                 }
                 else
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "Bad Login:user info is not matched.", "");

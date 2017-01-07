@@ -37,13 +37,14 @@ public partial class Data_GET_CheckCode : class_WebBase_NUA
             strImageHeight = class_XmlHelper.GetNodeValue(heightNode);
            
         }
-        else
-        {
+        if(string.IsNullOrEmpty(codeLength))
             codeLength = GetQuerystringParam("length");
+        if(string.IsNullOrEmpty(codeName))
             codeName = GetQuerystringParam("name");
+        if(string.IsNullOrEmpty(strImageWidth))
             strImageWidth = GetQuerystringParam("width");
+        if(string.IsNullOrEmpty(strImageHeight))
             strImageHeight = GetQuerystringParam("height");
-        }
         int.TryParse(codeLength, out activeCodeLength);
         int.TryParse(strImageWidth, out imageWidth);
         int.TryParse(strImageHeight, out imageHeight);

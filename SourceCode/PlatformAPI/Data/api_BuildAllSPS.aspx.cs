@@ -16,7 +16,7 @@ public partial class Data_api_BuildAllSPS : class_WebBase_NWA
             if (object_CommonLogic.ConnectToDatabase())
             {
                 class_Data_SqlHelper objectSqlHelper = new class_Data_SqlHelper();
-                if (objectSqlHelper.ActionAutoCreateSPS(object_CommonLogic.Object_SqlConnectionHelper.Get_ActiveConnection(class_CommonLogic.Const_PlatformDBSymbol)))
+                if (objectSqlHelper.ActionAutoCreateSPS(object_CommonLogic.Object_SqlConnectionHelper.Get_ActiveConnection(object_CommonLogic.dbServer)))
                     AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + "execute_buildALLSPS", class_CommonDefined.enumExecutedCode.executed.ToString(), "complete executing api.", "");
                 else
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "api_buildALLSPS", "failed to execute task : build all SPS.", "");
