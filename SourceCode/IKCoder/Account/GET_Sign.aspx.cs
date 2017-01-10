@@ -40,6 +40,24 @@ public partial class Account_GET_Sign : class_WebBase
             string URL=Server_API+Virtul_Folder_API+"Account/api_LoginAccount.aspx";
             string strReturnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(inputDoc, URL, 1000 * 60, 100000);
             returnFromAPIServer.LoadXml(strReturnDoc);
+            XmlNode msgNode = returnFromAPIServer.SelectSingleNode("/root/msg");
+            if(msgNode!=null)
+            {
+                string user_name = class_XmlHelper.GetAttrValue(msgNode, "logined_username");
+                string user_id = class_XmlHelper.GetAttrValue(msgNode, "logined_userid");
+                string user_loginid = class_XmlHelper.GetAttrValue(msgNode, "logined_loginid");
+                Session["logined_user_nmae"] = user_name;
+                Session["logined_user_id"] = user_id;
+                Session["logined_user_signedid"] = user_loginid;
+                Response.Cookies["logined_marked"].Value = "1";
+                Response.Cookies["logined_user_id"].Value = user_id;
+                Response.Cookies["logined_user_signedid"].Value = user_loginid;
+                AddResponseMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true","");
+             }
+            else
+            {
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Param_Sign_UnSigned"), "");
+            }
         }
         else        
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "Invalidated Input Document", "", enum_MessageType.Exception);

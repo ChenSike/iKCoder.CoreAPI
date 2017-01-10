@@ -78,17 +78,23 @@ public static class class_LoginedPool
         {
             lock (_accountLoginedPool)
             {
-                if (_accountLoginedPool.ContainsKey(activeAccountItem.UserNmae))
-                {
+                if (!_accountLoginedPool.ContainsKey(activeAccountItem.UserNmae))
                     _accountLoginedPool.Add(activeAccountItem.UserNmae, activeAccountItem);
-                    return true;
-                }
                 else
-                    return false;
+                    _accountLoginedPool[activeAccountItem.UserNmae] = activeAccountItem;
+                return true;                 
             }
         }
         else
             return false;
+    }
+
+    public static class_AccountItem getActiveAccountItem(string userName)
+    {
+        if (_accountLoginedPool != null && _accountLoginedPool.ContainsKey(userName))
+            return _accountLoginedPool[userName];
+        else
+            return null;
     }
 
     public static void clearLoginedAccountPool()

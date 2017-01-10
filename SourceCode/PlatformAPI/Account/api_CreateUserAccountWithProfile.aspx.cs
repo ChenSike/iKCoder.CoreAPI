@@ -4,21 +4,46 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Xml;
 using iKCoder_Platform_SDK_Kit;
-using System.Text;
+using System.Xml;
 using System.Data;
+using System.Text;
 
-public partial class Buss_api_AccountProfile_Create : class_WebClass_WLA
+public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_WA
 {
-    protected override void AfterExtenedFunction()
-    {        
+    protected override void ExtenedFunction()
+    {
         ISRESPONSEDOC = true;
-        string profileName = "profile_" + activeUserName;
-        string profileProduct = string.Empty;
-        profileProduct = GetQuerystringParam("product");
+        object_CommonLogic.ConnectToDatabase();
+        object_CommonLogic.LoadStoreProcedureList();    
+        XmlNode usernameNode = REQUESTDOCUMENT.SelectSingleNode("/root/username");
+        XmlNode passwordNode = REQUESTDOCUMENT.SelectSingleNode("/root/password");
+        XmlNode productNode = REQUESTDOCUMENT.SelectSingleNode("/root/product");
+        string username = class_XmlHelper.GetNodeValue("", usernameNode);
+        string password = class_XmlHelper.GetNodeValue("", passwordNode);
+        string profileProduct = class_XmlHelper.GetNodeValue("", productNode);   
+        if (string.IsNullOrEmpty(username))
+            username = GetQuerystringParam("username");
+        if (string.IsNullOrEmpty(password))
+            password = GetQuerystringParam("password");
+        if(string.IsNullOrEmpty(profileProduct))
+            profileProduct = GetQuerystringParam("product");
         if (string.IsNullOrEmpty(profileProduct))
             profileProduct = "iKCoder";
+        class_Security_DES object_DES = new class_Security_DES(class_CommonLogic.Const_DESKey);
+        class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_basic");
+        activeSPEntry.ModifyParameterValue("@username", username);
+        DataTable selectResultDT = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+        if (selectResultDT != null && selectResultDT.Rows.Count == 1)
+        {
+            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : insert -> username existed.", "");
+            return;
+        }
+        activeSPEntry.ClearAllParamsValues();
+        activeSPEntry.ModifyParameterValue("@username", username);
+        activeSPEntry.ModifyParameterValue("@password", password);
+        object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, "insert", this.GetType());
+        string profileName = "profile_" + username;       
         StringBuilder strProDoc = new StringBuilder();
         strProDoc.Append("<root>");
         strProDoc.Append("<docbasic>");
@@ -30,7 +55,7 @@ public partial class Buss_api_AccountProfile_Create : class_WebClass_WLA
         strProDoc.Append("</docbasic>");
         strProDoc.Append("<usrbasic>");
         strProDoc.Append("<usr_name>");
-        strProDoc.Append(activeUserName);
+        strProDoc.Append(username);
         strProDoc.Append("</usr_name>");
         strProDoc.Append("<usr_nickname>");
         strProDoc.Append("</usr_nickname>");
@@ -51,26 +76,26 @@ public partial class Buss_api_AccountProfile_Create : class_WebClass_WLA
         strProDoc.Append("<senior></senior>");
         strProDoc.Append("</lessions>");
         strProDoc.Append("<friends></friends>");
-        strProDoc.Append("</root>");      
+        strProDoc.Append("</root>");
         XmlDocument proDoc = new XmlDocument();
-        proDoc.LoadXml(strProDoc.ToString());        
+        proDoc.LoadXml(strProDoc.ToString());
         object_CommonLogic.ConnectToDatabase();
         object_CommonLogic.LoadStoreProcedureList();
-        class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_profile");
+        activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_profile");
         activeSPEntry.ModifyParameterValue("@profile_name", profileName);
         DataTable activeAccountProfileDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPKeyForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
-        if(activeAccountProfileDataTable!=null)
+        if (activeAccountProfileDataTable != null)
         {
-            if(activeAccountProfileDataTable.Rows.Count>0)            
+            if (activeAccountProfileDataTable.Rows.Count > 0)
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : account profile existed.", "");
             else
             {
                 activeSPEntry.ClearAllParamsValues();
                 activeSPEntry.ModifyParameterValue("@profile_name", profileName);
                 activeSPEntry.ModifyParameterValue("@profile_product", profileProduct);
-                activeSPEntry.ModifyParameterValue("@account_name", activeUserName);
+                activeSPEntry.ModifyParameterValue("@account_name", username);
                 activeSPEntry.ModifyParameterValue("@profile_data", strProDoc);
-                if(object_CommonLogic.Object_SqlHelper.ExecuteInsertSP(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer))
+                if (object_CommonLogic.Object_SqlHelper.ExecuteInsertSP(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer))
                     AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "created profile", "");
                 else
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : faild to create account profile.", "");

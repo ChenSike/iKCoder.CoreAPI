@@ -106,10 +106,10 @@ public partial class Account_SET_Reg : class_WebBase_NUA
             inputDoc.Append(userPassword);
             inputDoc.Append("</password>");
             inputDoc.Append("</root>");
-            requestAPI = "/Account/api_OperationUserAccount.aspx";
+            requestAPI = "/Account/api_CreateUserAccountWithProfile.aspx";
             URL = Server_API + Virtul_Folder_API + requestAPI;
-            returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(inputDoc.ToString(), URL, 1000 * 60, 100000);            
-            if(!returnDoc.Contains("<err>"))            
+            returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(inputDoc.ToString(), URL, 1000 * 60, 100000);
+            if (!returnDoc.Contains("<err>"))            
                 AddResponseMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), Object_LabelController.GetString("message", "SC_Param_Reg_Account"), "");            
             else
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Param_Reg_Account"), "");               
