@@ -13,30 +13,33 @@ public partial class Data_GET_UrlMap : class_WebBase_NUA
     {
         ISRESPONSEDOC = true;
         string mapkey = GetQuerystringParam("mapkey");
-        bool isfulurl = GetQuerystringParam("fulurl") == "1"?true:false;
-        if(string.IsNullOrEmpty(mapkey))
-        {            
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "Invalidated Parameter", "", enum_MessageType.Exception);
-            return;
-        }
+        bool isfulurl = GetQuerystringParam("fulurl") == "1" ? true : false;
+        bool isshowall = GetQuerystringParam("showall") == "1" ? true : false;
         try
         {
             XmlDocument roadMapDoc = new XmlDocument();
             roadMapDoc.Load(APPFOLDERPATH + "\\" + "roadmap.xml");
-            XmlNode activeNode = roadMapDoc.SelectSingleNode("/root/item[@key='"+mapkey+"']");
-            if(activeNode!=null)
+            if (!isshowall)
             {
-                string value = class_XmlHelper.GetAttrValue(activeNode,"value");
-                string fullurl = "";
-                if (isfulurl)
-                    fullurl = Server_API + Virtul_Folder_API + value;
+                XmlNode activeNode = roadMapDoc.SelectSingleNode("/root/item[@key='" + mapkey + "']");
+                if (activeNode != null)
+                {
+                    string value = class_XmlHelper.GetAttrValue(activeNode, "value");
+                    string fullurl = "";
+                    if (isfulurl)
+                        fullurl = Server_API + Virtul_Folder_API + value;
+                    else
+                        fullurl = value;
+                    AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), fullurl, "");
+                }
                 else
-                    fullurl = value;
-                AddResponseMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), fullurl, "");
+                {
+                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "Can not find the correct map node", "", enum_MessageType.Exception);
+                }
             }
             else
             {
-                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "Can not find the correct map node", "", enum_MessageType.Exception);
+                RESPONSEDOCUMENT.Load(APPFOLDERPATH + "\\" + "roadmap.xml");
             }
                 
         }

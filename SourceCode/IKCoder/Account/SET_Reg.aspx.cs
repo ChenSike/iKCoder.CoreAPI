@@ -34,6 +34,10 @@ public partial class Account_SET_Reg : class_WebBase_NUA
                 userSymbol = class_XmlHelper.GetNodeValue(userSymbolNode);
                 if (string.IsNullOrEmpty(userSymbol))
                 {
+                    userSymbol = GetQuerystringParam("symbol");
+                }
+                if (string.IsNullOrEmpty(userSymbol))
+                {
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_Symbol"), "");
                     return;
                 }
@@ -46,6 +50,10 @@ public partial class Account_SET_Reg : class_WebBase_NUA
             else
             {
                 userPassword = class_XmlHelper.GetNodeValue(userPasswordNode);
+                if (string.IsNullOrEmpty(userPassword))
+                {
+                    userPassword = GetQuerystringParam("password");
+                }
                 if (string.IsNullOrEmpty(userPassword))
                 {
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_Password"), "");
@@ -62,6 +70,10 @@ public partial class Account_SET_Reg : class_WebBase_NUA
                 codeValue = class_XmlHelper.GetNodeValue(codeValueNode);
                 if (string.IsNullOrEmpty(codeValue))
                 {
+                    codeValue = GetQuerystringParam("codevalue");
+                }
+                if (string.IsNullOrEmpty(codeValue))
+                {
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_Checkcode"), "");
                     return;
                 }
@@ -74,6 +86,10 @@ public partial class Account_SET_Reg : class_WebBase_NUA
             else
             {
                 codeName = class_XmlHelper.GetNodeValue(codeNameNode);
+                if (string.IsNullOrEmpty(codeName))
+                {
+                    codeName = GetQuerystringParam("codename");
+                }
                 if (string.IsNullOrEmpty(codeName))
                 {
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_CodeName"), "");
@@ -97,14 +113,16 @@ public partial class Account_SET_Reg : class_WebBase_NUA
                 return;
             }
             StringBuilder inputDoc = new StringBuilder();
-            inputDoc.Append("<root>");
-            inputDoc.Append("<operation>insert</operation>");
+            inputDoc.Append("<root>");            
             inputDoc.Append("<username>");
             inputDoc.Append(userSymbol);
             inputDoc.Append("</username>");
             inputDoc.Append("<password>");
             inputDoc.Append(userPassword);
             inputDoc.Append("</password>");
+            inputDoc.Append("<product>");
+            inputDoc.Append(Produce_Name);
+            inputDoc.Append("</product>");
             inputDoc.Append("</root>");
             requestAPI = "/Account/api_CreateUserAccountWithProfile.aspx";
             URL = Server_API + Virtul_Folder_API + requestAPI;

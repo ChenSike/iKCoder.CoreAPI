@@ -1,5 +1,6 @@
 ﻿<root>
-  <item group="account" key="reg" value="/Account/SET_Reg.aspx"></item>
-  <item group="account" key="sign" value="/Account/GET_Sign.aspx"></item>
+  <item group="account" key="reg" value="/Account/SET_Reg.aspx" queryparams ="symbol|password|codevalue}codename"></item>
+  <item group="account" key="sign" value="/Account/GET_Sign.aspx" queryparams ="symbol|password"></item>
   <item group="account" key="signsstatus" value="Account/GET_SignStatus.aspx"></item>
+  
 </root>
