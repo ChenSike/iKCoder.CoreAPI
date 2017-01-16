@@ -34,8 +34,7 @@ public partial class Data_GET_CheckCode : class_WebBase_NUA
             XmlNode widthNode = REQUESTDOCUMENT.SelectSingleNode("/root/width");
             strImageWidth = class_XmlHelper.GetNodeValue(widthNode);            
             XmlNode heightNode = REQUESTDOCUMENT.SelectSingleNode("/root/height");
-            strImageHeight = class_XmlHelper.GetNodeValue(heightNode);
-           
+            strImageHeight = class_XmlHelper.GetNodeValue(heightNode);           
         }
         if(string.IsNullOrEmpty(codeLength))
             codeLength = GetQuerystringParam("length");

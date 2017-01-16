@@ -58,6 +58,7 @@ public class class_WebBase : class_Base_WebBaseclass
     {
         initServices();        
         CookieContainer activeCookieContainerObject = new CookieContainer();
+        
         Object_DomainPersistance.AddSingle(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name), CookieContainer_Name, -999, activeCookieContainerObject);
         CookieContainer activeCookieContainer = (CookieContainer)Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name), CookieContainer_Name);
         Object_NetRemote = new class_Net_RemoteRequest(ref activeCookieContainer);
