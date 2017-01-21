@@ -97,8 +97,8 @@ public partial class Account_SET_Reg : class_WebBase_NUA
                 }
             }
             string codeValueFromServer = "";
-            if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name), codeName) != null)
-                codeValueFromServer = (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name), codeName)).ToString();
+            if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name,ClientSymbol), codeName) != null)
+                codeValueFromServer = (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name,ClientSymbol), codeName)).ToString();
             if (codeValueFromServer != codeValue)
             {
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Equal_Param_Reg_Code"), "");

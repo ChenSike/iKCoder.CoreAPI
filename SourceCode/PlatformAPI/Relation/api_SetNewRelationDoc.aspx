@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="api_SetNewRelationDoc.aspx.cs" Inherits="Relation_api_SetNewRelationDoc" %>

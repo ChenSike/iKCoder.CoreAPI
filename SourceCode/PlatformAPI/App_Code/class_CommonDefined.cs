@@ -48,5 +48,12 @@ public class class_CommonDefined
         tmplocked = 5002,
         locked = 5003
     }
+
+    public enum enumRelationShipType
+    {
+        root = 6001,
+        parant = 6002,
+        child = 6003
+    }
        
 }

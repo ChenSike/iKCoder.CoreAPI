@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="api_SetNewParantGroup.aspx.cs" Inherits="Relation_api_SetNewParantGroup" %>

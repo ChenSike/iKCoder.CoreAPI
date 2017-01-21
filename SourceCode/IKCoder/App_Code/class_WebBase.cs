@@ -58,16 +58,15 @@ public class class_WebBase : class_Base_WebBaseclass
     {
         initServices();        
         CookieContainer activeCookieContainerObject = new CookieContainer();
-        
-        Object_DomainPersistance.AddSingle(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name), CookieContainer_Name, -999, activeCookieContainerObject);
-        CookieContainer activeCookieContainer = (CookieContainer)Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name), CookieContainer_Name);
+        Object_DomainPersistance.AddSingle(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), CookieContainer_Name, -999, activeCookieContainerObject);
+        CookieContainer activeCookieContainer = (CookieContainer)Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name,ClientSymbol), CookieContainer_Name);
         Object_NetRemote = new class_Net_RemoteRequest(ref activeCookieContainer);
         ISRESPONSEDOC = true;
         string requestURL = Server_API + Virtul_Folder_API + "/Token/api_verifyActiveToken.aspx";
         string requestGetTokenURL = Server_API + Virtul_Folder_API + "/Token/api_getToken.aspx";
-        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name), "token") != null)
+        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name,ClientSymbol), "token") != null)
         {
-            string verifyTokenDoc = "<root><token>" + Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name), "token") + "</token></root>";
+            string verifyTokenDoc = "<root><token>" + Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name,ClientSymbol), "token") + "</token></root>";
             string resultDocFromServer = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(verifyTokenDoc, requestURL, 1000, 10000);
             XmlDocument responseFromServerDoc = new XmlDocument();
             responseFromServerDoc.LoadXml(resultDocFromServer);
@@ -89,7 +88,7 @@ public class class_WebBase : class_Base_WebBaseclass
         XmlDocument resultDoc = new XmlDocument();
         resultDoc.LoadXml(strResultDoc);
         XmlNode msgNode = resultDoc.SelectSingleNode("/root/msg");
-        Object_DomainPersistance.Add(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name), "token", 1440, class_XmlHelper.GetAttrValue(msgNode, "msg"));        
+        Object_DomainPersistance.Add(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name,ClientSymbol), "token", 1440, class_XmlHelper.GetAttrValue(msgNode, "msg"));        
     }
 
     protected virtual void ExtendedAction()
