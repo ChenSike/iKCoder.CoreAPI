@@ -14,7 +14,6 @@
     <item code="ERR_Param_Reg_Account" chinese="非常抱歉，平台无法为您创建账户，您可以稍后再试或者联系我们." english=""></item>
     <item code="ERR_Param_Reg_AccountExisted" chinese="非常抱歉，您选择的账户名称已经存在，您可以更换您的账户后重试." english=""></item>
     <item code="ERR_Param_Sign_NoMsgNode" chinese="非常抱歉，登录失败,无法联系到中央服务器，请稍后再试." english=""></item>
-    <item code="ERR_Param_Sign_UnSigned" chinese="非常抱歉，登录失败,无效的账户或者是无效的密码." english=""></item>
-    
+    <item code="ERR_Param_Sign_UnSigned" chinese="非常抱歉，登录失败,无效的账户或者是无效的密码." english=""></item>    
   </group>
 </root>

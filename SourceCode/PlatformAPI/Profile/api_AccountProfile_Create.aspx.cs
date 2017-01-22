@@ -38,12 +38,16 @@ public partial class Buss_api_AccountProfile_Create : class_WebClass_WLA
         strProDoc.Append("0");
         strProDoc.Append("<coins>");
         strProDoc.Append("<account_status>");
-        strProDoc.Append("L0");
+        strProDoc.Append("0");
         strProDoc.Append("</account_status>");
         strProDoc.Append("<account_limited>");
         strProDoc.Append("</account_limited>");
         strProDoc.Append("<account_head>");
         strProDoc.Append("</account_head>");
+        strProDoc.Append("<account_childs>");
+        strProDoc.Append("</account_childs>");
+        strProDoc.Append("<account_sms>");
+        strProDoc.Append("</account_sms>");
         strProDoc.Append("</usrbasic>");
         strProDoc.Append("<lessons>");
         strProDoc.Append("<begin></begin>");
@@ -58,6 +62,7 @@ public partial class Buss_api_AccountProfile_Create : class_WebClass_WLA
         object_CommonLogic.LoadStoreProcedureList();
         class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_profile");
         activeSPEntry.ModifyParameterValue("@profile_name", profileName);
+        activeSPEntry.ModifyParameterValue("@profile_product", profileProduct);
         DataTable activeAccountProfileDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPKeyForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if(activeAccountProfileDataTable!=null)
         {

@@ -37,7 +37,9 @@ public class class_WebClass_WLA : class_WebClass_WA
             AfterExtenedFunction();
         }
         else
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false", "");        
+            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false", "");
+        if (object_CommonLogic.isExecutedConnectedDB)
+            object_CommonLogic.CloseDBConnection();
     }
 
     protected virtual void AfterExtenedFunction()

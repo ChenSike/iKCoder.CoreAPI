@@ -22,6 +22,8 @@ public class class_WebBase : class_Base_WebBaseclass
     protected class_Base_Config Object_BaseConfig;
     protected static class_Store_DomainPersistance Object_DomainPersistance = new class_Store_DomainPersistance();
     protected class_Util_LabelsController Object_LabelController;
+    protected int Session_TimeOutMinutes = 60;
+    protected int Cookie_TimeOutHour = 1;
     
 
 	public class_WebBase()
@@ -54,10 +56,16 @@ public class class_WebBase : class_Base_WebBaseclass
         initServices();
     }
 
+    protected virtual void BeforeExtenedAction()
+    {
+
+    }
+
     protected override void DoAction()
     {
         initServices();        
         CookieContainer activeCookieContainerObject = new CookieContainer();
+        Object_DomainPersistance.ClearBuffer();
         Object_DomainPersistance.AddSingle(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), CookieContainer_Name, -999, activeCookieContainerObject);
         CookieContainer activeCookieContainer = (CookieContainer)Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name,ClientSymbol), CookieContainer_Name);
         Object_NetRemote = new class_Net_RemoteRequest(ref activeCookieContainer);
@@ -76,6 +84,7 @@ public class class_WebBase : class_Base_WebBaseclass
         }
         else
             regToken();
+        BeforeExtenedAction();
         ExtendedAction();
 
     }
@@ -94,6 +103,6 @@ public class class_WebBase : class_Base_WebBaseclass
     protected virtual void ExtendedAction()
     {
 
-    }
+    }  
 
 }

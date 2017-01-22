@@ -60,7 +60,6 @@ public partial class Relation_api_SetNewRelationDoc : class_WebClass_WA
             object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, class_CommonDefined.enumDataOperaqtionType.insert.ToString(), this.GetType());
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
         }
-        object_CommonLogic.CloseDBConnection();
         
     }
 }

@@ -21,7 +21,12 @@ public class class_CommonLogic
     public delegate void addErrMsgFunction (string header, string message,string link,enum_MessageType activeType);
     public delegate void addMsgFunction (string header, string code, string message,string link);
 
-    
+
+    public bool isExecutedConnectedDB
+    {
+        set;
+        get;
+    }
    
     public class_Base_Config Object_BaseConfig
     {
@@ -172,6 +177,7 @@ public class class_CommonLogic
         Object_SqlConnectionHelper = new class_Data_SqlConnectionHelper();
         if (!Object_SqlConnectionHelper.Set_NewConnectionItem(this.dbServer, this.dbServer, dbuid, dbpwd, dbdata,dataBaseType)) 
             return false;
+        isExecutedConnectedDB = true;
         return true;
     }
 

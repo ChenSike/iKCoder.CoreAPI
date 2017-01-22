@@ -23,6 +23,8 @@ public class class_WebClass_WA:class_Base_WebBaseclass
             ExtenedFunction();
         else
             AddErrMessageToResponseDOC("BadToken", "Your token is invalidated", "");
+        if (object_CommonLogic.isExecutedConnectedDB)
+            object_CommonLogic.CloseDBConnection();
     }
 
     protected virtual void ExtenedFunction()

@@ -16,9 +16,10 @@ public class class_WebBase_NWA:class_Base_WebBaseclass
 
     protected override void DoAction()
     {
-        object_CommonLogic.InitServices(APPFOLDERPATH,ref RSDoamin);
-       
+        object_CommonLogic.InitServices(APPFOLDERPATH,ref RSDoamin);       
         ExtenedFunction();
+        if (object_CommonLogic.isExecutedConnectedDB)
+            object_CommonLogic.CloseDBConnection();
     }
 
     protected virtual void ExtenedFunction()

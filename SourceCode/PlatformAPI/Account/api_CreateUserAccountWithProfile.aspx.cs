@@ -68,6 +68,8 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
         strProDoc.Append("</account_status>");
         strProDoc.Append("<account_limited>");
         strProDoc.Append("</account_limited>");
+        strProDoc.Append("<account_childs>");
+        strProDoc.Append("</account_childs>");
         strProDoc.Append("<account_head>");
         strProDoc.Append("</account_head>");
         strProDoc.Append("</usrbasic>");
