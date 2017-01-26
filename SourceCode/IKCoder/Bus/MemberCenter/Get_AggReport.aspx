@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Get_AggReport.aspx.cs" Inherits="Bus_MemberCenter_Get_AggReport" %>

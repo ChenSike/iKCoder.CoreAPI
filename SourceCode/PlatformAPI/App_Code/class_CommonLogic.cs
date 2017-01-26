@@ -124,7 +124,7 @@ public class class_CommonLogic
 
     }        
 
-    public bool InitServices(string rootPath,ref Dictionary<string,string> refBaseDomainLst)
+    public bool InitServices(string rootPath,string refDomain,string regedDomain)
     {
         Object_BaseConfig = new class_Base_Config();        
         if(!Object_BaseConfig.DoOpen(rootPath + "\\" + "normaldata.xml"))
@@ -145,8 +145,8 @@ public class class_CommonLogic
         {
             string itemName = Object_BaseConfig.GetAttrValue(activeDomainItem, "name");
             string domainValue = Object_BaseConfig.GetAttrValue(activeDomainItem, "domain");
-            if (!refBaseDomainLst.ContainsKey(itemName))
-                refBaseDomainLst.Add(itemName, domainValue);
+            if (regedDomain.Contains(itemName))
+                refDomain = regedDomain;
         }
         int iMaxCountOfLoginedAccount = 5000;
         int.TryParse(Object_BaseConfig.GetAttrValue(applicationConfig, "maxCountOfLoginedAccount"), out iMaxCountOfLoginedAccount);

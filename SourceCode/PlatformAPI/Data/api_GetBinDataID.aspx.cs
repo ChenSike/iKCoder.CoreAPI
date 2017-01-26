@@ -13,7 +13,7 @@ public partial class Data_api_GetBinDataID : class_WebClass_WA
     {
         ISRESPONSEDOC = true;                
         string symbol = GetQuerystringParam("symbol");        
-        class_Data_SqlSPEntry activeSPEntry_binData = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Data_Basic");
+        class_Data_SqlSPEntry activeSPEntry_binData = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_data_basic");
         activeSPEntry_binData.ModifyParameterValue("@symbol", symbol);
         DataTable binDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_binData, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if (binDataTable.Rows.Count > 0)

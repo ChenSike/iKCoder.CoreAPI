@@ -1,0 +1,21 @@
+﻿'<root>
+  <docbasic>
+    <doc_id></doc_id>
+    <doc_symbol>profile_18675521735</doc_symbol>
+  </docbasic>
+  <usrbasic>
+    <usr_name>18675521735</usr_name>
+    <usr_nickname></usr_nickname>
+    <coins>0</coins>
+    <account_status>L0</account_status>
+    <account_limited></account_limited>
+    <account_childs></account_childs>
+    <account_head></account_head>
+  </usrbasic>
+  <lessons>
+    <begin></begin>
+    <intermediate></intermediate>
+    <senior></senior>
+  </lessons>
+  <friends></friends>
+</root>

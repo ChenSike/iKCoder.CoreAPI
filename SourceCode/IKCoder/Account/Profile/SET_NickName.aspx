@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="SET_NickName.aspx.cs" Inherits="Account_SET_NickName" %>

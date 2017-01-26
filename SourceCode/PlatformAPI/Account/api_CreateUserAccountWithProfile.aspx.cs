@@ -62,7 +62,7 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
         strProDoc.Append("</usr_nickname>");
         strProDoc.Append("<coins>");
         strProDoc.Append("0");
-        strProDoc.Append("<coins>");
+        strProDoc.Append("</coins>");
         strProDoc.Append("<account_status>");
         strProDoc.Append("L0");
         strProDoc.Append("</account_status>");
@@ -77,7 +77,7 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
         strProDoc.Append("<begin></begin>");
         strProDoc.Append("<intermediate></intermediate>");
         strProDoc.Append("<senior></senior>");
-        strProDoc.Append("</lessions>");
+        strProDoc.Append("</lessons>");
         strProDoc.Append("<friends></friends>");
         strProDoc.Append("</root>");
         XmlDocument proDoc = new XmlDocument();

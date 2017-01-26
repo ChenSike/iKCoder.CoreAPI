@@ -11,7 +11,6 @@ using System.Xml;
 /// </summary>
 public class class_WebBase : class_Base_WebBaseclass
 {
-
     protected string Server_API = "http://ikcoder.iok.la:24525/";
     //public static string Server_API = "http://localhost/";
     protected string Virtul_Folder_API = "PlatformAPI";
@@ -19,11 +18,11 @@ public class class_WebBase : class_Base_WebBaseclass
     protected string Produce_Code = "12345678";
     protected string CookieContainer_Name = "CommonCookieContainer";
     protected class_Net_RemoteRequest Object_NetRemote;
-    protected class_Base_Config Object_BaseConfig;
-    protected static class_Store_DomainPersistance Object_DomainPersistance = new class_Store_DomainPersistance();
+    protected class_Base_Config Object_BaseConfig;    
     protected class_Util_LabelsController Object_LabelController;
     protected int Session_TimeOutMinutes = 60;
     protected int Cookie_TimeOutHour = 1;
+    protected static int cid = (new Random(DateTime.Now.Millisecond)).Next(1111111,99999999);
     
 
 	public class_WebBase()
@@ -32,21 +31,27 @@ public class class_WebBase : class_Base_WebBaseclass
 
     protected void initServices()
     {
-        Object_BaseConfig = new class_Base_Config();
+       Object_BaseConfig = new class_Base_Config();
         if (!Object_BaseConfig.DoOpen(APPFOLDERPATH + "\\" + "normaldata.xml"))
             return;
+
         if ((Object_LabelController = class_Util_LabelsController.CreateInstance(APPFOLDERPATH + "\\" + "labels.xml")) == null)
             return;
         XmlNodeList RSDomainItems = Object_BaseConfig.GetItemNodes("RSDomain");
         Object_BaseConfig.SwitchToDESModeOFF();
-        foreach (XmlNode activeDomainItem in RSDomainItems)
+        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientID), "RSDOMAIN") != null)
         {
-            string itemName = Object_BaseConfig.GetAttrValue(activeDomainItem, "name");
-            string domainValue = Object_BaseConfig.GetAttrValue(activeDomainItem, "domain");
-            if (!RSDoamin.ContainsKey(itemName))
-                RSDoamin.Add(itemName, domainValue);
-            else
-                RSDoamin[itemName] = domainValue;
+            string perinstanceDomain = Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientID), "RSDOMAIN").ToString();
+            foreach (XmlNode activeDomainItem in RSDomainItems)
+            {
+                string itemName = Object_BaseConfig.GetAttrValue(activeDomainItem, "name");
+                string domainValue = Object_BaseConfig.GetAttrValue(activeDomainItem, "domain");
+                if (perinstanceDomain.Contains(domainValue))
+                {
+                    RSDoamin = domainValue;
+                    break;
+                }
+            }
         }
 
     }
@@ -56,9 +61,9 @@ public class class_WebBase : class_Base_WebBaseclass
         initServices();
     }
 
-    protected virtual void BeforeExtenedAction()
+    protected virtual bool BeforeExtenedAction()
     {
-
+        return false;
     }
 
     protected override void DoAction()
@@ -72,21 +77,30 @@ public class class_WebBase : class_Base_WebBaseclass
         ISRESPONSEDOC = true;
         string requestURL = Server_API + Virtul_Folder_API + "/Token/api_verifyActiveToken.aspx";
         string requestGetTokenURL = Server_API + Virtul_Folder_API + "/Token/api_getToken.aspx";
-        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name,ClientSymbol), "token") != null)
+        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), "token") != null)
         {
-            string verifyTokenDoc = "<root><token>" + Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name,ClientSymbol), "token") + "</token></root>";
+            string verifyTokenDoc = "<root><token>" + Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), "token") + "</token></root>";
             string resultDocFromServer = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(verifyTokenDoc, requestURL, 1000, 10000);
             XmlDocument responseFromServerDoc = new XmlDocument();
             responseFromServerDoc.LoadXml(resultDocFromServer);
-            if (responseFromServerDoc.SelectSingleNode("/root/err") != null)            
-                regToken();           
-                
+            if (responseFromServerDoc.SelectSingleNode("/root/err") != null)
+                regToken();
+
         }
         else
+        {
+            regDomain();
             regToken();
-        BeforeExtenedAction();
-        ExtendedAction();
+        }
+        if(BeforeExtenedAction())
+            ExtendedAction();   
 
+    }
+
+    protected void regDomain()
+    {
+        string requestURL = Server_API + Virtul_Folder_API + "/Domain/api_RegDomain.aspx?domain=" + Server_API + "&cid=" + cid;
+        Object_NetRemote.getRemoteRequestByGet(requestURL);
     }
 
     protected void regToken()

@@ -8,6 +8,11 @@ using System.Xml;
 using iKCoder_Platform_SDK_Kit;
 using System.Text;
 
+public class testdata
+{
+    public string data;
+}
+
 public partial class Account_SET_Reg : class_WebBase_NUA
 {
     protected override void ExtendedAction()
@@ -15,15 +20,15 @@ public partial class Account_SET_Reg : class_WebBase_NUA
         ISRESPONSEDOC = true;
         ISBINRESPONSE = false;
         if (REQUESTDOCUMENT != null)
-        {
+        {            
             string userSymbol = "";
             string userPassword = "";
             string codeName = "";
-            string codeValue = "";
+            string codeValue = "";           
             XmlNode userSymbolNode = REQUESTDOCUMENT.SelectSingleNode("/root/symbol");
             XmlNode userPasswordNode = REQUESTDOCUMENT.SelectSingleNode("/root/password");
             XmlNode codeNameNode = REQUESTDOCUMENT.SelectSingleNode("/root/codename");
-            XmlNode codeValueNode = REQUESTDOCUMENT.SelectSingleNode("/root/codevalue");
+            XmlNode codeValueNode = REQUESTDOCUMENT.SelectSingleNode("/root/codevalue");            
             if (userSymbolNode == null)
             {
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_Symbol"), "");
@@ -104,7 +109,7 @@ public partial class Account_SET_Reg : class_WebBase_NUA
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Equal_Param_Reg_Code"), "");
                 return;
             }
-            string requestAPI = "/Account/api_VerifyAccountExisted.aspx?username=" + userSymbol;
+            string requestAPI = "/Account/api_VerifyAccountExisted.aspx?cid=" + cid + "&username=" + userSymbol;
             string URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 100000);
             if(returnDoc.Contains("true"))
@@ -124,7 +129,7 @@ public partial class Account_SET_Reg : class_WebBase_NUA
             inputDoc.Append(Produce_Name);
             inputDoc.Append("</product>");
             inputDoc.Append("</root>");
-            requestAPI = "/Account/api_CreateUserAccountWithProfile.aspx";
+            requestAPI = "/Account/api_CreateUserAccountWithProfile.aspx?cid=" + cid;
             URL = Server_API + Virtul_Folder_API + requestAPI;
             returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(inputDoc.ToString(), URL, 1000 * 60, 100000);
             if (!returnDoc.Contains("<err>"))            

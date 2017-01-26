@@ -16,4 +16,9 @@ public class class_WebBase_NUA:class_WebBase
 		//
 	}
 
+    protected override bool BeforeExtenedAction()
+    {
+        return true;
+    }
+
 }

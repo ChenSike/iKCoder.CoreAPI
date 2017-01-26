@@ -9,28 +9,57 @@ using iKCoder_Platform_SDK_Kit;
 /// </summary>
 public class class_WebBase_UA:class_WebBase
 {
-    protected override void BeforeExtenedAction()
+    protected string logined_user_id;
+    protected string logined_user_name;
+
+    protected override bool BeforeExtenedAction()
     {
         ISRESPONSEDOC = true;
-        if (Request.Cookies["logined_marked"] != null && Request.Cookies["logined_user_signedid"]!=null)
+        if (Request.Cookies["logined_marked"] != null && Request.Cookies["logined_user_signedid"] != null && Request.Cookies["logined_user_id"] != null)
         {
             string logined_marked = Request.Cookies["logined_marked"].Value;
             string logined_user_loginid = Request.Cookies["logined_user_signedid"].Value;
-            //if(Session["logined_user_id"])
+            logined_user_id = Request.Cookies["logined_user_id"].Value;
+            logined_user_name = Session["logined_user_name"].ToString();
+            if (Session["logined_user_id"].ToString() == logined_user_id)
+            {
+                if(Session["logined_user_signedid"].ToString() == logined_user_loginid)
+                {
+                    if (Session["logined_marked"].ToString() == "1")
+                    {
+                        AddResponseMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
+                        return true;
+                    }
+                    else
+                    {
+                        Dictionary<string, string> errAttrs = new Dictionary<string, string>();
+                        errAttrs.Add("issigndneeded", "1");
+                        AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), "");
+                        return false;
+                    }
+                }
+                else
+                {
+                    Dictionary<string, string> errAttrs = new Dictionary<string, string>();
+                    errAttrs.Add("issigndneeded", "1");
+                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), "");
+                    return false;
+                }
+            }
+            else
+            {
+                Dictionary<string, string> errAttrs = new Dictionary<string, string>();
+                errAttrs.Add("issigndneeded", "1");
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), "");
+                return false;
+            }
         }
         else
         {
-
-        }
-        /*Session["logined_user_nmae"] = user_name;
-        Session["logined_user_id"] = user_id;
-        Session["logined_user_signedid"] = user_loginid;
-        Session.Timeout = Session_TimeOutMinutes;
-        Response.Cookies["logined_marked"].Value = "1";
-        Response.Cookies["logined_marked"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);
-        Response.Cookies["logined_user_id"].Value = user_id;
-        Response.Cookies["logined_user_id"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);
-        Response.Cookies["logined_user_signedid"].Value = user_loginid;
-        Response.Cookies["logined_user_signedid"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);*/
+            Dictionary<string, string> errAttrs = new Dictionary<string, string>();
+            errAttrs.Add("issigndneeded", "1");
+            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), "");
+            return false;
+        }        
     }
 }
