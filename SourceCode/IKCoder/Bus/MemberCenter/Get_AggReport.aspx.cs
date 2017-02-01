@@ -4,14 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using iKCoder_Platform_SDK_Kit;
-using System.Xml;
 
-public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
+public partial class Bus_MemberCenter_GET_AggReport : System.Web.UI.Page
 {
-    protected override void ExtendedAction()
+    protected void Page_Load(object sender, EventArgs e)
     {
-        ISRESPONSEDOC = true;        
-        XmlDocument dataDocument = new XmlDocument();
+
     }
 }
