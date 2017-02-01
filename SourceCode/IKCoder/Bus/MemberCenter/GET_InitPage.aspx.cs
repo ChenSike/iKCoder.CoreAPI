@@ -17,7 +17,7 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
         ISRESPONSEDOC = true;       
         dataDocument.LoadXml("<root></root>");
         XmlNode rootNode = dataDocument.SelectSingleNode("/root");
-        BuildNode_carousel(rootNode);
+        BuildNode_carousel(rootNode,InitData_carouselItems());
     }
 
     protected List<Struct_InitPage_CarouselItem> InitData_carouselItems()
@@ -54,11 +54,25 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
         rootNode.AppendChild(carouselNode);
     }
 
-    protected void BuildNode_honorwall(XmlNode rootNode)
+    protected void BuildNode_honorwall(XmlNode rootNode,List<Struct_InitPage_HonorItem> honorItemLst)
     {
         XmlNode honorwallNode = class_XmlHelper.CreateNode(dataDocument, "honorwall", "");
-        XmlNode itemNode = class_XmlHelper.CreateNode(dataDocument, "item", "");
-        //class_XmlHelper.SetAttribute(itemNode,"map","computerprofessor",)
+        foreach (Struct_InitPage_HonorItem activeItem in honorItemLst)
+        {
+            XmlNode itemNode = class_XmlHelper.CreateNode(dataDocument, "item", "");
+            class_XmlHelper.SetAttribute(itemNode, "map", activeItem.map);
+            class_XmlHelper.SetAttribute(itemNode, "title", activeItem.title);
+            class_XmlHelper.SetAttribute(itemNode, "condition", activeItem.condition);
+            honorwallNode.AppendChild(itemNode);
+        }
+        rootNode.AppendChild(honorwallNode);
+    }
+
+    protected void BuildNode_userinfo(XmlNode rootNode)
+    {
+        XmlNode userinfoNode = class_XmlHelper.CreateNode(dataDocument, "userinfo", "");
+        
+        rootNode.AppendChild(userinfoNode);
     }
 
 }

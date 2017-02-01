@@ -54,3 +54,53 @@ public class Struct_InitPage_CarouselItem
     }
 
 }
+
+public class Struct_InitPage_HonorItem
+{
+    public string map
+    {
+        set;
+        get;
+    }
+
+    public string title
+    {
+        set;
+        get;
+    }
+
+    public string condition
+    {
+        set;
+        get;
+    }
+
+}
+
+public class Struct_InitPage_UserinfoUser
+{
+    public string name
+    {
+        set;
+        get;
+    }
+
+    public string level
+    {
+        set;
+        get;
+    }
+
+    public string works
+    {
+        set;
+        get;
+    }
+
+    public string course
+    {
+        set;
+        get;
+    }
+
+}
