@@ -35,6 +35,17 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
         return resultLst;
     }
 
+    protected Struct_InitPage_UserinfoUser InitData_userinfoUser()
+    {
+        Struct_InitPage_UserinfoUser result = new Struct_InitPage_UserinfoUser();
+        result.name = "可乐";
+        result.level = "实习工程师";
+        result.works = "18";
+        result.course = "25";
+        result.friend = "30";
+        result.head = "1";
+    }
+
     protected void BuildNode_carousel(XmlNode rootNode,List<Struct_InitPage_CarouselItem> carouseItemLst)
     {
         XmlNode carouselNode = class_XmlHelper.CreateNode(dataDocument, "carousel", "");

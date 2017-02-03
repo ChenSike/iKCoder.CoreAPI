@@ -103,4 +103,16 @@ public class Struct_InitPage_UserinfoUser
         get;
     }
 
+    public string friend
+    {
+        set;
+        get;
+    }
+
+    public string head
+    {
+        set;
+        get;
+    }
+
 }
