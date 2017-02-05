@@ -100,7 +100,11 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
         return result;
     }
 
-    
+    protected List<Struct_InitPage_HonorItem> InitData_HonorItems()
+    {
+        List<Struct_InitPage_HonorItem> result = new List<Struct_InitPage_HonorItem>();
+        return result;
+    }
 
     protected void BuildNode_carousel(XmlNode rootNode,List<Struct_InitPage_CarouselItem> carouseItemLst)
     {
