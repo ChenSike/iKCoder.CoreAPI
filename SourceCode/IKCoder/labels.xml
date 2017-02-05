@@ -1,6 +1,23 @@
 ﻿<root>
   <group type="labels">
-    <item code="" chinese="" english=""></item>
+    <item code="computerprofessor_title" chinese="计算机小专家" english=""></item>
+    <item code="shareexpert_title" chinese="分享达人" english=""></item>
+    <item code="mathematician_title" chinese="小小数学家" english=""></item>
+    <item code="arithmeticprofessor_title" chinese="算法小达人" english=""></item>
+    <item code="languagemaster_title" chinese="语言大师" english=""></item>
+    <item code="musician_title" chinese="音乐家" english=""></item>
+    <item code="sciencemastermind_title" chinese="科学智多星" english=""></item>
+    <item code="littlepinter_title" chinese="小画家" english=""></item>
+    <item code="UAVpilot_title" chinese="无人机小飞手" english=""></item>
+    <item code="computerprofessor_condition" chinese="学习计算机课程超过10课时" english=""></item>
+    <item code="shareexpert_condition" chinese="学习计算机课程超过10课时" english=""></item>
+    <item code="mathematician_condition" chinese="学习计算机课程超过10课时" english=""></item>
+    <item code="arithmeticprofessor_condition" chinese="学习计算机课程超过10课时" english=""></item>
+    <item code="languagemaster_condition" chinese="学习计算机课程超过10课时" english=""></item>
+    <item code="musician_condition" chinese="学习计算机课程超过10课时" english=""></item>
+    <item code="sciencemastermind_condition" chinese="学习计算机课程超过10课时" english=""></item>
+    <item code="littlepinter_condition" chinese="学习计算机课程超过10课时" english=""></item>
+    <item code="UAVpilot_condition" chinese="学习计算机课程超过10课时" english=""></item>
   </group>
   <group type="message">
     <item code="Empty_Param_Reg_Symbol" chinese="非常抱歉，注册失败,您的手机号码或者EMAIL地址不可为空." english=""></item>

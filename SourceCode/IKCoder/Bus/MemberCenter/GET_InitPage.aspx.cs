@@ -100,6 +100,8 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
         return result;
     }
 
+    
+
     protected void BuildNode_carousel(XmlNode rootNode,List<Struct_InitPage_CarouselItem> carouseItemLst)
     {
         XmlNode carouselNode = class_XmlHelper.CreateNode(dataDocument, "carousel", "");
@@ -123,6 +125,8 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
         }
         rootNode.AppendChild(carouselNode);
     }
+
+
 
     protected void BuildNode_honorwall(XmlNode rootNode,List<Struct_InitPage_HonorItem> honorItemLst)
     {
