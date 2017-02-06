@@ -55,6 +55,7 @@ public partial class Buss_api_AccountProfile_Create : class_WebClass_WLA
         strProDoc.Append("<senior></senior>");
         strProDoc.Append("</lessons>");
         strProDoc.Append("<friends></friends>");
+        strProDoc.Append("<codetime></codetime>");
         strProDoc.Append("</root>");      
         XmlDocument proDoc = new XmlDocument();
         proDoc.LoadXml(strProDoc.ToString());        
