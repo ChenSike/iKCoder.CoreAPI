@@ -34,7 +34,7 @@ public class class_WebBase_UA:class_WebBase
                     {
                         Dictionary<string, string> errAttrs = new Dictionary<string, string>();
                         errAttrs.Add("issigndneeded", "1");
-                        AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), "");
+                        AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), errAttrs);
                         return false;
                     }
                 }
@@ -42,7 +42,7 @@ public class class_WebBase_UA:class_WebBase
                 {
                     Dictionary<string, string> errAttrs = new Dictionary<string, string>();
                     errAttrs.Add("issigndneeded", "1");
-                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), "");
+                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), errAttrs);
                     return false;
                 }
             }
@@ -50,7 +50,7 @@ public class class_WebBase_UA:class_WebBase
             {
                 Dictionary<string, string> errAttrs = new Dictionary<string, string>();
                 errAttrs.Add("issigndneeded", "1");
-                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), "");
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), errAttrs);
                 return false;
             }
         }

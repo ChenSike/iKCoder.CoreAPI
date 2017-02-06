@@ -5,7 +5,7 @@ using System.Web;
 using iKCoder_Platform_SDK_Kit;
 
 
-public class Struct_InitPage_CarouselItem : Structs_Base
+public class Struct_InitPage_CarouselItem : Base_DataStructs
 {
     public string color
     {
@@ -57,7 +57,7 @@ public class Struct_InitPage_CarouselItem : Structs_Base
 
 }
 
-public class Struct_InitPage_HonorItem : Structs_Base
+public class Struct_InitPage_HonorItem : Base_DataStructs
 {
     public string map
     {
@@ -79,7 +79,7 @@ public class Struct_InitPage_HonorItem : Structs_Base
 
 }
 
-public class Struct_InitPage_UserinfoUser : Structs_Base
+public class Struct_InitPage_UserinfoUser : Base_DataStructs
 {
     public string name
     {
@@ -119,7 +119,7 @@ public class Struct_InitPage_UserinfoUser : Structs_Base
 
 }
 
-public class Struct_InitPage_UserinfoCourse : Structs_Base
+public class Struct_InitPage_UserinfoCourse : Base_DataStructs
 {   
     public string rank
     {
@@ -177,7 +177,7 @@ public class Struct_InitPage_UserinfoCourse : Structs_Base
 
 }
 
-public class Struct_InitPage_UserinfoDistributionItems : Structs_Base
+public class Struct_InitPage_UserinfoDistributionItems : Base_DataStructs
 {
     public string id
     {
@@ -198,6 +198,89 @@ public class Struct_InitPage_UserinfoDistributionItems : Structs_Base
     }
 
     public string exp
+    {
+        set;
+        get;
+    }
+
+}
+
+public class Struct_InitPage_CodeTimeItem : Base_DataStructs
+{
+    public string date = "";
+    public string time = "";
+}
+
+public class Structs_InitPage_LearningItem : Base_DataStructs
+{
+    public string id
+    {
+        set;
+        get;
+    }
+
+    public string title
+    {
+        set;
+        get;
+    }
+
+    public string content
+    {
+        set;
+        get;
+    }
+
+    public string img
+    {
+        set;
+        get;
+    }
+}
+
+public class Structs_InitPage_ClassifyCategory : Base_DataStructs
+{
+    public string id
+    {
+        set;
+        get;
+    }
+
+    public string symbol
+    {
+        set;
+        get;
+    }
+
+    public string title
+    {
+        set;
+        get;
+    }
+
+}
+
+public class Structs_InitPage_ClassifyCategoryItem : Base_DataStructs
+{
+    public string id
+    {
+        set;
+        get;
+    }
+
+    public string title
+    {
+        set;
+        get;
+    }
+
+    public string content
+    {
+        set;
+        get;
+    }
+
+    public string img
     {
         set;
         get;

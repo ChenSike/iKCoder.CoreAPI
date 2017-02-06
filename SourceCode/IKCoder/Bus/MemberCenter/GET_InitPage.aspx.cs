@@ -10,7 +10,7 @@ using System.Xml;
 public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
 {      
 
-    protected XmlDocument dataDocument = new XmlDocument();
+    protected XmlDocument dataDocument = new XmlDocument();    
 
     protected override void ExtendedAction()
     {
@@ -103,7 +103,14 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
     protected List<Struct_InitPage_HonorItem> InitData_HonorItems()
     {
         List<Struct_InitPage_HonorItem> result = new List<Struct_InitPage_HonorItem>();
+        
         return result;
+    }
+
+    protected void BuildNode_learning(XmlNode rootNode)
+    {
+        XmlNode learningNode = class_XmlHelper.CreateNode(dataDocument, "learning", "");
+        rootNode.AppendChild(learningNode);
     }
 
     protected void BuildNode_carousel(XmlNode rootNode,List<Struct_InitPage_CarouselItem> carouseItemLst)
@@ -112,9 +119,9 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
         foreach (Struct_InitPage_CarouselItem activeItem in carouseItemLst)
         {
             XmlNode itemNode = class_XmlHelper.CreateNode(dataDocument, "item", "");
-            List<string> setPropertiesLst = activeItem.GetSetOnlyPropertiesLst();
+            List<string> setPropertiesLst = activeItem.GetPropertiesNameForSet();
             foreach(string activeProperty in setPropertiesLst)            
-                class_XmlHelper.SetAttribute(itemNode, activeProperty, activeItem.GetPropertyValue(activeProperty).ToString());
+                class_XmlHelper.SetAttribute(itemNode, activeProperty, activeItem.GetValue(activeProperty).ToString());
             carouselNode.AppendChild(itemNode);
             /*
             
@@ -138,9 +145,9 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
         foreach (Struct_InitPage_HonorItem activeItem in honorItemLst)
         {
             XmlNode itemNode = class_XmlHelper.CreateNode(dataDocument, "item", "");
-            List<string> setPropertiesLst = activeItem.GetSetOnlyPropertiesLst();
+            List<string> setPropertiesLst = activeItem.GetPropertiesNameForSet();
             foreach(string activeProperty in setPropertiesLst)            
-                class_XmlHelper.SetAttribute(itemNode, activeProperty, activeItem.GetPropertyValue(activeProperty).ToString());
+                class_XmlHelper.SetAttribute(itemNode, activeProperty, activeItem.GetValue(activeProperty).ToString());
             /*
             class_XmlHelper.SetAttribute(itemNode, "map", activeItem.map);
             class_XmlHelper.SetAttribute(itemNode, "title", activeItem.title);
@@ -156,10 +163,10 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
     {
         Struct_InitPage_UserinfoUser objUserinfoUser = InitData_userinfoUser();
         XmlNode userinfoNode = class_XmlHelper.CreateNode(dataDocument, "userinfo", "");
-        List<string> setPropertiesLst = objUserinfoUser.GetSetOnlyPropertiesLst();
+        List<string> setPropertiesLst = objUserinfoUser.GetPropertiesNameForSet();
         XmlNode userNode = class_XmlHelper.CreateNode(dataDocument, "user", "");
         foreach (string activeProperty in setPropertiesLst)
-            class_XmlHelper.SetAttribute(userNode, activeProperty, objUserinfoUser.GetPropertyValue(activeProperty).ToString());
+            class_XmlHelper.SetAttribute(userNode, activeProperty, objUserinfoUser.GetValue(activeProperty).ToString());        
         rootNode.AppendChild(userinfoNode);
     }
 
