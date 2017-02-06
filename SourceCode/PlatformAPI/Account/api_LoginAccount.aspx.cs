@@ -49,6 +49,9 @@ public partial class Account_api_LoginAccount : class_WebClass_WA
             }
             else
             {
+                string desValuePasswordFromDB = "";
+                object_CommonLogic.Object_DES.DESDecoding(valuePasswordFromDB, out desValuePasswordFromDB);
+                valuePasswordFromDB = desValuePasswordFromDB;
                 if (password == valuePasswordFromDB)
                 {
                     string strId = string.Empty;

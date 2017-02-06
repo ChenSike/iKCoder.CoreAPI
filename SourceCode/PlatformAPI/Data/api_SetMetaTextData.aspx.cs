@@ -35,6 +35,10 @@ public partial class Data_api_SetMetaTextData : class_WebClass_WA
             activeSPEntry.ModifyParameterValue("@type", type);
             activeSPEntry.ModifyParameterValue("@data", data);
             activeSPEntry.ModifyParameterValue("@produce", _fromProduct);
+            activeSPEntry.ModifyParameterValue("@isBinary", "0");
+            activeSPEntry.ModifyParameterValue("@isBase64", "0");
+            activeSPEntry.ModifyParameterValue("@isDES", "0");
+            activeSPEntry.ModifyParameterValue("@DESKey", "");            
             object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, operation, this.GetType());
         }
         else

@@ -30,7 +30,10 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
             profileProduct = GetQuerystringParam("product");
         if (string.IsNullOrEmpty(profileProduct))
             profileProduct = "iKCoder";
-        class_Security_DES object_DES = new class_Security_DES(class_CommonLogic.Const_DESKey);
+        string desPassword = string.Empty;
+        object_CommonLogic.Object_DES.DESCoding(password, out desPassword);
+        if (!string.IsNullOrEmpty(desPassword))
+            password = desPassword;
         class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_basic");
         activeSPEntry.ModifyParameterValue("@username", username);
         DataTable selectResultDT = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);

@@ -11,6 +11,8 @@ public partial class Data_api_GetMetaTextID : class_WebClass_WA
 {
     protected override void ExtenedFunction()
     {
+        object_CommonLogic.ConnectToDatabase();
+        object_CommonLogic.LoadStoreProcedureList();
         ISRESPONSEDOC = true;
         string symbol = GetQuerystringParam("symbol");
         class_Data_SqlSPEntry activeSPEntry_binData = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Data_Basic");

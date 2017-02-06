@@ -12,7 +12,6 @@ public partial class Data_api_RemoveBinData : class_WebClass_WA
 {
     protected override void ExtenedFunction()
     {
-
         ISRESPONSEDOC = true;      
         string dataId = GetQuerystringParam("id");
         if (string.IsNullOrEmpty(dataId))

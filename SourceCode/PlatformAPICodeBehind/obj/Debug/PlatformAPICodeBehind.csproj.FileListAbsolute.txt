@@ -1,6 +1,0 @@
-D:\iKCoder\iKCoder.CoreAPI\SourceCode\PlatformAPICodeBehind\bin\Debug\PlatformAPICodeBehind.dll
-D:\iKCoder\iKCoder.CoreAPI\SourceCode\PlatformAPICodeBehind\bin\Debug\PlatformAPICodeBehind.pdb
-D:\iKCoder\iKCoder.CoreAPI\SourceCode\PlatformAPICodeBehind\bin\Debug\iKCoder_Platform_SDK_Kit.dll
-D:\iKCoder\iKCoder.CoreAPI\SourceCode\PlatformAPICodeBehind\obj\Debug\PlatformAPICodeBehind.csprojResolveAssemblyReference.cache
-D:\iKCoder\iKCoder.CoreAPI\SourceCode\PlatformAPICodeBehind\obj\Debug\PlatformAPICodeBehind.dll
-D:\iKCoder\iKCoder.CoreAPI\SourceCode\PlatformAPICodeBehind\obj\Debug\PlatformAPICodeBehind.pdb

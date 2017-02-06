@@ -13,6 +13,7 @@ public partial class Data_api_GetBinData : class_WebClass_WA
     protected override void ExtenedFunction()
     {
         object_CommonLogic.ConnectToDatabase();
+        object_CommonLogic.LoadStoreProcedureList();
         ISRESPONSEDOC = true;
         string dataId = "";
         dataId = GetQuerystringParam("id");
@@ -33,8 +34,8 @@ public partial class Data_api_GetBinData : class_WebClass_WA
         {
             string resultBase64 = class_XmlHelper.GetAttrValue(rowNode, "data");
             byte[] resultBin = class_CommonUtil.Decoder_Base64ToByte(resultBase64);
-            ISRESPONSEDOC = false;
-            Response.OutputStream.Write(resultBin, 0, resultBin.Length);
+            ISBINRESPONSE = true;
+            RESPONSEBUFFER = resultBin;
         }
         else
         {

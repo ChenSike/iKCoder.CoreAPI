@@ -13,6 +13,7 @@ public partial class Data_api_GetMetaText : class_WebClass_WA
     protected override void ExtenedFunction()
     {
         object_CommonLogic.ConnectToDatabase();
+        object_CommonLogic.LoadStoreProcedureList();
         ISRESPONSEDOC = true;
         string dataId = "";
         dataId = GetQuerystringParam("id");
