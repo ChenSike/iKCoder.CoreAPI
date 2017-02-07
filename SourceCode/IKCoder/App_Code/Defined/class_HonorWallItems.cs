@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using iKCoder_Platform_SDK_Kit;
 
-public class class_HonorWallItems
+public class class_HonorWallItems : Base_DataStructs
 {
     public string Computerprofessor
     {
         get
         {
-             return "computerprofessor";
+            return "computerprofessor";
         }
     }
 
@@ -36,7 +37,7 @@ public class class_HonorWallItems
             return "arithmeticprofessor";
         }
     }
-    
+
     public string Musician
     {
         get

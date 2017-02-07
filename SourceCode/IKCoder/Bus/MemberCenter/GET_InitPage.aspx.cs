@@ -100,10 +100,19 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
         return result;
     }
 
-    protected List<Struct_InitPage_HonorItem> InitData_HonorItems()
+    protected List<Struct_InitPage_HonorItem> InitData_honorItems()
     {
         List<Struct_InitPage_HonorItem> result = new List<Struct_InitPage_HonorItem>();
-        
+        class_HonorWallItems definedForHonorItems = new class_HonorWallItems();
+        List<string> propertiesLst = definedForHonorItems.GetPropertiesNameForGet();
+        foreach(string activeProperty in propertiesLst)
+        {
+            Struct_InitPage_HonorItem newItem = new Struct_InitPage_HonorItem();
+            newItem.map = definedForHonorItems.GetValue(activeProperty);
+            newItem.title = Object_LabelController.GetString("labels", newItem.map+"_title");
+            newItem.condition = Object_LabelController.GetString("labels", newItem.map + "_condition");
+            result.Add(newItem);
+        }
         return result;
     }
 
