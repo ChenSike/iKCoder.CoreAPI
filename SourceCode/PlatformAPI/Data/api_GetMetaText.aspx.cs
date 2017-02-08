@@ -32,15 +32,12 @@ public partial class Data_api_GetMetaText : class_WebClass_WA
         XmlNode rowNode = resultDoc.SelectSingleNode("/root/row");
         if (rowNode != null)
         {
-            string resultBase64 = class_XmlHelper.GetAttrValue(rowNode, "data");
-            byte[] resultBin = class_CommonUtil.Decoder_Base64ToByte(resultBase64);
-            ISRESPONSEDOC = false;
-            Response.OutputStream.Write(resultBin, 0, resultBin.Length);
+            string result = class_XmlHelper.GetAttrValue(rowNode, "data");
+            AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), result, "");
         }
         else
         {
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + "Data_api_GetMetaText", "No data.", "");
         }
-        object_CommonLogic.CloseDBConnection();
     }
 }
