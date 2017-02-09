@@ -17,7 +17,7 @@ public partial class Data_api_GetDataAggInfo : class_WebClass_WA
         ISRESPONSEDOC = true;
         string produceName = "";
         produceName = GetQuerystringParam("produce");        
-        class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Data_Basic");
+        class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_data_basic");
         class_Data_SqlHelper _objectSqlHelper = new class_Data_SqlHelper();
         DataTable activeDataTable = new DataTable();
         if (!string.IsNullOrEmpty(produceName))

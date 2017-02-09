@@ -19,7 +19,7 @@ public partial class Data_api_GetBinDataWithBase64 : class_WebClass_WA
         dataId = GetQuerystringParam("id");
         string symbol = "";
         symbol = GetQuerystringParam("symbol");
-        class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Data_Basic");
+        class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_data_basic");
         class_Data_SqlHelper _objectSqlHelper = new class_Data_SqlHelper();
         if (!string.IsNullOrEmpty(dataId))
             activeSPEntry.ModifyParameterValue("@id", dataId);

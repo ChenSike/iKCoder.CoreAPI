@@ -18,7 +18,7 @@ public partial class Data_api_SetMetaTextData : class_WebClass_WA
         string type = class_CommonDefined.enumDataItemType.text.ToString();
         string operation = class_CommonDefined.enumDataOperaqtionType.insert.ToString();
         string symbol = class_XmlHelper.GetNodeValue(REQUESTDOCUMENT, "/root/symbol");
-        class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Data_Basic");
+        class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_data_basic");
         string guid = symbol;
         if(guid=="")
             guid = Guid.NewGuid().ToString();
@@ -26,11 +26,10 @@ public partial class Data_api_SetMetaTextData : class_WebClass_WA
         activeSPEntry.ModifyParameterValue("@type", type);
         activeSPEntry.ModifyParameterValue("@data", data);
         string Data64 = class_CommonUtil.Decoder_Base64(data);
-        class_Data_SqlSPEntry activeSPEntry_Data = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Data_Basic");
-        activeSPEntry_Data.ModifyParameterValue("@symbol", guid);
-        DataTable binDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_Data, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+        DataTable binDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if (binDataTable.Rows.Count == 0)
         {
+            activeSPEntry.ClearAllParamsValues();
             activeSPEntry.ModifyParameterValue("@symbol", guid);
             activeSPEntry.ModifyParameterValue("@type", type);
             activeSPEntry.ModifyParameterValue("@data", data);
