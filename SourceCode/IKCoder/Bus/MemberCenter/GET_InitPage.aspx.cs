@@ -14,12 +14,16 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
 
     protected override void ExtendedAction()
     {
-        ISRESPONSEDOC = true;       
+        ISRESPONSEDOC = true;
         dataDocument.LoadXml("<root></root>");
         XmlNode rootNode = dataDocument.SelectSingleNode("/root");
         List<Struct_InitPage_CarouselItem> carouselItemsLst = new List<Struct_InitPage_CarouselItem>();
         carouselItemsLst = InitData_carouselItems();        
         BuildNode_carousel(rootNode, carouselItemsLst);
+        List<Struct_InitPage_HonorItem> honorItemLst  = new List<Struct_InitPage_HonorItem>();
+        honorItemLst = InitData_honorItems();
+        BuildNode_honorwall(rootNode, honorItemLst);
+
     }
 
     protected List<Struct_InitPage_CarouselItem> InitData_carouselItems()
@@ -132,16 +136,6 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
             foreach(string activeProperty in setPropertiesLst)            
                 class_XmlHelper.SetAttribute(itemNode, activeProperty, activeItem.GetValue(activeProperty).ToString());
             carouselNode.AppendChild(itemNode);
-            /*
-            
-            class_XmlHelper.SetAttribute(itemNode, "color", activeItem.color);
-            class_XmlHelper.SetAttribute(itemNode, "title", activeItem.title);
-            class_XmlHelper.SetAttribute(itemNode, "content", activeItem.content);
-            class_XmlHelper.SetAttribute(itemNode, "keys", activeItem.keys);
-            class_XmlHelper.SetAttribute(itemNode, "diff", activeItem.diff);
-            class_XmlHelper.SetAttribute(itemNode, "times", activeItem.times);
-            class_XmlHelper.SetAttribute(itemNode, "img", activeItem.img);
-            class_XmlHelper.SetAttribute(itemNode, "btnColor", "25,161,121");*/            
         }
         rootNode.AppendChild(carouselNode);
     }
@@ -157,16 +151,11 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
             List<string> setPropertiesLst = activeItem.GetPropertiesNameForSet();
             foreach(string activeProperty in setPropertiesLst)            
                 class_XmlHelper.SetAttribute(itemNode, activeProperty, activeItem.GetValue(activeProperty).ToString());
-            /*
-            class_XmlHelper.SetAttribute(itemNode, "map", activeItem.map);
-            class_XmlHelper.SetAttribute(itemNode, "title", activeItem.title);
-            class_XmlHelper.SetAttribute(itemNode, "condition", activeItem.condition);*/
             honorwallNode.AppendChild(itemNode);
         }
         rootNode.AppendChild(honorwallNode);
     }
-
-    
+         
 
     protected void BuildNode_userinfo(XmlNode rootNode)
     {

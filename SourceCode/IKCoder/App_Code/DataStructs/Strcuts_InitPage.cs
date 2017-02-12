@@ -77,6 +77,12 @@ public class Struct_InitPage_HonorItem : Base_DataStructs
         get;
     }
 
+    public string isused
+    {
+        set;
+        get;
+    }
+
 }
 
 public class Struct_InitPage_UserinfoUser : Base_DataStructs
