@@ -293,3 +293,4 @@ public class Structs_InitPage_ClassifyCategoryItem : Base_DataStructs
     }
 
 }
+

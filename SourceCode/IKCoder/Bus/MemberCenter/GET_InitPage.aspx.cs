@@ -23,6 +23,7 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
         List<Struct_InitPage_HonorItem> honorItemLst  = new List<Struct_InitPage_HonorItem>();
         honorItemLst = InitData_honorItems();
         BuildNode_honorwall(rootNode, honorItemLst);
+        BuildNode_userinfo(rootNode);
 
     }
 
@@ -39,6 +40,26 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
         obj.btncolor = "25,161,121";
         resultLst.Add(obj);
         return resultLst;
+    }
+
+    protected List<Struct_InitPage_CodeTimeItem> InitData_userinfoCodeTime()
+    {
+        List<Struct_InitPage_CodeTimeItem> resultLst = new List<Struct_InitPage_CodeTimeItem>();
+        Struct_InitPage_CodeTimeItem newItem = new Struct_InitPage_CodeTimeItem();
+        newItem.date = "2017-1-1";
+        newItem.time = "3";
+        resultLst.Add(newItem);
+        return resultLst;
+    }
+
+    protected List<Structs_InitPage_LearningItem> InitData_learningItem()
+    {
+        List<Structs_InitPage_LearningItem> resultLst = new List<Structs_InitPage_LearningItem>();
+        Structs_InitPage_LearningItem newItem = new Structs_InitPage_LearningItem();
+        newItem.id = "1";
+        newItem.title = "Star Wars";
+        newItem.content = "Learn to program droids, and create your own Star Wars game in a galaxy far, far away.";
+        newItem.img = "";
     }
 
     protected Struct_InitPage_UserinfoUser InitData_userinfoUser()
@@ -165,7 +186,37 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
         XmlNode userNode = class_XmlHelper.CreateNode(dataDocument, "user", "");
         foreach (string activeProperty in setPropertiesLst)
             class_XmlHelper.SetAttribute(userNode, activeProperty, objUserinfoUser.GetValue(activeProperty).ToString());        
+        userinfoNode.AppendChild(userNode);
         rootNode.AppendChild(userinfoNode);
+        XmlNode courseNode = class_XmlHelper.CreateNode(dataDocument, "course", "");
+        userinfoNode.AppendChild(courseNode);
+        Struct_InitPage_UserinfoCourse courseItem = InitData_userinfoCourse();
+        setPropertiesLst = courseItem.GetPropertiesNameForSet();
+        foreach (string activeProperty in setPropertiesLst)
+            class_XmlHelper.SetAttribute(courseNode, activeProperty, objUserinfoUser.GetValue(activeProperty).ToString());
+        userinfoNode.AppendChild(courseNode);
+        XmlNode distributionNode = class_XmlHelper.CreateNode(dataDocument, "distribution", "");
+        userinfoNode.AppendChild(distributionNode);
+        List<Struct_InitPage_UserinfoDistributionItems> distributionItems = InitData_userinfoDistributionItems();
+        foreach (Struct_InitPage_UserinfoDistributionItems distributionItem in distributionItems)
+        {
+            XmlNode itemNode = class_XmlHelper.CreateNode(dataDocument, "item", "");
+            distributionNode.AppendChild(itemNode);
+            setPropertiesLst = distributionItem.GetPropertiesNameForSet();
+            foreach (string activeProperty in setPropertiesLst)
+                class_XmlHelper.SetAttribute(itemNode, activeProperty, objUserinfoUser.GetValue(activeProperty).ToString());
+        }
+        List<Struct_InitPage_CodeTimeItem> codeTimeLst = InitData_userinfoCodeTime();
+        XmlNode codetimeNode = class_XmlHelper.CreateNode(dataDocument, "codetimes", "");
+        userinfoNode.AppendChild(codetimeNode);
+        foreach(Struct_InitPage_CodeTimeItem codeTimeItem in codeTimeLst)
+        {
+            XmlNode itemNode = class_XmlHelper.CreateNode(dataDocument, "item", "");
+            codetimeNode.AppendChild(itemNode);
+            setPropertiesLst = codeTimeItem.GetPropertiesNameForSet();
+            foreach (string activeProperty in setPropertiesLst)
+                class_XmlHelper.SetAttribute(itemNode, activeProperty, objUserinfoUser.GetValue(activeProperty).ToString());
+        }
     }
 
 }

@@ -24,7 +24,7 @@ public partial class Data_api_GetBinDataWithBase64 : class_WebClass_WA
         if (!string.IsNullOrEmpty(dataId))
             activeSPEntry.ModifyParameterValue("@id", dataId);
         else if (!string.IsNullOrEmpty(symbol))
-            activeSPEntry.ModifyParameterValue("@symbol", dataId);
+            activeSPEntry.ModifyParameterValue("@symbol", symbol);
         DataTable binDataTable = _objectSqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         string resultXML = class_Data_SqlDataHelper.ActionConvertDTtoXMLString(binDataTable);
         XmlDocument resultDoc = new XmlDocument();

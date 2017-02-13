@@ -35,7 +35,7 @@ public partial class Account_GET_Sign : class_WebBase_NUA
         }
         XmlDocument returnFromAPIServer = new XmlDocument();
         string inputDoc = "<root><username>" + symbol + "<username><password>" + password + "</password></root>";
-        string URL = Server_API + Virtul_Folder_API + "Account/api_LoginAccount.aspx?cid=" + cid;
+        string URL = Server_API + Virtul_Folder_API + "/Account/api_LoginAccount.aspx?cid=" + cid;
         string strReturnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(inputDoc, URL, 1000 * 60, 100000);
         returnFromAPIServer.LoadXml(strReturnDoc);
         XmlNode msgNode = returnFromAPIServer.SelectSingleNode("/root/msg");
