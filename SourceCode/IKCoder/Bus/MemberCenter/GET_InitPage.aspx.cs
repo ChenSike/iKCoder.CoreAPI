@@ -60,6 +60,8 @@ public partial class Bus_MemberCenter_Get_AggReport : class_WebBase_UA
         newItem.title = "Star Wars";
         newItem.content = "Learn to program droids, and create your own Star Wars game in a galaxy far, far away.";
         newItem.img = "";
+        resultLst.Add(newItem);
+        return resultLst;
     }
 
     protected Struct_InitPage_UserinfoUser InitData_userinfoUser()
