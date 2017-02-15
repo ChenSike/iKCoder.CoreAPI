@@ -45,7 +45,6 @@ public partial class Data_api_SetMetaTextData : class_WebClass_WA
         else
         {
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to execute api : symbol existed or guid existed.", "");
-        }
-        object_CommonLogic.CloseDBConnection();        
+        }       
     }
 }
