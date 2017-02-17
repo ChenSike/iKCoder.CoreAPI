@@ -23,14 +23,14 @@ public partial class Data_api_SetBinData : class_WebClass_WA
             object_CommonLogic.LoadStoreProcedureList();
             string binData = System.Text.Encoding.Default.GetString(binBuffer);
             string binData64 = class_CommonUtil.Decoder_Base64(binData);
-            class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Data_Basic");
+            class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_data_basic");
             string data = binData64;
             string type = class_CommonDefined.enumDataItemType.bin.ToString();
             string operation = class_CommonDefined.enumDataOperaqtionType.insert.ToString();
             string guid = symbol;
             if (guid == "")
                 guid = Guid.NewGuid().ToString();
-            class_Data_SqlSPEntry activeSPEntry_binData = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Data_Basic");
+            class_Data_SqlSPEntry activeSPEntry_binData = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_data_basic");
             activeSPEntry_binData.ModifyParameterValue("@symbol", guid);
             DataTable binDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_binData, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
             if (binDataTable.Rows.Count == 0)

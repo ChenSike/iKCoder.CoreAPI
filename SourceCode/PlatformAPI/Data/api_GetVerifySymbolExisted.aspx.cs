@@ -21,7 +21,7 @@ public partial class Data_api_GetVerifySymbolExisted : class_WebClass_WA
         symbol = GetQuerystringParam("symbol");
         string produce = "";
         produce = GetQuerystringParam("produce");
-        class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "SPA_Operation_Data_Basic");
+        class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_data_basic");
         class_Data_SqlHelper _objectSqlHelper = new class_Data_SqlHelper();
         if (!string.IsNullOrEmpty(dataId))
             activeSPEntry.ModifyParameterValue("@id", dataId);
