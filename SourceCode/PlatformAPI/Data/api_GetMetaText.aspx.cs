@@ -24,15 +24,12 @@ public partial class Data_api_GetMetaText : class_WebClass_WA
         if (!string.IsNullOrEmpty(dataId))
             activeSPEntry.ModifyParameterValue("@id", dataId);
         else if (!string.IsNullOrEmpty(symbol))
-            activeSPEntry.ModifyParameterValue("@symbol", dataId);
-        DataTable binDataTable = _objectSqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
-        string resultXML = class_Data_SqlDataHelper.ActionConvertDTtoXMLString(binDataTable);
-        XmlDocument resultDoc = new XmlDocument();
-        resultDoc.LoadXml(resultXML);
-        XmlNode rowNode = resultDoc.SelectSingleNode("/root/row");
-        if (rowNode != null)
+            activeSPEntry.ModifyParameterValue("@symbol", symbol);
+        DataTable textDataTable = _objectSqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+        if(textDataTable!=null && textDataTable.Rows.Count>0)
         {
-            string result = class_XmlHelper.GetAttrValue(rowNode, "data");
+            string result = "";
+            class_Data_SqlDataHelper.GetColumnData(textDataTable.Rows[0], "data", out result);
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), result, "");
         }
         else

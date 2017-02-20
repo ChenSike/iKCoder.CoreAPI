@@ -26,7 +26,7 @@ public partial class Data_api_GetVerifySymbolExisted : class_WebClass_WA
         if (!string.IsNullOrEmpty(dataId))
             activeSPEntry.ModifyParameterValue("@id", dataId);
         if (!string.IsNullOrEmpty(symbol))
-            activeSPEntry.ModifyParameterValue("@symbol", dataId);
+            activeSPEntry.ModifyParameterValue("@symbol", symbol);
         if (!string.IsNullOrEmpty(produce))
             activeSPEntry.ModifyParameterValue("@produce", produce);
         DataTable binDataTable = _objectSqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);        
