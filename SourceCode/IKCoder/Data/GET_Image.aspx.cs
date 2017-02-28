@@ -41,6 +41,7 @@ public partial class Data_GET_Image : class_WebBase_NUA
             }
             else
             {
+
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "No Data.", "", enum_MessageType.Exception);
             }
         }

@@ -30,7 +30,8 @@ public partial class Data_api_GetMetaText : class_WebClass_WA
         {
             string result = "";
             class_Data_SqlDataHelper.GetColumnData(textDataTable.Rows[0], "data", out result);
-            AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), result, "");
+            string decodeStr = class_CommonUtil.Decoder_Base64(result);
+            AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), decodeStr, "");
         }
         else
         {
