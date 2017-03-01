@@ -31,12 +31,12 @@ public partial class Relation_api_SetNewRelationDoc : class_WebClass_WA
         }
         if (string.IsNullOrEmpty(shipType))
         {
-            XmlNode shipTypeNode = REQUESTDOCUMENT.SelectSingleNode("/root/shipType");
+            XmlNode shipTypeNode = REQUESTDOCUMENT.SelectSingleNode("/root/type");
             if (shipTypeNode != null)
                 shipType = class_XmlHelper.GetNodeValue(shipTypeNode);
             else
             {
-                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "faild to create realationship : empty->shiptype", "");
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "faild to create realationship : empty->type", "");
                 return;
             }
         }
