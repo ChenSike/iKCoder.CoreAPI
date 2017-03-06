@@ -10,6 +10,6 @@ public partial class Relation_api_GetShipType : class_WebClass_WA
     protected override void ExtenedFunction()
     {
         ISRESPONSEDOC = true;        
-        AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "root|parent|child", "");
+        AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "parent|child", "");
     }
 }
