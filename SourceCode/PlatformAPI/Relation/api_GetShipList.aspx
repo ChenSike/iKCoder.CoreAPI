@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="api_GetShipList.aspx.cs" Inherits="Relation_api_GetShipList" %>

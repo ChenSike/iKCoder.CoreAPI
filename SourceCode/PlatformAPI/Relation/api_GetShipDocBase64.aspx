@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="api_GetShipDocBase64.aspx.cs" Inherits="Relation_api_GetShipDocBase64" %>
