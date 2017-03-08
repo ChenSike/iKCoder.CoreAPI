@@ -47,7 +47,7 @@ public partial class Relation_api_GetShipList : class_WebClass_WA
                 attrMap.Add("symbol", tmpValue);
                 class_Data_SqlDataHelper.GetColumnData(activeRow, "produce", out tmpValue);
                 attrMap.Add("produce", tmpValue);
-                class_Data_SqlDataHelper.GetColumnData(activeRow, "relationdoc", out tmpValue);
+                class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeRow, "relationdoc", out tmpValue);
                 string strBase64 = class_CommonUtil.Encoder_Base64(tmpValue);
                 attrMap.Add("relationdoc", strBase64);
                 AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrMap);
