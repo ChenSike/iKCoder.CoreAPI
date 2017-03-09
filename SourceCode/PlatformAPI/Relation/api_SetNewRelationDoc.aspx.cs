@@ -52,7 +52,7 @@ public partial class Relation_api_SetNewRelationDoc : class_WebClass_WA
         }
         else
         {
-            activeSPEntry.ClearAllParamsValues();
+            activeSPEntry.ClearAllParamsValues();            
             activeSPEntry.ModifyParameterValue("@symbol", relationSymbol);
             activeSPEntry.ModifyParameterValue("@shiptype", shipType);
             activeSPEntry.ModifyParameterValue("@relationdoc", relationDoc.OuterXml);
