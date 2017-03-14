@@ -8,6 +8,7 @@ public class class_CommonDefined
     public const string _Faild_Execute_Api = "Faild to execute api : ";
     public const string _Executed_Api = "Executed api : ";
     public const string _AllowSysOperation = "AllowedOperation";
+    public const string _ResourceWorkspaceFlagSymbol = "wk_current_st_doc_";
     public static int CountOfLoginedAccount = 5000;
     public static int ExperiedPeriodOfLoginedAccount = 60;
 

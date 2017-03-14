@@ -44,7 +44,6 @@ public partial class Relation_api_SetNewRelationDoc : class_WebClass_WA
         object_CommonLogic.LoadStoreProcedureList();
         class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_data_relationship");
         activeSPEntry.ModifyParameterValue("@symbol", relationSymbol);
-        activeSPEntry.ModifyParameterValue("@produce", produce);
         DataTable selectResultDT = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if (selectResultDT != null && selectResultDT.Rows.Count >= 1)
         {

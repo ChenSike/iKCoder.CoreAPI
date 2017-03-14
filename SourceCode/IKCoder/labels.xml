@@ -33,5 +33,8 @@
     <item code="ERR_Param_Sign_NoMsgNode" chinese="非常抱歉，登录失败,无法联系到中央服务器，请稍后再试." english=""></item>
     <item code="ERR_Param_Sign_UnSigned" chinese="非常抱歉，登录失败,无效的账户或者是无效的密码." english=""></item>
     <item code="ERR_Msg_Unsigned" chinese="非常抱歉，您需要使用您的账户进行登录后才可以进行操作." english=""></item>
+    <item code="SC_Msg_Workspace_Save" chinese="您已经成功保存了工作区." english=""></item>
+    <item code="ERR_Msg_Workspace_Save" chinese="非常抱歉，无法保存工作区的数据，请联系客户服务中心解决." english=""></item>
+    <item code="ERR_Msg_Workspace_Load" chinese="非常抱歉，无法加载工作区的数据，请联系客户服务中心解决." english=""></item>
   </group>
 </root>

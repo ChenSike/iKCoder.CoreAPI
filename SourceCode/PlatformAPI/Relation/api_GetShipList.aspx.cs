@@ -32,12 +32,12 @@ public partial class Relation_api_GetShipList : class_WebClass_WA
         object_CommonLogic.LoadStoreProcedureList();
         class_Data_SqlHelper _objectSqlHelper = new class_Data_SqlHelper();
         class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_data_relationship");
-        activeSPEntry.ModifyParameterValue("@produce", produce);
-        activeSPEntry.ModifyParameterValue("@shiptype", shipType);
+        activeSPEntry.ModifyParameterValue("@produce", produce);        
         DataTable activeDataTable = _objectSqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if (activeDataTable != null && activeDataTable.Rows.Count > 0)
         {
-            foreach (DataRow activeRow in activeDataTable.Rows)
+            DataRow[] activeDataRows = activeDataTable.Select("shiptype='" + shipType + "'");
+            foreach (DataRow activeRow in activeDataRows)
             {
                 Dictionary<string, string> attrMap = new Dictionary<string, string>();
                 string tmpValue = string.Empty;

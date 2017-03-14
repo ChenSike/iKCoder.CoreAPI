@@ -22,12 +22,9 @@ public partial class Data_api_SetMetaTextData : class_WebClass_WA
         string guid = symbol;
         if(guid=="")
             guid = Guid.NewGuid().ToString();
-        activeSPEntry.ModifyParameterValue("@symbol", guid);
-        activeSPEntry.ModifyParameterValue("@type", type);
-        activeSPEntry.ModifyParameterValue("@data", data);
-        string Data64 = class_CommonUtil.Decoder_Base64(data);
-        DataTable binDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
-        if (binDataTable.Rows.Count == 0)
+        activeSPEntry.ModifyParameterValue("@symbol", guid);     
+        DataTable activeDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+        if (activeDataTable.Rows.Count == 0)
         {
             activeSPEntry.ClearAllParamsValues();
             activeSPEntry.ModifyParameterValue("@symbol", guid);

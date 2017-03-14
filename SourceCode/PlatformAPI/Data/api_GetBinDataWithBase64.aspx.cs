@@ -25,14 +25,11 @@ public partial class Data_api_GetBinDataWithBase64 : class_WebClass_WA
             activeSPEntry.ModifyParameterValue("@id", dataId);
         else if (!string.IsNullOrEmpty(symbol))
             activeSPEntry.ModifyParameterValue("@symbol", symbol);
-        DataTable binDataTable = _objectSqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
-        string resultXML = class_Data_SqlDataHelper.ActionConvertDTtoXMLString(binDataTable);
-        XmlDocument resultDoc = new XmlDocument();
-        resultDoc.LoadXml(resultXML);
-        XmlNode rowNode = resultDoc.SelectSingleNode("/root/row");
-        if (rowNode != null)
+        DataTable activeDataTable = _objectSqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+        if (activeDataTable != null && activeDataTable.Rows.Count > 0)
         {
-            string resultBase64 = class_XmlHelper.GetAttrValue(rowNode, "data");
+            string resultBase64 = string.Empty;
+            class_Data_SqlDataHelper.GetColumnData(activeDataTable.Rows[0], "data", out resultBase64);
             Dictionary<string, string> messageList = new Dictionary<string, string>();
             messageList.Add("data", resultBase64);
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), messageList);
