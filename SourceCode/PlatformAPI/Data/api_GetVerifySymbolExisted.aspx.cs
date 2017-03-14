@@ -33,7 +33,7 @@ public partial class Data_api_GetVerifySymbolExisted : class_WebClass_WA
         {
             activeSPEntry.ModifyParameterValue("@produce", _fromProduct);
         }
-        DataTable binDataTable = _objectSqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);        
+        DataTable binDataTable = _objectSqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);        
         if (binDataTable != null && binDataTable.Rows.Count > 0)
         {            
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
