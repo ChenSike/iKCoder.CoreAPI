@@ -31,7 +31,9 @@ public class class_CommonDefined
         update = 3002,
         delete = 3003,
         select = 3004,
-        selectkey = 3005
+        selectkey = 3005,
+        selectcondition = 3006,
+        selectmixed = 3007
     }
 
     public enum enumDevices
