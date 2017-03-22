@@ -19,9 +19,11 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
         XmlNode usernameNode = REQUESTDOCUMENT.SelectSingleNode("/root/username");
         XmlNode passwordNode = REQUESTDOCUMENT.SelectSingleNode("/root/password");
         XmlNode productNode = REQUESTDOCUMENT.SelectSingleNode("/root/product");
+        XmlNode templateNode = REQUESTDOCUMENT.SelectSingleNode("/root/template");
         string username = class_XmlHelper.GetNodeValue("", usernameNode);
         string password = class_XmlHelper.GetNodeValue("", passwordNode);
-        string profileProduct = class_XmlHelper.GetNodeValue("", productNode);   
+        string profileProduct = class_XmlHelper.GetNodeValue("", productNode);
+        string template = class_XmlHelper.GetNodeValue("", templateNode); 
         if (string.IsNullOrEmpty(username))
             username = GetQuerystringParam("username");
         if (string.IsNullOrEmpty(password))
@@ -30,6 +32,10 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
             profileProduct = GetQuerystringParam("product");
         if (string.IsNullOrEmpty(profileProduct))
             profileProduct = "iKCoder";
+        if (string.IsNullOrEmpty(template))
+            template = GetQuerystringParam("template");
+        if (string.IsNullOrEmpty(template))
+            template = "profile_ikcoder_template";
         string desPassword = string.Empty;
         object_CommonLogic.Object_DES.DESCoding(password, out desPassword);
         if (!string.IsNullOrEmpty(desPassword))
@@ -47,46 +53,22 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
         activeSPEntry.ModifyParameterValue("@username", username);
         activeSPEntry.ModifyParameterValue("@password", password);
         object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, "insert", this.GetType());
-        string profileName = "profile_" + username;       
-        StringBuilder strProDoc = new StringBuilder();
-        strProDoc.Append("<root>");
-        strProDoc.Append("<docbasic>");
-        strProDoc.Append("<doc_id>");
-        strProDoc.Append("</doc_id>");
-        strProDoc.Append("<doc_symbol>");
-        strProDoc.Append(profileName);
-        strProDoc.Append("</doc_symbol>");
-        strProDoc.Append("</docbasic>");
-        strProDoc.Append("<usrbasic>");
-        strProDoc.Append("<usr_name>");
-        strProDoc.Append(username);
-        strProDoc.Append("</usr_name>");
-        strProDoc.Append("<usr_nickname>");
-        strProDoc.Append("</usr_nickname>");
-        strProDoc.Append("<coins>");
-        strProDoc.Append("0");
-        strProDoc.Append("</coins>");
-        strProDoc.Append("<account_status>");
-        strProDoc.Append("L0");
-        strProDoc.Append("</account_status>");
-        strProDoc.Append("<account_limited>");
-        strProDoc.Append("</account_limited>");
-        strProDoc.Append("<account_childs>");
-        strProDoc.Append("</account_childs>");
-        strProDoc.Append("<account_head>");
-        strProDoc.Append("</account_head>");
-        strProDoc.Append("</usrbasic>");
-        strProDoc.Append("<lessons>");
-        strProDoc.Append("<begin></begin>");
-        strProDoc.Append("<intermediate></intermediate>");
-        strProDoc.Append("<senior></senior>");
-        strProDoc.Append("</lessons>");
-        strProDoc.Append("<friends></friends>");
-        strProDoc.Append("</root>");
-        XmlDocument proDoc = new XmlDocument();
-        proDoc.LoadXml(strProDoc.ToString());
-        object_CommonLogic.ConnectToDatabase();
-        object_CommonLogic.LoadStoreProcedureList();
+        string profileName = "profile_" + username;
+        class_Data_SqlHelper _objectSqlHelper = new class_Data_SqlHelper();
+        activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_data_basic");
+        activeSPEntry.ModifyParameterValue("@symbol", template);
+        DataTable textDataTable = _objectSqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+        string templateresult = "";
+        XmlDocument templateDocument = new XmlDocument();
+        if (textDataTable != null && textDataTable.Rows.Count > 0)
+        {
+            class_Data_SqlDataHelper.GetArrByteColumnDataToString(textDataTable.Rows[0], "data", out templateresult);
+            templateDocument.LoadXml(template);
+            XmlNode activeNode = templateDocument.SelectSingleNode("/root/docbasic/doc_symbol");
+            class_XmlHelper.SetNodeValue(activeNode, profileName);
+            activeNode = templateDocument.SelectSingleNode("/root/usrbasic/usr_name");
+            class_XmlHelper.SetNodeValue(activeNode, username);
+        }
         activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_profile");
         activeSPEntry.ModifyParameterValue("@profile_name", profileName);
         DataTable activeAccountProfileDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPKeyForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
@@ -100,7 +82,7 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
                 activeSPEntry.ModifyParameterValue("@profile_name", profileName);
                 activeSPEntry.ModifyParameterValue("@profile_product", profileProduct);
                 activeSPEntry.ModifyParameterValue("@account_name", username);
-                activeSPEntry.ModifyParameterValue("@profile_data", strProDoc);
+                activeSPEntry.ModifyParameterValue("@profile_data", templateDocument.OuterXml);
                 if (object_CommonLogic.Object_SqlHelper.ExecuteInsertSP(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer))
                     AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "created profile", "");
                 else

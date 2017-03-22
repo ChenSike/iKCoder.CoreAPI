@@ -12,8 +12,20 @@ using System.Data;
 public partial class Buss_api_AccountProfile_Create : class_WebClass_WLA
 {
     protected override void AfterExtenedFunction()
-    {        
+    {
         ISRESPONSEDOC = true;
+        string profileName = "profile_" + activeUserName;
+        string profileProduct = string.Empty;
+        string profileTemplate = GetQuerystringParam("template");
+        if(string.IsNullOrEmpty(profileTemplate))
+        {
+            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "template->empty", "");
+            return;
+        }
+        profileProduct = GetQuerystringParam("product");
+        if (string.IsNullOrEmpty(profileProduct))
+            profileProduct = "iKCoder";
+        /*ISRESPONSEDOC = true;
         string profileName = "profile_" + activeUserName;
         string profileProduct = string.Empty;
         profileProduct = GetQuerystringParam("product");
@@ -83,7 +95,7 @@ public partial class Buss_api_AccountProfile_Create : class_WebClass_WLA
             }
         }
         else
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : faild to select account profile.", "");
+            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : faild to select account profile.", "");*/
 
     }
 }

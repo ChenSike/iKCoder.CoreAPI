@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="GET_ResourceDataText.aspx.cs" Inherits="Data_GET_ResourceDataText" %>
