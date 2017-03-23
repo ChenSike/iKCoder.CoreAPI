@@ -1,1 +1,0 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="SET_Coins.aspx.cs" Inherits="Account_Profile_Set_Coins"%>

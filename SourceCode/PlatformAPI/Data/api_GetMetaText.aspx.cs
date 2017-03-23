@@ -29,13 +29,8 @@ public partial class Data_api_GetMetaText : class_WebClass_WA
         if(textDataTable!=null && textDataTable.Rows.Count>0)
         {
             string result = "";
-<<<<<<< .mine
             class_Data_SqlDataHelper.GetArrByteColumnDataToString(textDataTable.Rows[0], "data", out result);            
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), result, "");
-=======
-            class_Data_SqlDataHelper.GetArrByteColumnDataToString(textDataTable.Rows[0], "data", out result);
-            AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), result, "");
->>>>>>> .theirs
         }
         else
         {
