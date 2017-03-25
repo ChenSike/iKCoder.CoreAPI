@@ -6,5 +6,5 @@
     <item name="" source="D1" xpath="/root/" id="#1"></item>
     <item name="" value="20" id="#2"></item>
   </defined>
-  <calc value="#1+#2"></calc>
+  <calc>#1+#2</calc>
 </root>
