@@ -14,6 +14,7 @@ public partial class Account_api_LoginAccount : class_WebClass_WA
     {
         ISRESPONSEDOC = true;
         object_CommonLogic.ConnectToDatabase();
+        object_CommonLogic.LoadStoreProcedureList();
         XmlNode usernameNode = REQUESTDOCUMENT.SelectSingleNode("/root/username");
         string username = string.Empty;
         string password = string.Empty;
@@ -33,13 +34,15 @@ public partial class Account_api_LoginAccount : class_WebClass_WA
         if (class_LoginedPool.verifyLoginedAccountExisted(username))
             class_LoginedPool.removeLoginedAccount(username);
         class_Data_SqlSPEntry activeSPEntry_Basic = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_basic");
+        activeSPEntry_Basic.ClearAllParamsValues();
+        activeSPEntry_Basic.ModifyParameterValue("@username", username);
         DataTable selectResultDT = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_Basic, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if (selectResultDT != null && selectResultDT.Rows.Count >= 1)
         {
             DataRow activeUserRow = selectResultDT.Rows[0];
             string valueUserFromDB = string.Empty;
             string valuePasswordFromDB = string.Empty;
-            class_Data_SqlDataHelper.GetColumnData(activeUserRow, "name", out valueUserFromDB);
+            class_Data_SqlDataHelper.GetColumnData(activeUserRow, "username", out valueUserFromDB);
             class_Data_SqlDataHelper.GetColumnData(activeUserRow, "password", out valuePasswordFromDB);
             if (string.IsNullOrEmpty(valueUserFromDB))
             {

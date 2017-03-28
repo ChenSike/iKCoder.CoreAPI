@@ -56,6 +56,7 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
         string profileName = "profile_" + username;
         class_Data_SqlHelper _objectSqlHelper = new class_Data_SqlHelper();
         activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_data_basic");
+        activeSPEntry.ClearAllParamsValues();
         activeSPEntry.ModifyParameterValue("@symbol", template);
         DataTable textDataTable = _objectSqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         string templateresult = "";

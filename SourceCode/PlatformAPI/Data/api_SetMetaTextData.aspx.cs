@@ -22,7 +22,8 @@ public partial class Data_api_SetMetaTextData : class_WebClass_WA
         string guid = symbol;
         if(guid=="")
             guid = Guid.NewGuid().ToString();
-        activeSPEntry.ModifyParameterValue("@symbol", guid);     
+        activeSPEntry.ModifyParameterValue("@symbol", guid);
+        data = class_CommonUtil.Decoder_Base64(data);
         DataTable activeDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if (activeDataTable.Rows.Count == 0)
         {

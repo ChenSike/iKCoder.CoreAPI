@@ -20,90 +20,75 @@ public partial class Account_SET_Reg : class_WebBase_NUA
         ISRESPONSEDOC = true;
         ISBINRESPONSE = false;
         if (REQUESTDOCUMENT != null)
-        {            
+        {
             string userSymbol = "";
             string userPassword = "";
             string codeName = "";
-            string codeValue = "";           
+            string codeValue = "";
+            string nickname = "";
             XmlNode userSymbolNode = REQUESTDOCUMENT.SelectSingleNode("/root/symbol");
             XmlNode userPasswordNode = REQUESTDOCUMENT.SelectSingleNode("/root/password");
             XmlNode codeNameNode = REQUESTDOCUMENT.SelectSingleNode("/root/codename");
-            XmlNode codeValueNode = REQUESTDOCUMENT.SelectSingleNode("/root/codevalue");            
-            if (userSymbolNode == null)
+            XmlNode codeValueNode = REQUESTDOCUMENT.SelectSingleNode("/root/codevalue");
+            XmlNode nickNameNode = REQUESTDOCUMENT.SelectSingleNode("/root/nickname");
+            userSymbol = class_XmlHelper.GetNodeValue(userSymbolNode);
+            if (string.IsNullOrEmpty(userSymbol))
+            {
+                userSymbol = GetQuerystringParam("symbol");
+            }
+            if (string.IsNullOrEmpty(userSymbol))
             {
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_Symbol"), "");
                 return;
             }
-            else
+
+            userPassword = class_XmlHelper.GetNodeValue(userPasswordNode);
+            if (string.IsNullOrEmpty(userPassword))
             {
-                userSymbol = class_XmlHelper.GetNodeValue(userSymbolNode);
-                if (string.IsNullOrEmpty(userSymbol))
-                {
-                    userSymbol = GetQuerystringParam("symbol");
-                }
-                if (string.IsNullOrEmpty(userSymbol))
-                {
-                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_Symbol"), "");
-                    return;
-                }
+                userPassword = GetQuerystringParam("password");
             }
-            if (userPasswordNode == null)
+            if (string.IsNullOrEmpty(userPassword))
             {
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_Password"), "");
                 return;
             }
-            else
+
+            codeValue = class_XmlHelper.GetNodeValue(codeValueNode);
+            if (string.IsNullOrEmpty(codeValue))
             {
-                userPassword = class_XmlHelper.GetNodeValue(userPasswordNode);
-                if (string.IsNullOrEmpty(userPassword))
-                {
-                    userPassword = GetQuerystringParam("password");
-                }
-                if (string.IsNullOrEmpty(userPassword))
-                {
-                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_Password"), "");
-                    return;
-                }
+                codeValue = GetQuerystringParam("codevalue");
             }
-            if (codeValueNode == null)
+            if (string.IsNullOrEmpty(codeValue))
             {
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_Checkcode"), "");
                 return;
             }
-            else
+
+            codeName = class_XmlHelper.GetNodeValue(codeNameNode);
+            if (string.IsNullOrEmpty(codeName))
             {
-                codeValue = class_XmlHelper.GetNodeValue(codeValueNode);
-                if (string.IsNullOrEmpty(codeValue))
-                {
-                    codeValue = GetQuerystringParam("codevalue");
-                }
-                if (string.IsNullOrEmpty(codeValue))
-                {
-                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_Checkcode"), "");
-                    return;
-                }
+                codeName = GetQuerystringParam("codename");
             }
-            if (codeNameNode == null)
+            if (string.IsNullOrEmpty(codeName))
             {
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_CodeName"), "");
                 return;
             }
-            else
+
+            nickname = class_XmlHelper.GetNodeValue(nickNameNode);
+            if (string.IsNullOrEmpty(nickname))
             {
-                codeName = class_XmlHelper.GetNodeValue(codeNameNode);
-                if (string.IsNullOrEmpty(codeName))
-                {
-                    codeName = GetQuerystringParam("codename");
-                }
-                if (string.IsNullOrEmpty(codeName))
-                {
-                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_CodeName"), "");
-                    return;
-                }
+                nickname = GetQuerystringParam("nickname");
             }
+            if (string.IsNullOrEmpty(nickname))
+            {
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_CodeName"), "");
+                return;
+            }
+
             string codeValueFromServer = "";
-            if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name,ClientSymbol), codeName) != null)
-                codeValueFromServer = (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name,ClientSymbol), codeName)).ToString();
+            if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), codeName) != null)
+                codeValueFromServer = (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), codeName)).ToString();
             if (codeValueFromServer != codeValue)
             {
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Equal_Param_Reg_Code"), "");
@@ -112,13 +97,13 @@ public partial class Account_SET_Reg : class_WebBase_NUA
             string requestAPI = "/Account/api_VerifyAccountExisted.aspx?cid=" + cid + "&username=" + userSymbol;
             string URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 100000);
-            if(returnDoc.Contains("true"))
+            if (returnDoc.Contains("true"))
             {
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Param_Reg_AccountExisted"), "");
                 return;
             }
             StringBuilder inputDoc = new StringBuilder();
-            inputDoc.Append("<root>");            
+            inputDoc.Append("<root>");
             inputDoc.Append("<username>");
             inputDoc.Append(userSymbol);
             inputDoc.Append("</username>");
@@ -128,14 +113,17 @@ public partial class Account_SET_Reg : class_WebBase_NUA
             inputDoc.Append("<product>");
             inputDoc.Append(Produce_Name);
             inputDoc.Append("</product>");
+            inputDoc.Append("<template>");
+            inputDoc.Append("profile_template_ikcoder");
+            inputDoc.Append("</template>");
             inputDoc.Append("</root>");
             requestAPI = "/Account/api_CreateUserAccountWithProfile.aspx?cid=" + cid;
             URL = Server_API + Virtul_Folder_API + requestAPI;
             returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(inputDoc.ToString(), URL, 1000 * 60, 100000);
-            if (!returnDoc.Contains("<err>"))            
-                AddResponseMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), Object_LabelController.GetString("message", "SC_Param_Reg_Account"), "");            
+            if (!returnDoc.Contains("<err>"))
+                AddResponseMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), Object_LabelController.GetString("message", "SC_Param_Reg_Account"), "");
             else
-                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Param_Reg_Account"), "");               
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Param_Reg_Account"), "");
         }
         else
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "Invalidated Input Document", "", enum_MessageType.Exception);

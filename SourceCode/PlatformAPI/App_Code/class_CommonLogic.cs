@@ -133,6 +133,7 @@ public class class_CommonLogic
         XmlNode applicationConfig = Object_BaseConfig.GetSessionNode("appConfig");
         XmlNode rsDomain = Object_BaseConfig.GetSessionNode("RSDomain");
         Object_BaseConfig.SwitchToDESModeON(Const_DESKey);
+        Object_DES = new class_Security_DES(Const_DESKey);
         this.dbServer = Object_BaseConfig.GetAttrValue(platformDBConfig, "dbserver");
         this.dbuid = Object_BaseConfig.GetAttrValue(platformDBConfig, "uidname");
         this.dbpwd = Object_BaseConfig.GetAttrValue(platformDBConfig, "password");
