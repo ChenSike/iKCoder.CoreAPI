@@ -64,7 +64,7 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
         if (textDataTable != null && textDataTable.Rows.Count > 0)
         {
             class_Data_SqlDataHelper.GetArrByteColumnDataToString(textDataTable.Rows[0], "data", out templateresult);
-            templateDocument.LoadXml(template);
+            templateDocument.LoadXml(templateresult);
             XmlNode activeNode = templateDocument.SelectSingleNode("/root/docbasic/doc_symbol");
             class_XmlHelper.SetNodeValue(activeNode, profileName);
             activeNode = templateDocument.SelectSingleNode("/root/usrbasic/usr_name");

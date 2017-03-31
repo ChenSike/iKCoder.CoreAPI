@@ -99,7 +99,18 @@ public partial class Account_GET_SignWithCheckCode : class_WebBase_NUA
             Dictionary<string, string> attrsValue = new Dictionary<string, string>();
             attrsValue.Add("logined_user_name", user_name);
             attrsValue.Add("logined_marked", "1");
-            AddResponseMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrsValue);
+            string requestAPI = "/Profile/api_AccountProfile_SelectNodeValue.aspx?cid=" + cid + "&account=" + user_name + "&produce=" + Produce_Name + "&xpath=/root/usrbasic/usr_nickname";
+            URL = Server_API + Virtul_Folder_API + requestAPI;
+            string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 100000);
+            if (!returnStrDoc.Contains("<err>"))
+            {
+                XmlDocument returnDoc = new XmlDocument();
+                returnDoc.LoadXml(returnStrDoc);
+                XmlNode msgNod = returnDoc.SelectSingleNode("/root/msg");
+                string msg = class_XmlHelper.GetAttrValue(msgNod, "msg");
+                attrsValue.Add("logined_nickname", msg);
+            }
+            AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrsValue);
         }
         else
         {

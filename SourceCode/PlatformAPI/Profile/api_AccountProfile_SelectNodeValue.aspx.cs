@@ -48,8 +48,7 @@ public partial class Profile_api_AccountProfile_SelectNodeValue : class_WebClass
         object_CommonLogic.LoadStoreProcedureList();
         class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_profile");
         activeSPEntry.ModifyParameterValue("@profile_name", profileSymbol);
-        activeSPEntry.ModifyParameterValue("@profile_product", produceName);
-        DataTable activeAccountProfileDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPKeyForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+        DataTable activeAccountProfileDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if (activeAccountProfileDataTable != null)
         {
             if (activeAccountProfileDataTable.Rows.Count > 0)

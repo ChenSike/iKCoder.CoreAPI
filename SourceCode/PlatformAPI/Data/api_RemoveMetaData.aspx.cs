@@ -13,7 +13,7 @@ public partial class Data_api_RemoveMetaText : class_WebClass_WA
     {
         ISRESPONSEDOC = true;
         string dataId = GetQuerystringParam("id");
-        if (string.IsNullOrEmpty(dataId))
+        if (!string.IsNullOrEmpty(dataId))
         {
             object_CommonLogic.ConnectToDatabase();
             object_CommonLogic.LoadStoreProcedureList();

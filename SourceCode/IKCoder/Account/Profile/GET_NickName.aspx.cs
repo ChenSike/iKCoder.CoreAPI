@@ -12,15 +12,22 @@ public partial class Account_Profile_GET_NickName : class_WebBase_UA
 {
     protected override void ExtendedAction()
     {
-        string account = GetQuerystringParam("nickname");
+        string account = GetQuerystringParam("username");
         if (string.IsNullOrEmpty(account))
             account = Session["logined_user_name"].ToString();
         if (!string.IsNullOrEmpty(account))
         {
             string requestAPI = "/Profile/api_AccountProfile_SelectNodeValue.aspx?cid=" + cid + "&account=" + account + "&produce=" + Produce_Name + "&xpath=/root/usrbasic/usr_nickname";
             string URL = Server_API + Virtul_Folder_API + requestAPI;
-            if (Object_NetRemote.getRemoteRequestByGet(requestAPI))
-                AddResponseMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
+            string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 100000);
+            if (!returnStrDoc.Contains("<err>"))
+            {
+                XmlDocument returnDoc = new XmlDocument();
+                returnDoc.LoadXml(returnStrDoc);
+                XmlNode msgNod = returnDoc.SelectSingleNode("/root/msg");
+                string msg = class_XmlHelper.GetAttrValue(msgNod, "msg");
+                AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), msg, "");
+            }
             else
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false", "", enum_MessageType.Exception);
 
