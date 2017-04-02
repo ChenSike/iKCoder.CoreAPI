@@ -25,7 +25,10 @@ public partial class Profile_api_AccountProfile_SelectNodesValues : class_WebCla
             List<string> searchItems = new List<string>();
             if(REQUESTDOCUMENT.SelectSingleNode("/root/select")!=null)
             {
-                foreach()
+                foreach(XmlNode activeItem in REQUESTDOCUMENT.SelectNodes("/root/select/items"))
+                {
+                    searchItems.Add(class_XmlHelper.GetAttrValue(activeItem, "value"));
+                }
             }
             string profileSymbol = "profile_" + accountName;
             object_CommonLogic.ConnectToDatabase();
@@ -44,15 +47,17 @@ public partial class Profile_api_AccountProfile_SelectNodesValues : class_WebCla
                     {
                         XmlDocument resultDoc = new XmlDocument();
                         resultDoc.LoadXml(strDoc);
-                        XmlNode selectedNode = resultDoc.SelectSingleNode(xpathFrom);
-                        if (selectedNode != null)
+                        foreach (string selectXpath in searchItems)
                         {
-                            data = class_XmlHelper.GetNodeValue(selectedNode);
-                            AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), data, "");
-                        }
-                        else
-                        {
-                            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : no data.", "");
+                            XmlNode selectedNode = resultDoc.SelectSingleNode(selectXpath);
+                            if (selectedNode != null)
+                            {
+                                data = class_XmlHelper.GetNodeValue(selectedNode);
+                                Dictionary<string, string> attrs = new Dictionary<string, string>();
+                                attrs.Add("xpath", selectXpath);
+                                attrs.Add("value", data);
+                                AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
+                            }                            
                         }
                     }
                     catch
