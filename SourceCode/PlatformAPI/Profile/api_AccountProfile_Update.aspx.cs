@@ -67,7 +67,8 @@ public partial class Buss_api_AccountProfile_Update : class_WebClass_WLA
                 string id = "";
                 class_Data_SqlDataHelper.GetColumnData(activeAccountProfileDataTable.Rows[0], "id", out id);
                 activeSPEntry.ClearAllParamsValues();
-                activeSPEntry.ModifyParameterValue("@id", id);                
+                activeSPEntry.ModifyParameterValue("@id", id);
+                profileData = class_CommonUtil.Decoder_Base64(profileData);
                 activeSPEntry.ModifyParameterValue("@profile_data", profileData);
                 object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, class_CommonDefined.enumDataOperaqtionType.update.ToString(), this.GetType());
             }

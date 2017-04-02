@@ -32,22 +32,23 @@ public partial class Profile_api_AccountProfile_Select : class_WebClass_WA
             if (REQUESTDOCUMENT != null)
             {
                 if (REQUESTDOCUMENT.SelectSingleNode("/root/produce") != null)
-                    accountName = class_XmlHelper.GetNodeValue(REQUESTDOCUMENT.SelectSingleNode("/root/produce"));
+                    produceName = class_XmlHelper.GetNodeValue(REQUESTDOCUMENT.SelectSingleNode("/root/produce"));
                 else
                 {
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : invalidated produce name for select profile.", "");
                     return;
                 }
-
             }
         }
         string profileSymbol = "profile_" + accountName;
         object_CommonLogic.ConnectToDatabase();
         object_CommonLogic.LoadStoreProcedureList();
         class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_profile");
-        activeSPEntry.ModifyParameterValue("@profile_name", profileSymbol);
-        activeSPEntry.ModifyParameterValue("@profile_product", produceName);
-        DataTable activeAccountProfileDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPKeyForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+        if(!string.IsNullOrEmpty(profileSymbol))
+            activeSPEntry.ModifyParameterValue("@profile_name", profileSymbol);
+        if(!string.IsNullOrEmpty(produceName))
+            activeSPEntry.ModifyParameterValue("@profile_product", produceName);
+        DataTable activeAccountProfileDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if (activeAccountProfileDataTable != null)
         {
             if (activeAccountProfileDataTable.Rows.Count > 0)

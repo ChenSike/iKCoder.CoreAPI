@@ -13,7 +13,6 @@ public partial class Profile_api_AccountProfile_SelectNodeValue : class_WebClass
     protected override void ExtenedFunction()
     {
         string accountName = GetQuerystringParam("account");
-        string produceName = GetQuerystringParam("produce");
         string xpathFrom = GetQuerystringParam("xpath");
         if (string.IsNullOrEmpty(accountName))
         {
@@ -28,21 +27,7 @@ public partial class Profile_api_AccountProfile_SelectNodeValue : class_WebClass
                 }
 
             }
-        }
-        if (string.IsNullOrEmpty(produceName))
-        {
-            if (REQUESTDOCUMENT != null)
-            {
-                if (REQUESTDOCUMENT.SelectSingleNode("/root/produce") != null)
-                    accountName = class_XmlHelper.GetNodeValue(REQUESTDOCUMENT.SelectSingleNode("/root/produce"));
-                else
-                {
-                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : invalidated produce name for select profile.", "");
-                    return;
-                }
-
-            }
-        }
+        }        
         string profileSymbol = "profile_" + accountName;
         object_CommonLogic.ConnectToDatabase();
         object_CommonLogic.LoadStoreProcedureList();
