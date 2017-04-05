@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="SET_BinResource.aspx.cs" Inherits="Data_SET_BinResource" %>
