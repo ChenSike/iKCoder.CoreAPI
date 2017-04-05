@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class Account_GET_SignStatus : class_WebBase_NUA
+public partial class Account_GET_SignStatus : class_WebBase_UA
 {
     protected override void ExtendedAction()
     {

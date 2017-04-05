@@ -35,6 +35,7 @@ public partial class Data_api_GetCalcDataPonit : class_WebClass_WA
                 {
                     string strDoc = "";
                     class_Data_SqlDataHelper.GetArrByteColumnDataToString(textDataTable.Rows[0], "data", out strDoc);
+                    string calcEnBase64 = class_CommonUtil.Decoder_Base64(strDoc);
                     XmlDocument resultDoc = new XmlDocument();
                     resultDoc.LoadXml(strDoc);
                     dataSource_Buffer.Add(id, resultDoc);

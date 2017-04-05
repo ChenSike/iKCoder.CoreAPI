@@ -27,7 +27,7 @@ public class class_WebBase_UA:class_WebBase
                 {
                     if (Session["logined_marked"].ToString() == "1")
                     {
-                        AddResponseMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
+                        AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
                         return true;
                     }
                     else

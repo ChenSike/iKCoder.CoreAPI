@@ -28,8 +28,9 @@ public partial class Data_api_GetMetaText : class_WebClass_WA
         DataTable textDataTable = _objectSqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if(textDataTable!=null && textDataTable.Rows.Count>0)
         {
-            string result = "";
-            class_Data_SqlDataHelper.GetArrByteColumnDataToString(textDataTable.Rows[0], "data", out result);            
+            string result = "";            
+            class_Data_SqlDataHelper.GetArrByteColumnDataToString(textDataTable.Rows[0], "data", out result);
+            result = class_CommonUtil.Decoder_Base64(result);
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), result, "");
         }
         else
