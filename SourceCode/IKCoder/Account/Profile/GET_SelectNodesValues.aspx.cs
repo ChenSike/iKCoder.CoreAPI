@@ -11,9 +11,44 @@ public partial class Account_Profile_GET_SelectNodesValues : class_WebBase_UA
 {
     protected override void ExtendedAction()
     {
-        string account = GetQuerystringParam("account");
-        if(string.IsNullOrEmpty(account))        
-            account = Session["logined_user_name"].ToString();
-                
+        if (REQUESTDOCUMENT != null)
+        {
+            string account = string.Empty;
+            XmlNode accountNode = REQUESTDOCUMENT.SelectSingleNode("/root/account");
+            if (accountNode != null)
+            {
+                account = class_XmlHelper.GetNodeValue(accountNode);
+            }
+            else
+            {
+
+                if (string.IsNullOrEmpty(account))
+                {
+                    account = Session["logined_user_name"].ToString();
+                }
+                accountNode = class_XmlHelper.CreateNode(REQUESTDOCUMENT, "account", account);
+                REQUESTDOCUMENT.SelectSingleNode("/root").AppendChild(accountNode);
+            }
+            string requestAPI = "/Profile/api_AccountProfile_SelectNodesValues.aspx?cid=" + cid;
+            string URL = Server_API + Virtul_Folder_API + requestAPI;
+            string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(REQUESTDOCUMENT.OuterXml, URL, 1000 * 60, 100000);
+            if (!returnStrDoc.Contains("<err>"))
+            {
+                XmlDocument returnDoc = new XmlDocument();
+                returnDoc.LoadXml(returnStrDoc);
+                XmlNodeList msgNodes = returnDoc.SelectNodes("/root/msg");
+                foreach (XmlNode msgNode in msgNodes)
+                {
+                    string value = class_XmlHelper.GetAttrValue(msgNode, "value");
+                    string xpath = class_XmlHelper.GetAttrValue(msgNode, "xpath");
+                    Dictionary<string, string> attrs = new Dictionary<string, string>();
+                    attrs.Add("value", value);
+                    attrs.Add("xpath", xpath);
+                    AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
+                }
+            }
+            else
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false", "", enum_MessageType.Exception);
+        }
     }
 }

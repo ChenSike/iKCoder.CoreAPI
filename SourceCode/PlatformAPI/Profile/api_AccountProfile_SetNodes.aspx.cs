@@ -85,7 +85,10 @@ public partial class Profile_api_AccountProfile_SetNodes : class_WebClass_WA
                         {
                             XmlNode tmpNewNode = parentNode.SelectSingleNode(activeNodeName);
                             if (tmpNewNode == null)
+                            {
                                 tmpNewNode = class_XmlHelper.CreateNode(profileDoc, activeNodeName, "");
+                                parentNode.AppendChild(tmpNewNode);
+                            }
                             foreach (string activeNodeContentKey in newNodesLst[activeNodeName].Keys)
                             {
                                 if (activeNodeContentKey == "nodevalue")
