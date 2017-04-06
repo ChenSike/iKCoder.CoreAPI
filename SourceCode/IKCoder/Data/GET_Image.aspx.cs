@@ -31,6 +31,7 @@ public partial class Data_GET_Image : class_WebBase_NUA
                 if(!string.IsNullOrEmpty(data))
                 {
                     ISBINRESPONSE = true;
+                    ISRESPONSEDOC = false;
                     RESPONSEBUFFER = class_CommonUtil.Decoder_Base64ToByte(data);
                 }
                 else

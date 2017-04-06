@@ -29,7 +29,7 @@ public partial class Data_api_GetBinDataWithBase64 : class_WebClass_WA
         if (activeDataTable != null && activeDataTable.Rows.Count > 0)
         {
             string resultBase64 = string.Empty;
-            class_Data_SqlDataHelper.GetColumnData(activeDataTable.Rows[0], "data", out resultBase64);
+            class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataTable.Rows[0], "data", out resultBase64);
             Dictionary<string, string> messageList = new Dictionary<string, string>();
             messageList.Add("data", resultBase64);
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), messageList);
