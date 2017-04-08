@@ -12,6 +12,7 @@ public partial class Account_GET_Sign : class_WebBase_NUA
     protected override void ExtendedAction()
     {
         ISRESPONSEDOC = true;
+        ISBINRESPONSE = false;
         string symbol = "";
         string password = "";
         symbol = GetQuerystringParam("symbol");

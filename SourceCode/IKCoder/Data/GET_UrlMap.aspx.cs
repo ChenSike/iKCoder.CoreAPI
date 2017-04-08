@@ -12,6 +12,7 @@ public partial class Data_GET_UrlMap : class_WebBase_NUA
     protected override void ExtendedAction()
     {
         ISRESPONSEDOC = true;
+        ISBINRESPONSE = false;
         string mapkey = GetQuerystringParam("mapkey");
         bool isfulurl = GetQuerystringParam("fulurl") == "1" ? true : false;
         bool isshowall = GetQuerystringParam("showall") == "1" ? true : false;

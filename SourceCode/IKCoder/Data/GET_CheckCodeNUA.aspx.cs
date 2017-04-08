@@ -16,7 +16,7 @@ public partial class Data_GET_CheckCode : class_WebBase_NUA
     protected override void ExtendedAction()
     {
 
-        ISRESPONSEDOC = true;
+        ISRESPONSEDOC = false;
         ISBINRESPONSE = true;
         int activeCodeLength = 5;
         int imageWidth = 80;
