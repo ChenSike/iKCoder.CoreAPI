@@ -55,7 +55,8 @@ public partial class Account_GET_Sign : class_WebBase_NUA
             Session["logined_user_signedid"] = user_loginid;
             Session["logined_marked"] = "1";
             Session.Timeout = Session_TimeOutMinutes;
-            Response.Cookies["logined_marked"].Value = "1";
+            Response.Cookies["logined_user_name"].Value = user_name;
+            Response.Cookies["logined_user_name"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);
             Response.Cookies["logined_marked"].Value = "1";
             Response.Cookies["logined_marked"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);
             Response.Cookies["logined_user_id"].Value = user_id;

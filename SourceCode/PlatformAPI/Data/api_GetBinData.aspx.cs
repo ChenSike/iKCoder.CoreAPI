@@ -32,6 +32,7 @@ public partial class Data_api_GetBinData : class_WebClass_WA
             class_Data_SqlDataHelper.GetArrByteColumnDataToString(binDataTable.Rows[0], "data", out resultBase64);
             byte[] resultBin = class_CommonUtil.Decoder_Base64ToByte(resultBase64);
             ISBINRESPONSE = true;
+            ISRESPONSEDOC = false;
             RESPONSEBUFFER = resultBin;
         }
         else
