@@ -14,6 +14,7 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
     protected override void ExtenedFunction()
     {
         ISRESPONSEDOC = true;
+        ISBINRESPONSE = false;
         object_CommonLogic.ConnectToDatabase();
         object_CommonLogic.LoadStoreProcedureList();    
         XmlNode usernameNode = REQUESTDOCUMENT.SelectSingleNode("/root/username");

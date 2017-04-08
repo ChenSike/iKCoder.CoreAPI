@@ -66,8 +66,9 @@ public partial class Profile_api_AccountProfile_SetNodes : class_WebClass_WA
             object_CommonLogic.ConnectToDatabase();
             object_CommonLogic.LoadStoreProcedureList();
             class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_profile");
+            activeSPEntry.ClearAllParamsValues();
             activeSPEntry.ModifyParameterValue("@profile_name", profileSymbol);
-            DataTable activeAccountProfileDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+            DataTable activeAccountProfileDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPKeyForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
             if (activeAccountProfileDataTable != null)
             {
                 if (activeAccountProfileDataTable.Rows.Count > 0)
