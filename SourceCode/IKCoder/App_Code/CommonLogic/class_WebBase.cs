@@ -39,9 +39,9 @@ public class class_WebBase : class_Base_WebBaseclass
             return;
         XmlNodeList RSDomainItems = Object_BaseConfig.GetItemNodes("RSDomain");
         Object_BaseConfig.SwitchToDESModeOFF();
-        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientID), "RSDOMAIN") != null)
+        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), "RSDOMAIN") != null)
         {
-            string perinstanceDomain = Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientID), "RSDOMAIN").ToString();
+            string perinstanceDomain = Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), "RSDOMAIN").ToString();
             foreach (XmlNode activeDomainItem in RSDomainItems)
             {
                 string itemName = Object_BaseConfig.GetAttrValue(activeDomainItem, "name");

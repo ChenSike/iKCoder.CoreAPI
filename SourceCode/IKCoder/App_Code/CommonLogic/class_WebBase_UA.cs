@@ -15,6 +15,7 @@ public class class_WebBase_UA:class_WebBase
     protected override bool BeforeExtenedAction()
     {
         ISRESPONSEDOC = true;
+        ISBINRESPONSE = false;
         if (Request.Cookies["logined_marked"] != null && Request.Cookies["logined_user_signedid"] != null && Request.Cookies["logined_user_id"] != null)
         {
             string logined_marked = Request.Cookies["logined_marked"].Value;

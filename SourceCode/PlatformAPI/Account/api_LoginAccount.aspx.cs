@@ -13,6 +13,7 @@ public partial class Account_api_LoginAccount : class_WebClass_WA
     protected override void ExtenedFunction()
     {
         ISRESPONSEDOC = true;
+        ISBINRESPONSE = false;
         object_CommonLogic.ConnectToDatabase();
         object_CommonLogic.LoadStoreProcedureList();
         XmlNode usernameNode = REQUESTDOCUMENT.SelectSingleNode("/root/username");
