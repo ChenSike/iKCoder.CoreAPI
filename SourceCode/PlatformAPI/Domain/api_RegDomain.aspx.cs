@@ -9,6 +9,7 @@ public partial class Domain_api_RegDomain : class_WebBase_NWA
 {
     protected override void ExtenedFunction()
     {
+        ISRESPONSEDOC = true;
         string domianname = GetQuerystringParam("domain");
         if (!string.IsNullOrEmpty(domianname))
         {
