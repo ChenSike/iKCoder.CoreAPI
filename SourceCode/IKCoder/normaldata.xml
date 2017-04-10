@@ -3,5 +3,6 @@
     <item name="carlhome" domain="http://ikcoder.vicp.io:20596"></item>
     <item name="sikehome" domain="192.168.199.233"></item>
     <item name="carloffice" domain="http://ikcoder.ikcoder.com"></item>
+    <item name="localhost" domain="http://localhost"></item>
   </session>
 </root>

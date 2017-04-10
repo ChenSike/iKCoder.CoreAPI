@@ -27,5 +27,10 @@ public partial class Sys_SYS_RegServer : class_WebBase_NUA
         }
         else
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false", "");
+
     }
 }
+ 
+
+
+

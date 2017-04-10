@@ -13,7 +13,7 @@ public partial class Domain_api_RegDomain : class_WebBase_NWA
         string domianname = GetQuerystringParam("domain");
         if (!string.IsNullOrEmpty(domianname))
         {
-            if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, "PlatformAPI", ClientID), "RSDOMAIN") != null)
+            if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, "PlatformAPI", ClientSymbol), "RSDOMAIN") != null)
             {
                 string persistanceDomain = Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, "PlatformAPI", ClientSymbol), "RSDOMAIN").ToString();
                 if (persistanceDomain != domianname)

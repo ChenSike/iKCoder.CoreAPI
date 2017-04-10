@@ -66,7 +66,7 @@ public partial class Account_GET_Sign : class_WebBase_NUA
             string requestAPI = "/Profile/api_AccountProfile_SelectNodeValue.aspx?cid=" + cid + "&account=" + user_name + "&produce=" + Produce_Name + "&xpath=/root/usrbasic/usr_nickname";
             URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 100000);
-            if (!returnStrDoc.Contains("<err>"))
+            if (!returnStrDoc.Contains("err"))
             {
                 XmlDocument returnDoc = new XmlDocument();
                 returnDoc.LoadXml(returnStrDoc);

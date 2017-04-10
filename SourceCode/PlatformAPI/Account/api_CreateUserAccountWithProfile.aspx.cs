@@ -39,8 +39,6 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
             template = "profile_ikcoder_template";
         string desPassword = string.Empty;
         object_CommonLogic.Object_DES.DESCoding(password, out desPassword);
-        if (!string.IsNullOrEmpty(desPassword))
-            password = desPassword;
         class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_basic");
         activeSPEntry.ModifyParameterValue("@username", username);
         DataTable selectResultDT = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
@@ -52,7 +50,7 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
         }
         activeSPEntry.ClearAllParamsValues();
         activeSPEntry.ModifyParameterValue("@username", username);
-        activeSPEntry.ModifyParameterValue("@password", password);
+        activeSPEntry.ModifyParameterValue("@password", desPassword);
         object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, "insert", this.GetType());
         string profileName = "profile_" + username;
         class_Data_SqlHelper _objectSqlHelper = new class_Data_SqlHelper();
@@ -65,7 +63,8 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
         if (textDataTable != null && textDataTable.Rows.Count > 0)
         {
             class_Data_SqlDataHelper.GetArrByteColumnDataToString(textDataTable.Rows[0], "data", out templateresult);
-            templateDocument.LoadXml(templateresult);
+            string nomalString = class_CommonUtil.Decoder_Base64(templateresult);
+            templateDocument.LoadXml(nomalString);
             XmlNode activeNode = templateDocument.SelectSingleNode("/root/docbasic/doc_symbol");
             class_XmlHelper.SetNodeValue(activeNode, profileName);
             activeNode = templateDocument.SelectSingleNode("/root/usrbasic/usr_name");
