@@ -20,7 +20,7 @@ public partial class Account_Profile_GET_NickName : class_WebBase_UA
             string requestAPI = "/Profile/api_AccountProfile_SelectNodeValue.aspx?cid=" + cid + "&account=" + account + "&produce=" + Produce_Name + "&xpath=/root/usrbasic/usr_nickname";
             string URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 100000);
-            if (!returnStrDoc.Contains("<err>"))
+            if (!returnStrDoc.Contains("err"))
             {
                 XmlDocument returnDoc = new XmlDocument();
                 returnDoc.LoadXml(returnStrDoc);

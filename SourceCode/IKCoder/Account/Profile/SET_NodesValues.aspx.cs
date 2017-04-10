@@ -16,7 +16,7 @@ public partial class Account_Profile_SET_NodesValues : class_WebBase_UA
             string requestAPI = "/Profile/api_AccountProfile_SetNodes.aspx?cid=" + cid;
             string URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(REQUESTDOCUMENT.OuterXml, URL, 1000 * 60, 100000);
-            if (!returnDoc.Contains("<err>"))
+            if (!returnDoc.Contains("err"))
                 AddResponseMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), Object_LabelController.GetString("message", "SC_Param_Reg_Account"), "");
             else
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Param_Reg_Account"), "");

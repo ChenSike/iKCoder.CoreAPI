@@ -32,7 +32,7 @@ public partial class Account_Profile_GET_SelectNodesValues : class_WebBase_UA
             string requestAPI = "/Profile/api_AccountProfile_SelectNodesValues.aspx?cid=" + cid;
             string URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(REQUESTDOCUMENT.OuterXml, URL, 1000 * 60, 100000);
-            if (!returnStrDoc.Contains("<err>"))
+            if (!returnStrDoc.Contains("err"))
             {
                 XmlDocument returnDoc = new XmlDocument();
                 returnDoc.LoadXml(returnStrDoc);

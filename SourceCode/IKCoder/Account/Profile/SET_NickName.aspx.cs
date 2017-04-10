@@ -35,7 +35,7 @@ public partial class Account_SET_NickName : class_WebBase_NUA
             strRequestDoc.Append("</newnodes>");
             strRequestDoc.Append("</root>");
             string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(strRequestDoc.ToString(), URL, 1000 * 60, 100000);
-            if (!returnDoc.Contains("<err>"))
+            if (!returnDoc.Contains("err"))
                 AddResponseMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), Object_LabelController.GetString("message", "SC_Param_Reg_Account"), "");
             else
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Param_Reg_Account"), "");
