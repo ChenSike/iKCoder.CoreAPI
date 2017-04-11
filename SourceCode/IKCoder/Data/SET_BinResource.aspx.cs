@@ -16,7 +16,7 @@ public partial class Data_SET_BinResource : class_WebBase_UA
         string symbol = GetQuerystringParam("symbol");
         string filetype = GetQuerystringParam("filetype");
         if (!string.IsNullOrEmpty(symbol))
-        {                      
+        {
             HttpFileCollection requestFiles = Request.Files;
             HttpPostedFile postFile = requestFiles[0];
             if (postFile != null)
@@ -49,5 +49,5 @@ public partial class Data_SET_BinResource : class_WebBase_UA
             }
 
         }
-    }    
+    }
 }
