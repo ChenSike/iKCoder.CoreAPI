@@ -33,8 +33,10 @@ public partial class Account_api_ChangePassword : class_WebClass_WA
         DataTable selectResultDT = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry_Basic, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if (selectResultDT != null && selectResultDT.Rows.Count >= 1)
         {
+            string userID = string.Empty;
+            class_Data_SqlDataHelper.GetColumnData(selectResultDT.Rows[0], "id", out userID);
             activeSPEntry_Basic.ClearAllParamsValues();
-            activeSPEntry_Basic.ModifyParameterValue("@username", username);
+            activeSPEntry_Basic.ModifyParameterValue("@id", userID);
             activeSPEntry_Basic.ModifyParameterValue("@password", desNewPassword);
             object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry_Basic, "update", this.GetType());
         }

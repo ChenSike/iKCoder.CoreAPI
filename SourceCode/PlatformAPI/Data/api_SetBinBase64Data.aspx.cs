@@ -23,8 +23,6 @@ public partial class Data_api_SetBinBase64Data : class_WebClass_WA
         if (guid == "")
             guid = Guid.NewGuid().ToString();
         activeSPEntry.ModifyParameterValue("@symbol", guid);
-        activeSPEntry.ModifyParameterValue("@type", type);
-        activeSPEntry.ModifyParameterValue("@data", data);
         DataTable binDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
         if (binDataTable.Rows.Count == 0)
         {
