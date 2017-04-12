@@ -24,7 +24,7 @@ public partial class Data_SET_BinResource : class_WebBase_UA
                 byte[] binBuffer = new byte[postFile.InputStream.Length];
                 postFile.InputStream.Read(binBuffer, 0, (int)postFile.InputStream.Length);
                 string binData64 = class_CommonUtil.Encoder_Base64(binBuffer);
-                string URL = Server_API + Virtul_Folder_API + "/Data/api_SetBinBase64Data.aspx?cid=" + cid;
+                string URL = Server_API + Virtul_Folder_API + "/Data/api_SetOverBinBase64Data.aspx?cid=" + cid;
                 StringBuilder inputStr = new StringBuilder();
                 inputStr.Append("<root>");
                 inputStr.Append("<symbol>");

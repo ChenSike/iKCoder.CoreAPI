@@ -113,8 +113,7 @@ public partial class Account_SET_Reg : class_WebBase_NUA
             inputDoc.Append("<product>");
             inputDoc.Append(Produce_Name);
             inputDoc.Append("</product>");
-            inputDoc.Append("<template>");
-            inputDoc.Append("profile_template_ikcoder");
+            inputDoc.Append("<template>");            
             inputDoc.Append("</template>");
             inputDoc.Append("</root>");
             requestAPI = "/Account/api_CreateUserAccountWithProfile.aspx?cid=" + cid;
@@ -141,7 +140,7 @@ public partial class Account_SET_Reg : class_WebBase_NUA
                     strRequestDoc.Append("</newnodes>");
                     strRequestDoc.Append("</root>");
                     returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(strRequestDoc.ToString(), URL, 1000 * 60, 100000);
-                    if (!returnDoc.Contains("<err>"))
+                    if (!returnDoc.Contains("err"))
                         AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), Object_LabelController.GetString("message", "SC_Param_Reg_Account"), "");
                     else
                         AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Param_Reg_Account"), "");                    

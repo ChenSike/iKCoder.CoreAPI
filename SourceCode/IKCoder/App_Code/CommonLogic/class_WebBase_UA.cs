@@ -28,13 +28,18 @@ public class class_WebBase_UA:class_WebBase
                 {
                     if (Session["logined_marked"].ToString() == "1")
                     {
-                        AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
+                        Dictionary<String, String> attrs = new Dictionary<string, string>();
+                        attrs.Add("logined_user_name", Session["logined_user_name"].ToString());                        
+                        attrs.Add("logined_marked", "1");
+                        attrs.Add("type", "1");
+                        AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
                         return true;
                     }
                     else
                     {
                         Dictionary<string, string> errAttrs = new Dictionary<string, string>();
                         errAttrs.Add("issigndneeded", "1");
+                        errAttrs.Add("type", "1");
                         AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), errAttrs);
                         return false;
                     }
@@ -43,6 +48,7 @@ public class class_WebBase_UA:class_WebBase
                 {
                     Dictionary<string, string> errAttrs = new Dictionary<string, string>();
                     errAttrs.Add("issigndneeded", "1");
+                    errAttrs.Add("type", "1");
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), errAttrs);
                     return false;
                 }
@@ -51,6 +57,7 @@ public class class_WebBase_UA:class_WebBase
             {
                 Dictionary<string, string> errAttrs = new Dictionary<string, string>();
                 errAttrs.Add("issigndneeded", "1");
+                errAttrs.Add("type", "1");
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), errAttrs);
                 return false;
             }
@@ -59,6 +66,7 @@ public class class_WebBase_UA:class_WebBase
         {
             Dictionary<string, string> errAttrs = new Dictionary<string, string>();
             errAttrs.Add("issigndneeded", "1");
+            errAttrs.Add("type", "1");
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Unsigned"), "");
             return false;
         }        

@@ -9,6 +9,5 @@ public partial class Account_GET_SignStatus : class_WebBase_UA
 {
     protected override void ExtendedAction()
     {
-        
     }
 }

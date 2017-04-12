@@ -40,7 +40,7 @@ public partial class Account_GET_Sign : class_WebBase_NUA
         string strReturnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(inputDoc, URL, 1000 * 60, 100000);
         returnFromAPIServer.LoadXml(strReturnDoc);
         XmlNode msgNode = returnFromAPIServer.SelectSingleNode("/root/msg");
-        bool isLogined = false;
+        bool isLogined = true;
         if (msgNode == null)
         {
             isLogined = false;
@@ -62,7 +62,7 @@ public partial class Account_GET_Sign : class_WebBase_NUA
             Response.Cookies["logined_user_id"].Value = user_id;
             Response.Cookies["logined_user_id"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);
             Response.Cookies["logined_user_signedid"].Value = user_loginid;
-            Response.Cookies["logined_user_signedid"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);
+            Response.Cookies["logined_user_signedid"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);           
             string requestAPI = "/Profile/api_AccountProfile_SelectNodeValue.aspx?cid=" + cid + "&account=" + user_name + "&produce=" + Produce_Name + "&xpath=/root/usrbasic/usr_nickname";
             URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 100000);
@@ -72,7 +72,13 @@ public partial class Account_GET_Sign : class_WebBase_NUA
                 returnDoc.LoadXml(returnStrDoc);
                 XmlNode msgNod = returnDoc.SelectSingleNode("/root/msg");
                 string msg = class_XmlHelper.GetAttrValue(msgNod, "msg");
-                AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), msg, "");
+                Session["logined_user_nickname"] = msg;
+                Response.Cookies["logined_user_nickname"].Value = msg;
+                Dictionary<String, String> attrs = new Dictionary<string, string>();
+                attrs.Add("logined_nickname", msg);
+                attrs.Add("logined_user_name", user_name);
+                attrs.Add("logined_marked", "1");
+                AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
             }
             else
             {
