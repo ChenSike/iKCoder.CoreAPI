@@ -15,6 +15,7 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
         
     private XmlDocument workspaceDoc;
     private string symbol;
+    private string user_name;
 
     protected override void ExtendedAction()
     {
@@ -23,20 +24,28 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
         symbol = GetQuerystringParam("symbol");        
         if(!string.IsNullOrEmpty(symbol))
         {
+            user_name = Session["logined_user_name"].ToString();
             string configsItemSymbol = "workspace_configsitem_common";
             string URL = Server_API + Virtul_Folder_API + "/Data/api_GetMetaTextBase64Data.aspx?symbol=" + configsItemSymbol;
             string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
             string decoderDoc = class_CommonUtil.Decoder_Base64(returnDoc);
             sourceDoc_configsItem = new XmlDocument();
             sourceDoc_configsItem.LoadXml(returnDoc);
-            /*
+            
             StringBuilder requestInput = new StringBuilder();
             requestInput.Append("<root>");
             requestInput.Append("<account>");
-            requestInput.Append(Session[""])
+            requestInput.Append(user_name);
+            requestInput.Append("</account>");
+            requestInput.Append("<select>");
+            requestInput.Append("<item>");
+            requestInput.Append("/root/studystatus/currentsence/currentstage");
+            requestInput.Append("/root/studystatus/currentsence/symbol");
+            requestInput.Append("</item>");
+            requestInput.Append("</select>");
             string requestAPI = "/Profile/api_AccountProfile_SelectNodesValues.aspx?cid=" + cid;
             URL = Server_API + Virtul_Folder_API + requestAPI;
-            string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(, URL, 1000 * 60, 100000);
+            string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(requestInput.ToString(), URL, 1000 * 60, 100000);
             if (!returnStrDoc.Contains("err"))
             {
                 XmlDocument tmpData = new XmlDocument();
@@ -48,7 +57,7 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
                     sourceDic_accountProfile.Add(xpath, value);
                 }
             }
-            */
+            
             workspaceDoc = new XmlDocument();
             workspaceDoc.LoadXml("<root></root>");
 
@@ -58,6 +67,7 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
 
     protected void BuilldNode_basic(XmlNode rootNode)
     {
+        //build basic node
         XmlNode basicNode = class_XmlHelper.CreateNode(workspaceDoc, "basic", "");
         rootNode.AppendChild(basicNode);
         XmlNode usrNode = class_XmlHelper.CreateNode(workspaceDoc, "usr", "");
@@ -68,18 +78,31 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
         class_XmlHelper.SetAttribute(usrNode, "id", user_id);
         class_XmlHelper.SetAttribute(usrNode, "nickname", user_nickname);
         class_XmlHelper.SetAttribute(usrNode, "header", user_header);
+        //build sence node
+        XmlNode senceNode = class_XmlHelper.CreateNode(workspaceDoc, "sence", "");
+        rootNode.AppendChild(senceNode);
+        string stageSymbol = string.Empty;
+        if (sourceDic_accountProfile.ContainsKey("/root/studystatus/currentsence/symbol"))
+            stageSymbol = sourceDic_accountProfile["/root/studystatus/currentsence/symbol"];
+        XmlNode source_senceNode = workspaceDoc.SelectSingleNode("/root/sence[@symbol='" + stageSymbol + "']");
+        int stageCount = workspaceDoc.SelectNodes("/root/stages/stage").Count;
+        string stageName = class_XmlHelper.GetAttrValue(source_senceNode, "name");        
+        string id = class_XmlHelper.GetAttrValue(source_senceNode, "id");
+        string currentstage = string.Empty;        
+        if(sourceDic_accountProfile.ContainsKey("/root/studystatus/currentsence/currentstage"))
+            currentstage = sourceDic_accountProfile["/root/studystatus/currentsence/currentstage"];
+        class_XmlHelper.SetAttribute(senceNode, "name", stageName);
+        class_XmlHelper.SetAttribute(senceNode, "symbol", stageSymbol);
+        class_XmlHelper.SetAttribute(senceNode, "id", id);
+        class_XmlHelper.SetAttribute(senceNode, "totalstage", stageCount.ToString());
+        class_XmlHelper.SetAttribute(senceNode, "currentstage", currentstage);
     }
 
     protected void BuildNode_sence(XmlNode rootNode)
     {
-        XmlNode senceNode = class_XmlHelper.CreateNode(workspaceDoc, "sence", "");
-        XmlNode source_senceNode = workspaceDoc.SelectSingleNode("/root/sence");
-        int stageCount = workspaceDoc.SelectNodes("/root/stages/stage").Count;
-        string stageName = class_XmlHelper.GetAttrValue(source_senceNode, "name");
-        string stageSymbol = class_XmlHelper.GetAttrValue(source_senceNode, "symbol");
-        string id = class_XmlHelper.GetAttrValue(source_senceNode, "id");
+       
 
-        rootNode.AppendChild(senceNode);
+        
     }
 
 }

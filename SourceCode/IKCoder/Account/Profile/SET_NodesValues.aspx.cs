@@ -11,6 +11,7 @@ public partial class Account_Profile_SET_NodesValues : class_WebBase_UA
 {
     protected override void ExtendedAction()
     {
+        ISRESPONSEDOC = true;
         if (REQUESTDOCUMENT != null)
         {
             string requestAPI = "/Profile/api_AccountProfile_SetNodes.aspx?cid=" + cid;

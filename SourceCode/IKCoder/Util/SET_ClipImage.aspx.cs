@@ -25,7 +25,7 @@ public partial class Util_SET_ClipImage : class_WebBase_UA
         int.TryParse(GetQuerystringParam("starty"), out startY);
         int.TryParse(GetQuerystringParam("width"), out width);
         int.TryParse(GetQuerystringParam("height"), out height);
-        if(string.IsNullOrEmpty( tmpBinResourceSymbol))
+        if(!string.IsNullOrEmpty(tmpBinResourceSymbol))
         {
             string URL = Server_API + Virtul_Folder_API + "/Data/api_GetBinDataWithBase64.aspx?symbol=" + tmpBinResourceSymbol;
             string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
@@ -38,8 +38,8 @@ public partial class Util_SET_ClipImage : class_WebBase_UA
                 string type = class_XmlHelper.GetAttrValue(msgNode, "type");
                 if (!string.IsNullOrEmpty(data))
                 {
-                    ISBINRESPONSE = true;
-                    ISRESPONSEDOC = false;
+                    ISBINRESPONSE = false;
+                    ISRESPONSEDOC = true;
                     byte[] imageData = class_CommonUtil.Decoder_Base64ToByte(data);
                     Bitmap sourceBitMap = class_Util_Drawing.CreateImage(imageData);
                     Bitmap clippedBitMap = class_Util_Drawing.ClipImage(sourceBitMap, startX, startY, width, height);
