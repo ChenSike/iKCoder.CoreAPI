@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 using iKCoder_Platform_SDK_Kit;
 using System.Data;
 
-public partial class Data_api_UpdateMetaTextData : class_WebClass_WA
+public partial class Data_api_SetOverMetaTextData : class_WebClass_WA
 {
     protected override void ExtenedFunction()
     {
@@ -15,16 +15,18 @@ public partial class Data_api_UpdateMetaTextData : class_WebClass_WA
         object_CommonLogic.LoadStoreProcedureList();
         ISRESPONSEDOC = true;
         string data = class_XmlHelper.GetNodeValue(REQUESTDOCUMENT, "/root/data");
-        string type = class_CommonDefined.enumDataItemType.text.ToString();
-        string operation = class_CommonDefined.enumDataOperaqtionType.update.ToString();
+        string type = class_XmlHelper.GetNodeValue(REQUESTDOCUMENT, "/root/type");
         string symbol = class_XmlHelper.GetNodeValue(REQUESTDOCUMENT, "/root/symbol");
         class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_data_basic");
-        activeSPEntry.ModifyParameterValue("@symbol", symbol);
-        DataTable activeDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
-        if (activeDataTable.Rows.Count >=1 )
+        string guid = symbol;
+        if (guid == "")
+            guid = Guid.NewGuid().ToString();
+        activeSPEntry.ModifyParameterValue("@symbol", guid);
+        DataTable binDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+        if (binDataTable.Rows.Count == 0)
         {
             activeSPEntry.ClearAllParamsValues();
-            activeSPEntry.ModifyParameterValue("@symbol", symbol);
+            activeSPEntry.ModifyParameterValue("@symbol", guid);
             activeSPEntry.ModifyParameterValue("@type", type);
             activeSPEntry.ModifyParameterValue("@data", data);
             activeSPEntry.ModifyParameterValue("@produce", _fromProduct);
@@ -32,13 +34,19 @@ public partial class Data_api_UpdateMetaTextData : class_WebClass_WA
             activeSPEntry.ModifyParameterValue("@isBase64", "1");
             activeSPEntry.ModifyParameterValue("@isDES", "0");
             activeSPEntry.ModifyParameterValue("@DESKey", "");
-            object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, operation, this.GetType());
+            object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, class_CommonDefined.enumDataOperaqtionType.insert.ToString(), this.GetType());
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
 
         }
         else
         {
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to execute api : symbol existed or guid existed.", "");
+            string id = string.Empty;
+            class_Data_SqlDataHelper.GetColumnData(binDataTable.Rows[0], "id", out id);
+            activeSPEntry.ClearAllParamsValues();
+            activeSPEntry.ModifyParameterValue("@id", id);
+            activeSPEntry.ModifyParameterValue("@data", data);
+            object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, class_CommonDefined.enumDataOperaqtionType.update.ToString(), this.GetType());
         }
+        object_CommonLogic.CloseDBConnection();
     }
 }
