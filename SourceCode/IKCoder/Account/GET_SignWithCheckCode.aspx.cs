@@ -98,9 +98,9 @@ public partial class Account_GET_SignWithCheckCode : class_WebBase_NUA
             Response.Cookies["logined_user_id"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);
             Response.Cookies["logined_user_signedid"].Value = user_loginid;
             Response.Cookies["logined_user_signedid"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);
-            Dictionary<string, string> attrsValue = new Dictionary<string, string>();
-            attrsValue.Add("logined_user_name", user_name);
-            attrsValue.Add("logined_marked", "1");
+            Dictionary<string, string> attrs = new Dictionary<string, string>();
+            attrs.Add("logined_user_name", user_name);
+            attrs.Add("logined_marked", "1");
             string requestAPI = "/Profile/api_AccountProfile_SelectNodeValue.aspx?cid=" + cid + "&account=" + user_name + "&produce=" + Produce_Name + "&xpath=/root/usrbasic/usr_nickname";
             URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 100000);
@@ -110,9 +110,11 @@ public partial class Account_GET_SignWithCheckCode : class_WebBase_NUA
                 returnDoc.LoadXml(returnStrDoc);
                 XmlNode msgNod = returnDoc.SelectSingleNode("/root/msg");
                 string msg = class_XmlHelper.GetAttrValue(msgNod, "msg");
-                attrsValue.Add("logined_nickname", msg);
+                Session["logined_user_nickname"] = msg;
+                Response.Cookies["logined_user_nickname"].Value = msg;
+                attrs.Add("logined_nickname", msg);
             }
-            AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrsValue);
+            AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
         }
         else
         {

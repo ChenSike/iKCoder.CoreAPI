@@ -10,35 +10,36 @@ using System.Text;
 
 public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
 {
-    private XmlDocument sourceDoc_configsItem;
-    private XmlDocument sourceDoc_configsTips;
-    private Dictionary<string, string> sourceDic_accountProfile;
-        
-    private XmlDocument workspaceDoc;    
+    private XmlDocument sourceDoc_configsItem = new XmlDocument();
+    private XmlDocument sourceDoc_configsTips = new XmlDocument();
+    private XmlDocument sourceDoc_workspaceStatus = new XmlDocument();
+    private XmlDocument sourceDoc_toolBox = new XmlDocument();
+    private XmlDocument sourceDoc_wordList = new XmlDocument();
+    private Dictionary<string, string> sourceDic_accountProfile = new Dictionary<string, string>();
+
+    private class_WorkspaceProcess objectWorkspaceProcess;
+    private XmlDocument workspaceDoc;
+    private XmlNode senceNode;
+    private XmlNode stageNode;
     private string symbol;
     private string user_name;
+    private string symbol_tips = "";
+    private string symbol_toolbox = "";
+    private string symbol_toolbox_src = "";
+    private string symbol_step = "";
+    private string symbol_workspacestatus = "";
+
 
     protected override void ExtendedAction()
     {
+                
         ISRESPONSEDOC = true;
         ISBINRESPONSE = false;
-        symbol = GetQuerystringParam("symbol");        
-        if(!string.IsNullOrEmpty(symbol))
+        symbol = GetQuerystringParam("symbol");
+        if (!string.IsNullOrEmpty(symbol))
         {
             user_name = Session["logined_user_name"].ToString();
-            string configsItemSymbol = "workspace_configsitem_common";
-            string URL = Server_API + Virtul_Folder_API + "/Data/api_GetMetaTextBase64Data.aspx?cid="+ClientSymbol+"&symbol=" + configsItemSymbol;
-            string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
-            string decoderDoc = class_CommonUtil.Decoder_Base64(returnDoc);
-            sourceDoc_configsItem = new XmlDocument();
-            sourceDoc_configsItem.LoadXml(decoderDoc);
-
-            string configTipsSymbol = "config_tips_workspace";
-            URL = Server_API + Virtul_Folder_API + "/Data/api_GetMetaTextBase64Data.aspx?cid=" + ClientSymbol + "&symbol=" + configTipsSymbol;
-            returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
-            decoderDoc = class_CommonUtil.Decoder_Base64(returnDoc);
-            sourceDoc_configsTips = new XmlDocument();
-            sourceDoc_configsTips.LoadXml(decoderDoc);
+            objectWorkspaceProcess = new class_WorkspaceProcess(Server_API + Virtul_Folder_API, ClientSymbol, Object_NetRemote, user_name);
 
             StringBuilder requestInput = new StringBuilder();
             requestInput.Append("<root>");
@@ -46,17 +47,19 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
             requestInput.Append(user_name);
             requestInput.Append("</account>");
             requestInput.Append("<select>");
-            requestInput.Append("<item>");
-            requestInput.Append("/root/studystatus/currentsence/currentstage");
-            requestInput.Append("/root/studystatus/currentsence/symbol");
-            requestInput.Append("</item>");
+            requestInput.Append("<items value='/root/studystatus/currentsence/currentstage'>");            
+            requestInput.Append("</items>");
+            requestInput.Append("<items value='/root/studystatus/currentsence/symbol'>");            
+            requestInput.Append("</items>");
             requestInput.Append("</select>");
+            requestInput.Append("</root>");
             string requestAPI = "/Profile/api_AccountProfile_SelectNodesValues.aspx?cid=" + cid;
-            URL = Server_API + Virtul_Folder_API + requestAPI;
+            string URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(requestInput.ToString(), URL, 1000 * 60, 100000);
             if (!returnStrDoc.Contains("err"))
             {
                 XmlDocument tmpData = new XmlDocument();
+                tmpData.LoadXml(returnStrDoc);
                 XmlNodeList msgNodes = tmpData.SelectNodes("/root/msg");
                 foreach (XmlNode msgNode in msgNodes)
                 {
@@ -65,15 +68,89 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
                     sourceDic_accountProfile.Add(xpath, value);
                 }
             }
+            string currentstage = string.Empty;
+            if (sourceDic_accountProfile.ContainsKey("/root/studystatus/currentsence/currentstage"))
+                currentstage = sourceDic_accountProfile["/root/studystatus/currentsence/currentstage"];
+            if (string.IsNullOrEmpty(currentstage))
+            {
+                currentstage = "1";
+                requestAPI = "/Profile/api_AccountProfile_SetNodes.aspx?cid=" + cid;
+                URL = Server_API + Virtul_Folder_API + requestAPI;
+                StringBuilder strRequestDoc = new StringBuilder();
+                strRequestDoc.Append("<root>");
+                strRequestDoc.Append("<account>");
+                strRequestDoc.Append(user_name);
+                strRequestDoc.Append("</account>");
+                strRequestDoc.Append("<produce>");
+                strRequestDoc.Append(Produce_Name);
+                strRequestDoc.Append("</produce>");
+                strRequestDoc.Append("<parent>");
+                strRequestDoc.Append("/root/studystatus/currentsence");
+                strRequestDoc.Append("</parent>");
+                strRequestDoc.Append("<newnodes>");
+                strRequestDoc.Append("<item name=\"currentstage\" value=\"" + currentstage + "\" >");
+                strRequestDoc.Append("</item>");
+                strRequestDoc.Append("</newnodes>");
+                strRequestDoc.Append("</root>");
+                Object_NetRemote.getRemoteRequestToStringWithCookieHeader(strRequestDoc.ToString(), URL, 1000 * 60, 100000);
+            }
+            symbol_step = currentstage;
+
+
+     
+            string configsItemSymbol = "workspace_configsitem_common";
+            URL = Server_API + Virtul_Folder_API + "/Data/api_GetMetaTextBase64Data.aspx?cid=" + ClientSymbol + "&symbol=" + configsItemSymbol;
+            string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
+            XmlDocument tmpDoc = new XmlDocument();
+            tmpDoc.LoadXml(returnDoc);
+            string strMsg = class_XmlHelper.GetAttrValue(tmpDoc.SelectSingleNode("/root/msg"), "msg");
+            string decoderDoc = class_CommonUtil.Decoder_Base64(strMsg);
+            sourceDoc_configsItem = new XmlDocument();
+            sourceDoc_configsItem.LoadXml(decoderDoc);
+            senceNode = sourceDoc_configsItem.SelectSingleNode("/root/sence[@symbol='"+symbol+"']");
+            stageNode = senceNode.SelectSingleNode("stages/stage[@step='" + currentstage + "']");
+            symbol_tips = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("tips"), "symbol");
+            symbol_toolbox = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("toolbox"), "symbol");
+            symbol_toolbox_src = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("toolbox"), "src");
+            symbol_workspacestatus = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("toolbox"), "symbol");
+
+            string tmp_sourceDoc_workspaceStatus;            
+            tmp_sourceDoc_workspaceStatus = objectWorkspaceProcess.GET_Doc_WorkspaceStatus(symbol_workspacestatus);
+            sourceDoc_workspaceStatus.LoadXml(tmp_sourceDoc_workspaceStatus);
             
+            string configTipsSymbol = "config_tips_workspace";
+            URL = Server_API + Virtul_Folder_API + "/Data/api_GetMetaTextBase64Data.aspx?cid=" + ClientSymbol + "&symbol=" + configTipsSymbol;
+            returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
+            tmpDoc = new XmlDocument();
+            tmpDoc.LoadXml(returnDoc);
+            strMsg = class_XmlHelper.GetAttrValue(tmpDoc.SelectSingleNode("/root/msg"), "msg");
+            decoderDoc = class_CommonUtil.Decoder_Base64(strMsg);
+            sourceDoc_configsTips = new XmlDocument();
+            sourceDoc_configsTips.LoadXml(decoderDoc);
+
+            string wordListSymbol = "workspace_word_list";
+            URL = Server_API + Virtul_Folder_API + "/Data/api_GetMetaTextBase64Data.aspx?cid=" + ClientSymbol + "&symbol=" + wordListSymbol;
+            returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
+            tmpDoc = new XmlDocument();
+            tmpDoc.LoadXml(returnDoc);
+            strMsg = class_XmlHelper.GetAttrValue(tmpDoc.SelectSingleNode("/root/msg"), "msg");
+            decoderDoc = class_CommonUtil.Decoder_Base64(strMsg);            
+            sourceDoc_wordList.LoadXml(decoderDoc);
+
             workspaceDoc = new XmlDocument();
             workspaceDoc.LoadXml("<root></root>");
-
+            XmlNode rootNode = workspaceDoc.SelectSingleNode("/root");
+            BuildNode_Basic(rootNode);
+            BuildNode_WorkspaceStatus(rootNode);
+            BuildNode_Toolbox(rootNode);
+            BuildNode_Game(rootNode);
+            BuildNode_Word(rootNode);
+            RESPONSEDOCUMENT.LoadXml(workspaceDoc.OuterXml);
         }
         //else
     }
 
-    protected void BuilldNode_basic(XmlNode rootNode)
+    protected void BuildNode_Basic(XmlNode rootNode)
     {
         //build basic node
         XmlNode basicNode = class_XmlHelper.CreateNode(workspaceDoc, "basic", "");
@@ -103,11 +180,11 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
         class_XmlHelper.SetAttribute(senceNode, "symbol", stageSymbol);
         class_XmlHelper.SetAttribute(senceNode, "id", id);
         class_XmlHelper.SetAttribute(senceNode, "totalstage", stageCount.ToString());
-        class_XmlHelper.SetAttribute(senceNode, "currentstage", currentstage);
+        class_XmlHelper.SetAttribute(senceNode, "currentstage", symbol_step);
 
         XmlNode tipsNode = class_XmlHelper.CreateNode(workspaceDoc,"tips","");
         rootNode.AppendChild(tipsNode);
-        XmlNodeList tipItems = sourceDoc_configsTips.SelectNodes("/root/tip[@symbol='" + symbol + "']/stage[@value='" + currentstage + "']");
+        XmlNodeList tipItems = sourceDoc_configsTips.SelectNodes("/root/tip[@symbol='" + symbol_tips + "']/step[@value='" + currentstage + "']/item");
         int index = 1;
         foreach(XmlNode tipItem in tipItems)
         {
@@ -134,11 +211,52 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
 
     }
 
-    protected void BuildNode_sence(XmlNode rootNode)
+    protected void BuildNode_WorkspaceStatus(XmlNode rootnode)
     {
-       
+        XmlNode workstatusNode = class_XmlHelper.CreateNode(workspaceDoc, "workspacestatus", "");
+        XmlNode activeWorkspaceNode = workspaceDoc.ImportNode(sourceDoc_workspaceStatus.DocumentElement, true);
+        workstatusNode.AppendChild(activeWorkspaceNode);
+        rootnode.AppendChild(workstatusNode);
+    }
 
-        
+    protected void BuildNode_Toolbox(XmlNode rootnode)
+    {        
+        string tmp_sourceDoc_workspaceToolbox;
+        tmp_sourceDoc_workspaceToolbox = objectWorkspaceProcess.GET_Doc_WorkspaceToolbox(symbol, symbol_step);
+        if (!string.IsNullOrEmpty(tmp_sourceDoc_workspaceToolbox))
+        {
+            sourceDoc_toolBox.LoadXml(tmp_sourceDoc_workspaceToolbox);
+            XmlNode toolbox = class_XmlHelper.CreateNode(workspaceDoc, "toolbox", "");
+            rootnode.AppendChild(toolbox);
+            class_XmlHelper.SetAttribute(toolbox, "src", symbol_toolbox_src);
+            XmlNode toolBoxNode = workspaceDoc.ImportNode(sourceDoc_toolBox.DocumentElement, true);
+            toolbox.AppendChild(toolBoxNode);
+        }
+    }
+
+    protected void BuildNode_Game(XmlNode rootnode)
+    {
+        XmlNode gameNode = class_XmlHelper.CreateNode(workspaceDoc,"game","");
+        rootnode.AppendChild(gameNode);
+        foreach(XmlNode activeScriptNode in stageNode.SelectNodes("game/script"))
+        {
+            XmlNode scriptNode = class_XmlHelper.CreateNode(workspaceDoc,"script","");
+            class_XmlHelper.SetAttribute(scriptNode,"src",class_XmlHelper.GetAttrValue(activeScriptNode,"src"));
+            gameNode.AppendChild(scriptNode);
+        }
+    }
+
+    protected void BuildNode_Word(XmlNode rootnode)
+    {
+        string currentStage = sourceDic_accountProfile["/root/studystatus/currentsence/currentstage"];
+        XmlNode wordsNode = class_XmlHelper.CreateNode(workspaceDoc, "words", "");
+        rootnode.AppendChild(wordsNode);
+        XmlNodeList words = sourceDoc_wordList.SelectNodes("/root/list[@symbol='" + symbol + "']/stage[@value='" + symbol_step + "']");
+        foreach(XmlNode word in words)
+        {
+            XmlNode activeWord = workspaceDoc.ImportNode(word, true);
+            wordsNode.AppendChild(activeWord);
+        }
     }
 
 }

@@ -16,7 +16,7 @@ public class class_WebBase_UA:class_WebBase
     {
         ISRESPONSEDOC = true;
         ISBINRESPONSE = false;
-        if (Request.Cookies["logined_marked"] != null && Request.Cookies["logined_user_signedid"] != null && Request.Cookies["logined_user_id"] != null)
+        if (Request.Cookies["logined_marked"] != null && Request.Cookies["logined_user_signedid"] != null && Request.Cookies["logined_user_id"] != null && Session["logined_user_name"]!=null)
         {
             string logined_marked = Request.Cookies["logined_marked"].Value;
             string logined_user_loginid = Request.Cookies["logined_user_signedid"].Value;

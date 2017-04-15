@@ -34,8 +34,7 @@ public partial class Data_api_SetOverMetaTextData : class_WebClass_WA
             activeSPEntry.ModifyParameterValue("@isBase64", "1");
             activeSPEntry.ModifyParameterValue("@isDES", "0");
             activeSPEntry.ModifyParameterValue("@DESKey", "");
-            object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, class_CommonDefined.enumDataOperaqtionType.insert.ToString(), this.GetType());
-            AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
+            object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, class_CommonDefined.enumDataOperaqtionType.insert.ToString(), this.GetType());           
 
         }
         else
@@ -47,6 +46,7 @@ public partial class Data_api_SetOverMetaTextData : class_WebClass_WA
             activeSPEntry.ModifyParameterValue("@data", data);
             object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, class_CommonDefined.enumDataOperaqtionType.update.ToString(), this.GetType());
         }
+        AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
         object_CommonLogic.CloseDBConnection();
     }
 }

@@ -31,7 +31,7 @@ public partial class Bus_Workspace_SET_WorkspaceStatus : class_WebBase_NUA
                 inputStr.Append(base64data);
                 inputStr.Append("</data>");
                 inputStr.Append("</root>");
-                string workspaceStatusSymbol = "workspace_status_" + symbol + "_" + Session["logined_user_name"].ToString();
+                string workspaceStatusSymbol = class_WorkspaceProcess._PreWorkspace + symbol + "_" + Session["logined_user_name"].ToString();
                 string URL = Server_API + Virtul_Folder_API + "/Data/api_SetOverMetaTextData.aspx?cid=" + ClientSymbol + "&symbol=" + workspaceStatusSymbol;
                 string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(inputStr.ToString(), URL, 1000 * 60, 1024 * 1024);
                 if(!returnDoc.Contains("err"))

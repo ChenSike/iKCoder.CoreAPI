@@ -11,6 +11,7 @@ public class class_CommonDefined
     public const string _ResourceWorkspaceFlagSymbol = "wk_current_st_doc_";
     public static int CountOfLoginedAccount = 5000;
     public static int ExperiedPeriodOfLoginedAccount = 60;
+    
 
     public enum enumExecutedCode
     {
