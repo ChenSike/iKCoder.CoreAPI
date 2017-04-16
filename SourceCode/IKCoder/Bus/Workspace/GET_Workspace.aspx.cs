@@ -112,7 +112,7 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
             symbol_tips = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("tips"), "symbol");
             symbol_toolbox = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("toolbox"), "symbol");
             symbol_toolbox_src = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("toolbox"), "src");
-            symbol_workspacestatus = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("toolbox"), "symbol");
+            symbol_workspacestatus = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("workspacestatus"), "symbol");
 
             string tmp_sourceDoc_workspaceStatus;            
             tmp_sourceDoc_workspaceStatus = objectWorkspaceProcess.GET_Doc_WorkspaceStatus(symbol_workspacestatus);
