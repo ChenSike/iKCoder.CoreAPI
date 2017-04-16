@@ -165,19 +165,16 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
         class_XmlHelper.SetAttribute(usrNode, "header", user_header);
         //build sence node
         XmlNode senceNode = class_XmlHelper.CreateNode(workspaceDoc, "sence", "");
-        rootNode.AppendChild(senceNode);
-        string stageSymbol = string.Empty;
-        if (sourceDic_accountProfile.ContainsKey("/root/studystatus/currentsence/symbol"))
-            stageSymbol = sourceDic_accountProfile["/root/studystatus/currentsence/symbol"];
-        XmlNode source_senceNode = workspaceDoc.SelectSingleNode("/root/sence[@symbol='" + stageSymbol + "']");
-        int stageCount = workspaceDoc.SelectNodes("/root/stages/stage").Count;
+        rootNode.AppendChild(senceNode);  
+        XmlNode source_senceNode =  sourceDoc_configsItem.SelectSingleNode("/root/sence[@symbol='" + symbol + "']");
+        int stageCount = (source_senceNode.SelectNodes("stages/stage")).Count;
         string stageName = class_XmlHelper.GetAttrValue(source_senceNode, "name");        
         string id = class_XmlHelper.GetAttrValue(source_senceNode, "id");
         string currentstage = string.Empty;        
         if(sourceDic_accountProfile.ContainsKey("/root/studystatus/currentsence/currentstage"))
             currentstage = sourceDic_accountProfile["/root/studystatus/currentsence/currentstage"];
         class_XmlHelper.SetAttribute(senceNode, "name", stageName);
-        class_XmlHelper.SetAttribute(senceNode, "symbol", stageSymbol);
+        class_XmlHelper.SetAttribute(senceNode, "symbol", symbol);
         class_XmlHelper.SetAttribute(senceNode, "id", id);
         class_XmlHelper.SetAttribute(senceNode, "totalstage", stageCount.ToString());
         class_XmlHelper.SetAttribute(senceNode, "currentstage", symbol_step);
