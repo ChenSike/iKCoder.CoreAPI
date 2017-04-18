@@ -116,7 +116,8 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
 
             string tmp_sourceDoc_workspaceStatus;            
             tmp_sourceDoc_workspaceStatus = objectWorkspaceProcess.GET_Doc_WorkspaceStatus(symbol_workspacestatus);
-            sourceDoc_workspaceStatus.LoadXml(tmp_sourceDoc_workspaceStatus);
+            if(tmp_sourceDoc_workspaceStatus!="")
+                sourceDoc_workspaceStatus.LoadXml(tmp_sourceDoc_workspaceStatus);
             
             string configTipsSymbol = "config_tips_workspace";
             URL = Server_API + Virtul_Folder_API + "/Data/api_GetMetaTextBase64Data.aspx?cid=" + ClientSymbol + "&symbol=" + configTipsSymbol;
@@ -210,10 +211,13 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
 
     protected void BuildNode_WorkspaceStatus(XmlNode rootnode)
     {
-        XmlNode workstatusNode = class_XmlHelper.CreateNode(workspaceDoc, "workspacestatus", "");
-        XmlNode activeWorkspaceNode = workspaceDoc.ImportNode(sourceDoc_workspaceStatus.DocumentElement, true);
-        workstatusNode.AppendChild(activeWorkspaceNode);
-        rootnode.AppendChild(workstatusNode);
+        if (sourceDoc_workspaceStatus != null && sourceDoc_workspaceStatus.OuterXml != "")
+        {
+            XmlNode workstatusNode = class_XmlHelper.CreateNode(workspaceDoc, "workspacestatus", "");
+            XmlNode activeWorkspaceNode = workspaceDoc.ImportNode(sourceDoc_workspaceStatus.DocumentElement, true);
+            workstatusNode.AppendChild(activeWorkspaceNode);
+            rootnode.AppendChild(workstatusNode);
+        }
     }
 
     protected void BuildNode_Toolbox(XmlNode rootnode)
