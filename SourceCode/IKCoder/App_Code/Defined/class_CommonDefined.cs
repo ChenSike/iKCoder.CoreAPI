@@ -42,11 +42,20 @@ public class class_CommonDefined
         other = 4004
     }
 
-    public enum euumAccountStatus
+    public enum enumAccountStatus
     {
         normal = 5001,
         tmplocked = 5002,
         locked = 5003
     }
+
+    public enum enumStudyOperation
+    {
+        normalLesson = 6001,
+        recycleLesson = 6002,
+        appstudioLession = 6003,        
+    }
+
+    
 
 }

@@ -94,10 +94,7 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
                 strRequestDoc.Append("</root>");
                 Object_NetRemote.getRemoteRequestToStringWithCookieHeader(strRequestDoc.ToString(), URL, 1000 * 60, 100000);
             }
-            symbol_step = currentstage;
-
-
-     
+            symbol_step = currentstage;     
             string configsItemSymbol = "workspace_configsitem_common";
             URL = Server_API + Virtul_Folder_API + "/Data/api_GetMetaTextBase64Data.aspx?cid=" + ClientSymbol + "&symbol=" + configsItemSymbol;
             string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
