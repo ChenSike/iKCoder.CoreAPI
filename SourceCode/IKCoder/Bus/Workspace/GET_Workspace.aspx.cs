@@ -28,6 +28,8 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
     private string symbol_toolbox_src = "";
     private string symbol_step = "";
     private string symbol_workspacestatus = "";
+    private string symbol_message_err = "";
+    private string symbol_message_suc = "";
 
 
     protected override void ExtendedAction()
@@ -110,9 +112,12 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
             symbol_toolbox = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("toolbox"), "symbol");
             symbol_toolbox_src = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("toolbox"), "src");
             symbol_workspacestatus = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("workspacestatus"), "symbol");
+            XmlNode messageNode = stageNode.SelectSingleNode("message");
+            symbol_message_err = class_XmlHelper.GetAttrValue(messageNode.SelectSingleNode("err"), "code");
+            symbol_message_suc = class_XmlHelper.GetAttrValue(messageNode.SelectSingleNode("suc"), "code");
 
             string tmp_sourceDoc_workspaceStatus;            
-            tmp_sourceDoc_workspaceStatus = objectWorkspaceProcess.GET_Doc_WorkspaceStatus(symbol_workspacestatus);
+            tmp_sourceDoc_workspaceStatus = objectWorkspaceProcess.GET_Doc_WorkspaceStatus(symbol,currentstage,symbol_workspacestatus);
             if(tmp_sourceDoc_workspaceStatus!="")
                 sourceDoc_workspaceStatus.LoadXml(tmp_sourceDoc_workspaceStatus);
             
@@ -143,7 +148,9 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
             BuildNode_Toolbox(rootNode);
             BuildNode_Game(rootNode);
             BuildNode_Word(rootNode);
+            BuildNode_Message(rootNode);
             RESPONSEDOCUMENT.LoadXml(workspaceDoc.OuterXml);
+
         }
         //else
     }
@@ -255,6 +262,18 @@ public partial class Bus_Workspace_GET_Workspace : class_WebBase_UA
             XmlNode activeWord = workspaceDoc.ImportNode(word, true);
             wordsNode.AppendChild(activeWord);
         }
+    }
+
+    protected void BuildNode_Message(XmlNode rootnode)
+    {
+        XmlNode messageNode = class_XmlHelper.CreateNode(workspaceDoc, "message", "");
+        rootnode.AppendChild(messageNode);
+        XmlNode errNode = class_XmlHelper.CreateNode(workspaceDoc, "faild", "");
+        messageNode.AppendChild(errNode);
+        class_XmlHelper.SetAttribute(errNode, "msg", Object_LabelController.GetString("message", "ERR_Msg_Workspce_Coding"));
+        XmlNode sucNode = class_XmlHelper.CreateNode(workspaceDoc, "suc", "");
+        messageNode.AppendChild(sucNode);
+        class_XmlHelper.SetAttribute(errNode, "msg", Object_LabelController.GetString("message", "SC_Param_Workspace_Run"));
     }
 
 }

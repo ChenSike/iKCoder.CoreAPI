@@ -25,16 +25,16 @@ public class class_WorkspaceProcess
         username = activeUsername;
 	}
 
-    public string GET_Doc_WorkspaceStatus(string symbol)
+    public string GET_Doc_WorkspaceStatus(string symbol,string currentStage,string defaultWorkspaceSymbol)
     {        
         if (string.IsNullOrEmpty(symbol))
             return string.Empty;
-        string workspaceStatusSymbol = symbol + "_" + username;
+        string workspaceStatusSymbol = class_WorkspaceProcess._PreWorkspace + symbol + "_" + "s" + currentStage + "_" + username;
         string URL = serverPath + "/Data/api_GetVerifySymbolExisted.aspx?cid=" + clientSymbol + "&symbol=" + workspaceStatusSymbol;
         string returnDoc = ref_Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
         string decoderDoc = "";
         if (returnDoc.Contains("false"))
-            workspaceStatusSymbol = symbol;
+            workspaceStatusSymbol = defaultWorkspaceSymbol;
         URL = serverPath + "/Data/api_GetMetaTextBase64Data.aspx?cid=" + clientSymbol + "&symbol=" + workspaceStatusSymbol;
         returnDoc = ref_Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
         XmlDocument tmpData = new XmlDocument();
