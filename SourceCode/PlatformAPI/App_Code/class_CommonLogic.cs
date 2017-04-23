@@ -149,13 +149,16 @@ public class class_CommonLogic
             if (regedDomain.Contains(itemName))
                 refDomain = regedDomain;
         }
-        int iMaxCountOfLoginedAccount = 5000;
-        int.TryParse(Object_BaseConfig.GetAttrValue(applicationConfig, "maxCountOfLoginedAccount"), out iMaxCountOfLoginedAccount);
-        this.maxCountOfLoginedAccount = iMaxCountOfLoginedAccount;
-        class_CommonDefined.CountOfLoginedAccount = iMaxCountOfLoginedAccount;
-        int iExpiredPeriodOfLoginedAccount = 60;
-        int.TryParse(Object_BaseConfig.GetAttrValue(applicationConfig, "expiredPeriodOfLoginedAccount"), out iExpiredPeriodOfLoginedAccount);
-        class_CommonDefined.ExperiedPeriodOfLoginedAccount = iExpiredPeriodOfLoginedAccount;
+        if (applicationConfig != null)
+        {
+            int iMaxCountOfLoginedAccount = 5000;
+            int.TryParse(Object_BaseConfig.GetAttrValue(applicationConfig, "maxCountOfLoginedAccount"), out iMaxCountOfLoginedAccount);
+            this.maxCountOfLoginedAccount = iMaxCountOfLoginedAccount;
+            class_CommonDefined.CountOfLoginedAccount = iMaxCountOfLoginedAccount;
+            int iExpiredPeriodOfLoginedAccount = 60;
+            int.TryParse(Object_BaseConfig.GetAttrValue(applicationConfig, "expiredPeriodOfLoginedAccount"), out iExpiredPeriodOfLoginedAccount);
+            class_CommonDefined.ExperiedPeriodOfLoginedAccount = iExpiredPeriodOfLoginedAccount;
+        }
         Object_SqlHelper = new class_Data_SqlHelper();
         return true;
     }    
