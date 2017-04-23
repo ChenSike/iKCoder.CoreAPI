@@ -1,0 +1,14 @@
+<root>
+  <session name="platformDBConfig" dbserver="0pj7jABtJaoaYYRmOJHVZzpJFFDLK/bP" uidname="7z+YWoGvXAO3QnqP1vGM/w==" password="QTDVqg477e5vSG2YEicIS8Vjlh99z/NW" db="XLIV+5ga47pilyKReO18SWw12nWkigyO" dbtype="+T1Y8IIJMrmXGJ2fnBnbyw==">
+  </session>
+  <session name="regproduct">
+    <item name="iKCoder" code="QTDVqg477e5vSG2YEicIS8Vjlh99z/NW" expired="60">
+    </item>
+  </session>
+  <session name="RSDomain">
+    <item name="carl" domain="http://carl.morningstar.com"></item>
+    <item name="sikehome" domain="http://ikcoder.iok.la:24525"></item>
+    <item name="sikelocal" domain="http://localhost"></item>
+    <item name="carloffice" domain="http://ikcoder.ikcoder.com"></item>
+  </session>
+</root>

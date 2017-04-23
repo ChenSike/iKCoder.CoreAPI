@@ -40,6 +40,6 @@
     <item code="ERR_Msg_Workspace_Load" chinese="非常抱歉，加载工作区失败，请联系客户服务中心解决." english=""></item>
     <item code="ERR_Msg_Changed_Password" chinese="非常抱歉，修改密码失败，请联系客户服务中心解决." english=""></item>
     <item code="ERR_Msg_Workspce_Coding" chinese="非常抱歉，您的工作出现错误，请检查后继续运行." english=""></item>
-    <item code="SC_Param_Workspace_Run" chinese="恭喜你，你已经完成了{P1}." english=""></item>
+    <item code="SC_Param_Workspace_Run" chinese="恭喜你，你已经完成了第 {P1} 步了.距离成为一个工程师已经不远了." english=""></item>
   </group>
 </root>

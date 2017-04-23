@@ -14,6 +14,25 @@ public partial class Account_Profile_SET_NodesValues : class_WebBase_UA
         ISRESPONSEDOC = true;
         if (REQUESTDOCUMENT != null)
         {
+            string account = string.Empty;
+            XmlNode accountNode = REQUESTDOCUMENT.SelectSingleNode("/root/account");
+            account = Session["logined_user_name"].ToString();
+            if (accountNode == null)
+            {
+                accountNode = class_XmlHelper.CreateNode(REQUESTDOCUMENT, "account", account);
+                REQUESTDOCUMENT.SelectSingleNode("/root").AppendChild(accountNode);
+            }
+            else
+                class_XmlHelper.SetNodeValue(accountNode, account);
+            string produce = Produce_Name;
+            XmlNode produceNode = REQUESTDOCUMENT.SelectSingleNode("/root/produce");
+            if(produceNode==null)
+            {
+                produceNode = class_XmlHelper.CreateNode(REQUESTDOCUMENT, "produce", produce);
+                REQUESTDOCUMENT.SelectSingleNode("/root").AppendChild(produceNode);
+            }
+            else
+                class_XmlHelper.SetNodeValue(produceNode, produce);            
             string requestAPI = "/Profile/api_AccountProfile_SetNodes.aspx?cid=" + cid;
             string URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(REQUESTDOCUMENT.OuterXml, URL, 1000 * 60, 100000);
