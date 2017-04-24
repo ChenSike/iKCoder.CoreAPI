@@ -1,0 +1,31 @@
+﻿<root>
+  <docbasic>
+    <doc_id></doc_id>
+    <doc_symbol></doc_symbol>
+  </docbasic>
+  <usrbasic>
+    <usr_name></usr_name>
+    <usr_nickname></usr_nickname>
+    <coins></coins>
+    <account_status></account_status>
+    <account_limited></account_limited>
+    <account_head></account_head>
+    <account_childs></account_childs>
+    <account_sms></account_sms>
+  </usrbasic>
+  <studystatus>
+    <fiststarttime></fiststarttime>
+    <currentsence symbol="">
+      <currentstage>4</currentstage>
+    </currentsence>    
+  </studystatus>
+  <lessons>
+
+    
+    <begin></begin>
+    <intermediate></intermediate>
+    <senior></senior>
+  </lessons>
+  <friends></friends>
+  <codetime></codetime>
+</root>
