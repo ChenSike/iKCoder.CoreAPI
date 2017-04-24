@@ -45,7 +45,6 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
         if (selectResultDT != null && selectResultDT.Rows.Count == 1)
         {
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : insert -> username existed.", "");
-            object_CommonLogic.CloseDBConnection();
             return;
         }
         activeSPEntry.ClearAllParamsValues();
@@ -92,7 +91,5 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
         }
         else
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : faild to select account profile.", "");
-        object_CommonLogic.CloseDBConnection();
-
     }
 }

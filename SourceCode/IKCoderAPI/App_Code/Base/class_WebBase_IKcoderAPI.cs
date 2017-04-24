@@ -18,6 +18,7 @@ public class class_WebBase_IKCoderAPI : class_Base_WebBaseclass
     protected string Produce_Name = "iKCoder";
     protected string Produce_Code = "12345678";
     protected string CookieContainer_Name = "CommonCookieContainer";
+    protected string ApplicationAttrs = "ApplicationAttrs";
     protected class_Net_RemoteRequest Object_NetRemote;
     protected class_Base_Config Object_BaseConfig;
     protected class_Util_LabelsController Object_LabelController;
@@ -76,16 +77,13 @@ public class class_WebBase_IKCoderAPI : class_Base_WebBaseclass
         Object_NetRemote = new class_Net_RemoteRequest(ref activeCookieContainer);
         ISRESPONSEDOC = true;
         string requestURL = Server_API + Virtul_Folder_API + "/Token/api_verifyActiveToken.aspx";
-        string requestGetTokenURL = Server_API + Virtul_Folder_API + "/Token/api_getToken.aspx";
-        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), "token") != null)
+        
+        if (Object_DomainPersistance.Get(ApplicationAttrs, "token") != null)
         {
-            string verifyTokenDoc = "<root><token>" + Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), "token") + "</token></root>";
+            string verifyTokenDoc = "<root><token>" + Object_DomainPersistance.Get(ApplicationAttrs, "token") + "</token></root>";
             string resultDocFromServer = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(verifyTokenDoc, requestURL, 1000, 10000);
-            XmlDocument responseFromServerDoc = new XmlDocument();
-            responseFromServerDoc.LoadXml(resultDocFromServer);
-            if (responseFromServerDoc.SelectSingleNode("/root/err") != null)
+            if (resultDocFromServer.Contains("err"))
                 regToken();
-
         }
         else
         {
@@ -107,12 +105,13 @@ public class class_WebBase_IKCoderAPI : class_Base_WebBaseclass
     protected void regToken()
     {
         string getTokenDoc = "<root><name>" + Produce_Name + "</name><code>" + Produce_Code + "</code></root>";
-        string requestURL = Server_API + Virtul_Folder_API + "/Token/api_getToken.aspx";
+        string requestURL = Server_API + Virtul_Folder_API + "/Token/api_getToken.aspx";        
         string strResultDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(getTokenDoc, requestURL, 1000 * 20, 1000 * 50);
         XmlDocument resultDoc = new XmlDocument();
         resultDoc.LoadXml(strResultDoc);
         XmlNode msgNode = resultDoc.SelectSingleNode("/root/msg");
-        Object_DomainPersistance.Add(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), "token", 1440, class_XmlHelper.GetAttrValue(msgNode, "msg"));
+        string tokenValue = class_XmlHelper.GetAttrValue(msgNode, "msg");
+        Object_DomainPersistance.Add(ApplicationAttrs, "token", 1440, tokenValue);
     }
 
     protected virtual void ExtendedAction()
