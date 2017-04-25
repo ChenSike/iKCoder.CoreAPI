@@ -1,4 +1,6 @@
 <root>
+  <session name="platformDBConfig" dbserver="" uidname="" password="" db="" dbtype="">
+  </session>
   <session name="RSDomain">
     <item name="carlhome" domain="http://ikcoder.vicp.io:20596"></item>
     <item name="sikehome" domain="192.168.199.233"></item>

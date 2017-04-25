@@ -56,7 +56,6 @@ public partial class Data_api_SetOverBinData : class_WebClass_WA
                 AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
 
             }
-            object_CommonLogic.CloseDBConnection();
         }
         else
         {

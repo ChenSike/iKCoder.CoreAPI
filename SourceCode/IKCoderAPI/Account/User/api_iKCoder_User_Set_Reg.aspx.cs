@@ -82,7 +82,6 @@ public partial class Account_User_api_iKCoder_User_Set_Reg : class_WebBase_IKCod
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_NickName"), "");
                 return;
             }
-
             string codeValueFromServer = "";
             if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), codeName) != null)
                 codeValueFromServer = (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), codeName)).ToString();
@@ -91,7 +90,7 @@ public partial class Account_User_api_iKCoder_User_Set_Reg : class_WebBase_IKCod
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Equal_Param_Reg_Code"), "");
                 return;
             }
-            string requestAPI = "/Account/api_VerifyAccountExisted.aspx?cid=" + cid + "&username=" + userSymbol;
+            string requestAPI = "/Account/api_VerifyAccountExisted.aspx?username=" + userSymbol;
             string URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 100000);
             if (returnDoc.Contains("true"))
@@ -115,10 +114,10 @@ public partial class Account_User_api_iKCoder_User_Set_Reg : class_WebBase_IKCod
             inputDoc.Append("</root>");
             requestAPI = "/Account/api_CreateUserAccountWithProfile.aspx";
             URL = Server_API + Virtul_Folder_API + requestAPI;
-            returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(inputDoc.ToString(), URL, 1000 * 60, 100000);
+            returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(inputDoc.ToString(), URL, 1000 * 60, 1024 * 1024);
             if (!returnDoc.Contains("<err>"))
             {
-                requestAPI = "/Profile/api_AccountProfile_SetNodes.aspx?cid=" + cid;
+                requestAPI = "/Profile/api_AccountProfile_SetNodes.aspx";
                 URL = Server_API + Virtul_Folder_API + requestAPI;
                 StringBuilder strRequestDoc = new StringBuilder();
                 strRequestDoc.Append("<root>");

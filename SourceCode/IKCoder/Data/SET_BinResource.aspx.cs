@@ -12,7 +12,7 @@ public partial class Data_SET_BinResource : class_WebBase_UA
 {
     protected override void ExtendedAction()
     {
-        ISRESPONSEDOC = true;
+        ISRESPONSEDOC = true;        
         string symbol = GetQuerystringParam("symbol");
         string filetype = GetQuerystringParam("filetype");
         if (!string.IsNullOrEmpty(symbol))

@@ -22,7 +22,6 @@
   <group type="message">
     <item code="Empty_Param_Reg_Symbol" chinese="手机号码或者EMAIL地址不可为空." english=""></item>
     <item code="Empty_Param_Reg_Password" chinese="您的密码不可为空." english=""></item>
-    <item code="Empty_Param_Reg_PasswordLength" chinese="非常抱歉，为了您账户的安全，请使用6-12位密码保护您的账户." english=""></item>
     <item code="Empty_Param_Reg_Checkcode" chinese="您的验证码不可为空." english=""></item>
     <item code="Empty_Param_Reg_CodeName" chinese="非常抱歉，获取验证码失败，请稍后重试." english=""></item>
     <item code="Empty_Param_Reg_NickName" chinese="非常抱歉，获取您的昵称失败，请填写后重试." english=""></item>

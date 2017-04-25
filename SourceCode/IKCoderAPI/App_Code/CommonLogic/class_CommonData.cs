@@ -12,7 +12,7 @@ using System.Data;
 public class class_CommonData
 {
 
-    public const string Const_DESKey = "AACTTNLG";
+    public const string Const_DESKey = "IKCODER2007";
 
     public const string Const_PlatformDBSymbol = "iKCoderDB";
     public const string Const_OperationQueryString = "AllowPlatformOperation";
@@ -153,6 +153,12 @@ public class class_CommonData
             this.storeProceduresList.Add(activeKeyName, resuleList);
         }
         return true;
+    }
+
+    public void PrepareDataOperation()
+    {
+        ConnectToDatabase();
+        LoadStoreProcedureList();
     }
 
     public bool ConnectToDatabase()
