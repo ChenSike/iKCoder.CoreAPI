@@ -17,7 +17,7 @@ public partial class Account_Profile_api_iKCoder_Profile_UploadTmpHeaderImg : cl
         HttpPostedFile postFile = requestFiles[0];        
         if (postFile != null)
         {
-            string symbol = "Img_header_tmp_" + logined_user_name;
+            string symbol = "img_header_tmp_" + logined_user_name;
             string[] filenameInfos = postFile.FileName.Split('.');
             string filetype = filenameInfos.Length >= 2 ? filenameInfos[filenameInfos.Length - 1] : "";            
             byte[] binBuffer = new byte[postFile.InputStream.Length];
@@ -36,6 +36,7 @@ public partial class Account_Profile_api_iKCoder_Profile_UploadTmpHeaderImg : cl
                     activeSPEntry_binData.ModifyParameterValue("@type", filetype);
                     activeSPEntry_binData.ModifyParameterValue("@owner", logined_user_name);
                     activeSPEntry_binData.ModifyParameterValue("@data", binBuffer);
+                    activeSPEntry_binData.ModifyParameterValue("@isbyte", "1");
                     Object_CommonData.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry_binData, class_CommonDefined.enumDataOperaqtionType.insert.ToString(), this.GetType());
                     AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
                 }

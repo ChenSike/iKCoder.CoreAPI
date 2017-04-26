@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using iKCoder_Platform_SDK_Kit;
 using System.Data;
+using System.Xml;
 
 public partial class Account_Profile_api_iKCoder_Profile_Get_HeaderImg : class_WebBase_IKCoderAPI_UA
 {
@@ -32,7 +33,26 @@ public partial class Account_Profile_api_iKCoder_Profile_Get_HeaderImg : class_W
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false", "", enum_MessageType.Exception);
         }
         else
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false", "", enum_MessageType.Exception);
-
+        {
+            symbol = "img_header_default";            
+            string URL = Server_API + Virtul_Folder_API + "/Data/api_GetBinDataWithBase64.aspx?symbol=" + symbol;
+            string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
+            XmlDocument resultDoc = new XmlDocument();
+            resultDoc.LoadXml(returnDoc);
+            XmlNode msgNode = resultDoc.SelectSingleNode("/root/msg");
+            if (msgNode != null)
+            {
+                string data = class_XmlHelper.GetAttrValue(msgNode, "data");
+                if (!string.IsNullOrEmpty(data))
+                {
+                    switchResponseMode(enumResponseMode.bin);
+                    RESPONSEBUFFER = class_CommonUtil.Decoder_Base64ToByte(data);
+                }
+                else
+                {
+                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false.", "", enum_MessageType.Exception);
+                }
+            }
+        }
     }
 }

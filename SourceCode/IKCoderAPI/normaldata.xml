@@ -1,10 +1,14 @@
 <root>
-  <session name="platformDBConfig" dbserver="" uidname="" password="" db="" dbtype="">
+  <session name="iKCoderDB" dbserver="Zo47r8731xFO5lDsnjuOvDVuMdNNcciL" uidname="przihxI7bvvjEfO2wySRfA==" password="HDPiRRG/KrGoE3bak290OKyRDejHDgDX" db="uc6jFXXtjtdSXkbo/IIqDg==" dbtype="qwl7WTwq9gz6b64FiKHZeQ==">
   </session>
   <session name="RSDomain">
-    <item name="carlhome" domain="http://ikcoder.vicp.io:20596"></item>
-    <item name="sikehome" domain="192.168.199.233"></item>
-    <item name="carloffice" domain="http://ikcoder.ikcoder.com"></item>
-    <item name="localhost" domain="http://localhost"></item>
+    <item name="carlhome" domain="http://ikcoder.vicp.io:20596">
+    </item>
+    <item name="sikehome" domain="192.168.199.233">
+    </item>
+    <item name="carloffice" domain="http://ikcoder.ikcoder.com">
+    </item>
+    <item name="localhost" domain="http://localhost">
+    </item>
   </session>
 </root>

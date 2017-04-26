@@ -9,4 +9,7 @@ using System.Web;
 public class class_SPSMap
 {
     public static string SP_OPERATION_RESOURCE_BINARY = "spa_operation_resource_binary";
+    public static string SP_OPERATION_CONFIG_SENCE = "spa_operation_config_sence";
+    public static string SP_OPERATION_CONFIG_WORKSPACESTATUS = "spa_operation_config_workspace_status";
+    public static string SP_OPERATION_CONFIG_BLOCKLY = "spa_operation_config_blockly";
 }

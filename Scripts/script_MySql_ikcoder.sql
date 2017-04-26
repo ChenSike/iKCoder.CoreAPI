@@ -144,6 +144,30 @@ LOCK TABLES `resource_text` WRITE;
 /*!40000 ALTER TABLE `resource_text` DISABLE KEYS */;
 /*!40000 ALTER TABLE `resource_text` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `status_documents`
+--
+
+DROP TABLE IF EXISTS `status_documents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `status_documents` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `symbol` varchar(100) DEFAULT NULL,
+  `data` longblob,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `status_documents`
+--
+
+LOCK TABLES `status_documents` WRITE;
+/*!40000 ALTER TABLE `status_documents` DISABLE KEYS */;
+/*!40000 ALTER TABLE `status_documents` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -154,4 +178,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-25 16:38:53
+-- Dump completed on 2017-04-26 16:36:36
