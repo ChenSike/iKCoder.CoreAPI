@@ -14,6 +14,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
     protected XmlDocument sourceDoc_profile = new XmlDocument();
     protected XmlDocument sourceDoc_sence = new XmlDocument();
     protected XmlDocument sourceDoc_toolBox = new XmlDocument();
+    protected XmlDocument sourceDoc_words = new XmlDocument();
 
     protected DataRow activeSenceDataRow = null;
     protected DataRow activeToolboxDataRow = null;
@@ -63,6 +64,27 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             return true;        
     }
 
+    protected bool Init_WordsDoc()
+    {
+        string symbol = "data_list_words";
+        string strDataDoc = class_Bus_TextData.GetTextData(symbol, Object_CommonData);
+        if (!string.IsNullOrEmpty(strDataDoc))
+        {
+            try
+            {
+                sourceDoc_words.LoadXml(strDataDoc);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        else
+            return false;
+    }
+
+    
     protected void Get_CurrentStage()
     {
         XmlNode currentsenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/currentsence[symbol[text()='" + symbol + "']]");
@@ -175,7 +197,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
         }
     }
 
-    public void Set_ToolBox()
+    protected void Set_ToolBox()
     {
         XmlNode toolbox = class_XmlHelper.CreateNode(workspaceDoc, "toolbox", "");
         workspaceDoc_rootNode.AppendChild(toolbox);
@@ -184,7 +206,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
         toolbox.AppendChild(toolBoxNode);
     }
 
-    public void Set_WorkspaceStatus()
+    protected void Set_WorkspaceStatus()
     {
         XmlDocument sourceDoc_workspaceStatus = class_Bus_WorkspaceStatus.GetWorkspaceStatusDocument(Object_CommonData, symbol, currentStage, logined_user_name, out activeWorkspaceStatusRow);
         if (sourceDoc_workspaceStatus != null)
@@ -196,7 +218,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
         }
     }
 
-    public void Set_Game()
+    protected void Set_Game()
     {
         XmlNode gameNode = class_XmlHelper.CreateNode(workspaceDoc, "game", "");
         workspaceDoc_rootNode.AppendChild(gameNode);
@@ -209,7 +231,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
         }
     }
 
-    public void Set_Message()
+    protected void Set_Message()
     {
         XmlNode messageNode = class_XmlHelper.CreateNode(workspaceDoc, "message", "");
         workspaceDoc_rootNode.AppendChild(messageNode);
@@ -221,6 +243,18 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
         string sucMsg = Object_LabelController.GetString("message", "SC_Param_Workspace_Run");
         sucMsg = sucMsg.Replace("{P1}", currentStage);
         class_XmlHelper.SetAttribute(sucNode, "msg", sucMsg);
+    }
+
+    protected void Set_Words()
+    {
+        XmlNode wordsNode = class_XmlHelper.CreateNode(workspaceDoc, "words", "");
+        workspaceDoc_rootNode.AppendChild(wordsNode);
+        XmlNodeList words = sourceDoc_words.SelectNodes("/root/list[@symbol='" + symbol + "']/stage[@value='" + currentStage + "']");
+        foreach (XmlNode word in words)
+        {
+            XmlNode activeWord = workspaceDoc.ImportNode(word, true);
+            wordsNode.AppendChild(activeWord);
+        }
     }
 
     protected override void ExtendedAction()
@@ -241,55 +275,16 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             if (!Init_ToolBoxDoc())
                 return;
 
-
             Set_Basic();
             Set_Tip();
             Set_ToolBox();
             Set_WorkspaceStatus();
             Set_Game();
             Set_Message();
-            /*
-            stageNode = senceNode.SelectSingleNode("stages/stage[@step='" + currentstage + "']");
-            
-            symbol_workspacestatus = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("workspacestatus"), "symbol");
-            XmlNode messageNode = stageNode.SelectSingleNode("message");
-            symbol_message_err = class_XmlHelper.GetAttrValue(messageNode.SelectSingleNode("err"), "code");
-            symbol_message_suc = class_XmlHelper.GetAttrValue(messageNode.SelectSingleNode("suc"), "code");
 
-            string tmp_sourceDoc_workspaceStatus;
-            tmp_sourceDoc_workspaceStatus = objectWorkspaceProcess.GET_Doc_WorkspaceStatus(symbol, currentstage, symbol_workspacestatus);
-            if (tmp_sourceDoc_workspaceStatus != "")
-                sourceDoc_workspaceStatus.LoadXml(tmp_sourceDoc_workspaceStatus);
-
-            string configTipsSymbol = "config_tips_workspace";
-            URL = Server_API + Virtul_Folder_API + "/Data/api_GetMetaTextBase64Data.aspx?cid=" + ClientSymbol + "&symbol=" + configTipsSymbol;
-            returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
-            tmpDoc = new XmlDocument();
-            tmpDoc.LoadXml(returnDoc);
-            strMsg = class_XmlHelper.GetAttrValue(tmpDoc.SelectSingleNode("/root/msg"), "msg");
-            decoderDoc = class_CommonUtil.Decoder_Base64(strMsg);
-            sourceDoc_configsTips = new XmlDocument();
-            sourceDoc_configsTips.LoadXml(decoderDoc);
-
-            string wordListSymbol = "workspace_word_list";
-            URL = Server_API + Virtul_Folder_API + "/Data/api_GetMetaTextBase64Data.aspx?cid=" + ClientSymbol + "&symbol=" + wordListSymbol;
-            returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
-            tmpDoc = new XmlDocument();
-            tmpDoc.LoadXml(returnDoc);
-            strMsg = class_XmlHelper.GetAttrValue(tmpDoc.SelectSingleNode("/root/msg"), "msg");
-            decoderDoc = class_CommonUtil.Decoder_Base64(strMsg);
-            sourceDoc_wordList.LoadXml(decoderDoc);
-
-            
-            XmlNode rootNode = workspaceDoc.SelectSingleNode("/root");
-            BuildNode_Basic(rootNode);
-            BuildNode_WorkspaceStatus(rootNode);
-            BuildNode_Toolbox(rootNode);
-            BuildNode_Game(rootNode);
-            BuildNode_Word(rootNode);
-            BuildNode_Message(rootNode, currentstage);
-            RESPONSEDOCUMENT.LoadXml(workspaceDoc.OuterXml);
-            */
+            if (Init_WordsDoc())
+                Set_Words();
+            RESPONSEDOCUMENT.LoadXml(workspaceDoc.OuterXml);            
         }
     }
 }

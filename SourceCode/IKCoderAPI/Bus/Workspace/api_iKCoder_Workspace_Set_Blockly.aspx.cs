@@ -24,9 +24,11 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_Blockly : class_Web
             }
             if (string.IsNullOrEmpty(stage))
                 stage = "1";
+            string symbol = string.Empty;
             if (string.IsNullOrEmpty(optionHeader))
-                optionHeader = "lesson";
-            string symbol = optionHeader + "_" + senceSymbol + "_" + "s" + stage;
+                symbol = class_Bus_ToolboxDoc.GetToolboxSymbol(symbol, stage);
+            else
+                symbol = class_Bus_ToolboxDoc.GetToolboxOptionalSymbol(optionHeader, symbol, stage);
             Object_CommonData.PrepareDataOperation();
             class_Data_SqlSPEntry activeSPEntry_configBlockly = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_BLOCKLY);
             activeSPEntry_configBlockly.ClearAllParamsValues();

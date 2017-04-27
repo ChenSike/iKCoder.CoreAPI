@@ -20,14 +20,19 @@ public class class_Bus_ToolboxDoc
 
     public static string GetToolboxSymbol(string symbol,string currentStage)
     {
-        return symbol + "_" + currentStage;
+        return "lesson" + "_" + symbol + "_" + currentStage;
+    }
+
+    public static string GetToolboxOptionalSymbol(string headertype,string symbol,string curtrentStage)
+    {
+        return headertype + "_" + symbol + "_" + curtrentStage;
     }
 
     public static XmlDocument GetToolboxDocument(class_CommonData Object_CommonData,string symbol,string currentStage,out DataRow activeToolBoxDataRow)
     {
         XmlDocument sourceDoc_toolbox = new XmlDocument();
         symbol = GetToolboxSymbol(symbol, currentStage);
-        class_Data_SqlSPEntry activeSPEntry_configSence = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_TOOLBOX);
+        class_Data_SqlSPEntry activeSPEntry_configSence = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_BLOCKLY);
         activeSPEntry_configSence.ClearAllParamsValues();
         activeSPEntry_configSence.ModifyParameterValue("@symbol", symbol);
         DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_configSence, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
