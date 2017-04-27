@@ -16,7 +16,7 @@ public partial class Account_Profile_api_iKCoder_Profile_Get_SelectNodes : class
         {
             string account = string.Empty;
             XmlNode accountNode = REQUESTDOCUMENT.SelectSingleNode("/root/account");
-            account = Session["logined_user_name"].ToString();
+            account = logined_user_name;
             if (accountNode == null)
             {
                 accountNode = class_XmlHelper.CreateNode(REQUESTDOCUMENT, "account", account);

@@ -15,7 +15,7 @@ public partial class Account_Profile_api_iKCoder_Profile_Set_Nodes : class_WebBa
         if (REQUESTDOCUMENT != null)
         {
             string account = string.Empty;
-            account = Session["logined_user_name"].ToString();
+            account = logined_user_name;
             XmlNode accountNode = REQUESTDOCUMENT.SelectSingleNode("/root/account");            
             if (accountNode == null)
             {

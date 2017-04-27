@@ -13,7 +13,7 @@ public partial class Buss_api_AccountProfile_Create : class_WebClass_WLA
 {
     protected override void AfterExtenedFunction()
     {
-        ISRESPONSEDOC = true;
+        switchResponseMode(enumResponseMode.text);
         string profileName = "profile_" + activeUserName;
         string profileProduct = string.Empty;
         string profileTemplate = GetQuerystringParam("template");
@@ -22,10 +22,10 @@ public partial class Buss_api_AccountProfile_Create : class_WebClass_WLA
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "template->empty", "");
             return;
         }
+        /*
         profileProduct = GetQuerystringParam("product");
         if (string.IsNullOrEmpty(profileProduct))
             profileProduct = "iKCoder";
-        /*ISRESPONSEDOC = true;
         string profileName = "profile_" + activeUserName;
         string profileProduct = string.Empty;
         profileProduct = GetQuerystringParam("product");

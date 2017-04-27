@@ -109,7 +109,7 @@ public partial class Account_User_api_iKCoder_User_Set_SignWithCheckCode : class
                 string msg = class_XmlHelper.GetAttrValue(msgNod, "msg");
                 Session["logined_user_nickname"] = msg;
                 Response.Cookies["logined_user_nickname"].Value = msg;
-                attrs.Add("logined_nickname", msg);
+                attrs.Add("logined_user_nickname", msg);
             }
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
         }
