@@ -68,6 +68,30 @@ LOCK TABLES `config_sence` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `config_tips`
+--
+
+DROP TABLE IF EXISTS `config_tips`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `config_tips` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `symbol` varchar(100) DEFAULT NULL,
+  `config` longblob,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `config_tips`
+--
+
+LOCK TABLES `config_tips` WRITE;
+/*!40000 ALTER TABLE `config_tips` DISABLE KEYS */;
+/*!40000 ALTER TABLE `config_tips` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `config_workspace_status`
 --
 
@@ -178,4 +202,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-26 16:36:36
+-- Dump completed on 2017-04-28 11:00:42

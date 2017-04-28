@@ -12,6 +12,7 @@ public partial class Account_User_api_iKCoder_User_Set_Logout : class_WebBase_IK
     {
         ISRESPONSEDOC = true;
         Session.RemoveAll();
+        Request.Cookies.Clear();
         Response.Cookies.Clear();
         Dictionary<String, String> attrs = new Dictionary<string, string>();
         attrs.Add("logined_marked", "0");
