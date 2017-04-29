@@ -31,6 +31,7 @@ public partial class Data_api_iKCoder_Data_Set_TextData : class_WebBase_IKCoderA
             activeSPEntry_configSence.ClearAllParamsValues();
             activeSPEntry_configSence.ModifyParameterValue("@symbol", symbol);
             DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_configSence, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);            
+
             if (textDataTable != null && textDataTable.Rows.Count > 0)
             {
                 DataRow activeDataRow = null;
