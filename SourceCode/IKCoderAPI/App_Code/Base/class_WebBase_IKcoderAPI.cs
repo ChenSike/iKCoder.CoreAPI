@@ -31,14 +31,14 @@ public class class_WebBase_IKCoderAPI : class_Base_WebBaseclass
     {
     }
 
-    protected void initServices()
+    protected override void CheckRegDomain()
     {
         Object_BaseConfig = new class_Base_Config();
         if (!Object_BaseConfig.DoOpen(APPFOLDERPATH + "\\" + "normaldata.xml"))
             return;
         if ((Object_LabelController = class_Util_LabelsController.CreateInstance(APPFOLDERPATH + "\\" + "labels.xml")) == null)
             return;
-        Object_CommonData.InitServices(Object_BaseConfig, APPFOLDERPATH);          
+        Object_CommonData.InitServices(Object_BaseConfig, APPFOLDERPATH);
         XmlNodeList RSDomainItems = Object_BaseConfig.GetItemNodes("RSDomain");
         Object_BaseConfig.SwitchToDESModeOFF();
         if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), "RSDOMAIN") != null)
@@ -55,12 +55,6 @@ public class class_WebBase_IKCoderAPI : class_Base_WebBaseclass
                 }
             }
         }
-
-    }
-
-    protected override void InitAction()
-    {
-        initServices();
     }
 
     protected virtual bool BeforeExtenedAction()

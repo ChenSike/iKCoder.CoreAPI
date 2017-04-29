@@ -14,7 +14,7 @@ public partial class Buss_api_AccountProfile_Create : class_WebClass_WLA
     protected override void AfterExtenedFunction()
     {
         switchResponseMode(enumResponseMode.text);
-        string profileName = "profile_" + activeUserName;
+       // string profileName = "profile_" +  + "_" + username;
         string profileProduct = string.Empty;
         string profileTemplate = GetQuerystringParam("template");
         if(string.IsNullOrEmpty(profileTemplate))

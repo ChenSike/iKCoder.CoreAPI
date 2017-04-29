@@ -44,7 +44,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_Tips : class_WebBas
                 }
                 else
                 {
-                    activeSPEntry_configBlockly.ClearAllParams();
+                    activeSPEntry_configBlockly.ClearAllParamsValues();
                     activeSPEntry_configBlockly.ModifyParameterValue("@symbol", senceSymbol);
                     activeSPEntry_configBlockly.ModifyParameterValue("@config", base64Doc);
                     Object_CommonData.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry_configBlockly, class_CommonDefined.enumDataOperaqtionType.insert.ToString(), this.GetType());

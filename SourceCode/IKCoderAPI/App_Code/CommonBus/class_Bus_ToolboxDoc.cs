@@ -20,12 +20,12 @@ public class class_Bus_ToolboxDoc
 
     public static string GetToolboxSymbol(string symbol,string currentStage)
     {
-        return "lesson" + "_" + symbol + "_" + currentStage;
+        return "lesson" + "_" + symbol + "_s" + currentStage;
     }
 
     public static string GetToolboxOptionalSymbol(string headertype,string symbol,string curtrentStage)
     {
-        return headertype + "_" + symbol + "_" + curtrentStage;
+        return headertype + "_" + symbol + "_s" + curtrentStage;
     }
 
     public static XmlDocument GetToolboxDocument(class_CommonData Object_CommonData,string symbol,string currentStage,out DataRow activeToolBoxDataRow)

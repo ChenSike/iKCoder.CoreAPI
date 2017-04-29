@@ -29,9 +29,9 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_Blockly : class_Web
                     stage = "1";
                 string symbol = string.Empty;
                 if (string.IsNullOrEmpty(optionHeader))
-                    symbol = class_Bus_ToolboxDoc.GetToolboxSymbol(symbol, stage);
+                    symbol = class_Bus_ToolboxDoc.GetToolboxSymbol(senceSymbol, stage);
                 else
-                    symbol = class_Bus_ToolboxDoc.GetToolboxOptionalSymbol(optionHeader, symbol, stage);
+                    symbol = class_Bus_ToolboxDoc.GetToolboxOptionalSymbol(optionHeader, senceSymbol, stage);
                 Object_CommonData.PrepareDataOperation();
                 class_Data_SqlSPEntry activeSPEntry_configBlockly = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_BLOCKLY);
                 activeSPEntry_configBlockly.ClearAllParamsValues();
@@ -52,7 +52,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_Blockly : class_Web
                 }
                 else
                 {
-                    activeSPEntry_configBlockly.ClearAllParams();
+                    activeSPEntry_configBlockly.ClearAllParamsValues();
                     activeSPEntry_configBlockly.ModifyParameterValue("@symbol", symbol);
                     activeSPEntry_configBlockly.ModifyParameterValue("@config", base64Doc);
                     Object_CommonData.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry_configBlockly, class_CommonDefined.enumDataOperaqtionType.insert.ToString(), this.GetType());

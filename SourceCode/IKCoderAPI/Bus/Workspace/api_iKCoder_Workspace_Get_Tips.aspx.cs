@@ -31,7 +31,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Tips : class_WebBas
                 DataRow activeDataRow = null;
                 class_Data_SqlDataHelper.GetActiveRow(textDataTable, 0, out activeDataRow);
                 string config = string.Empty;
-                class_Data_SqlDataHelper.GetColumnData(activeDataRow, "config", out config);
+                class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "config", out config);
                 config = class_CommonUtil.Decoder_Base64(config);
                 RESPONSEDOCUMENT = new System.Xml.XmlDocument();
                 RESPONSEDOCUMENT.LoadXml(config);

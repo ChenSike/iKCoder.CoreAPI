@@ -53,7 +53,7 @@ public partial class Buss_api_AccountProfile_Update : class_WebClass_WLA
                 return;
             }
         }
-        string profileSymbol = "profile_" + accountName;
+        string profileSymbol = class_CommonName.GetProfileName(accountName);
         object_CommonLogic.ConnectToDatabase();
         object_CommonLogic.LoadStoreProcedureList();
         class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_account_profile");

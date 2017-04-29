@@ -51,7 +51,7 @@ public partial class Account_api_CreateUserAccountWithProfile : class_WebClass_W
         activeSPEntry.ModifyParameterValue("@username", username);
         activeSPEntry.ModifyParameterValue("@password", desPassword);
         object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, "insert", this.GetType());
-        string profileName = "profile_" + profileProduct + "_" + username;
+        string profileName = class_CommonName.GetProfileName(username);
         class_Data_SqlHelper _objectSqlHelper = new class_Data_SqlHelper();
         activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_data_basic");
         activeSPEntry.ClearAllParamsValues();

@@ -28,7 +28,7 @@ public partial class Account_User_api_iKCoder_User_Set_ResetPassword : class_Web
             }
             if (string.IsNullOrEmpty(userSymbol))
             {
-                userSymbol = Session["logined_user_name"].ToString();
+                userSymbol = logined_user_name;
             }
             if (string.IsNullOrEmpty(userSymbol))
             {

@@ -19,22 +19,17 @@ public partial class Bus_Workspace_api_iKCoder_Data_Set_Sence : class_WebBase_IK
         {
             if(REQUESTDOCUMENT!=null)
             {
-                XmlNode symbolNode = REQUESTDOCUMENT.SelectSingleNode("/root/symbol");
-                XmlNode configNode = REQUESTDOCUMENT.SelectSingleNode("/root/config");
-                XmlNode isfreeNode = REQUESTDOCUMENT.SelectSingleNode("/root/isfree");
-                string symbol = string.Empty;
-                string config = string.Empty;
-                string isfree = string.Empty;
-                symbol = class_XmlHelper.GetNodeValue(symbolNode);
+                string symbol = GetQuerystringParam("symbol");
+                string isfree = GetQuerystringParam("isfree");                
                 if(string.IsNullOrEmpty(symbol))
                 {
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "symbol->empty", "");
                     return;
                 }
-                config = class_XmlHelper.GetAttrValue(configNode,"doc");
-                isfree = class_XmlHelper.GetNodeValue(isfreeNode);
                 if (string.IsNullOrEmpty(isfree))
                     isfree = "1";
+                string config = string.Empty;
+                config = class_CommonUtil.Encoder_Base64(REQUESTDOCUMENT.OuterXml);              
                 Object_CommonData.PrepareDataOperation();
                 class_Data_SqlSPEntry activeSPEntry_configSence = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_SENCE);
                 activeSPEntry_configSence.ClearAllParamsValues();
@@ -55,7 +50,7 @@ public partial class Bus_Workspace_api_iKCoder_Data_Set_Sence : class_WebBase_IK
                 }
                 else
                 {
-                    activeSPEntry_configSence.ClearAllParams();
+                    activeSPEntry_configSence.ClearAllParamsValues();
                     activeSPEntry_configSence.ModifyParameterValue("@symbol", symbol);                    
                     activeSPEntry_configSence.ModifyParameterValue("@config", config);
                     activeSPEntry_configSence.ModifyParameterValue("@isfree", isfree);                    

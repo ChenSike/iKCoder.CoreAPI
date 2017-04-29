@@ -27,10 +27,10 @@ public partial class Account_Profile_api_iKCoder_Profile_Get_SelectNodes : class
             string requestAPI = "/Profile/api_AccountProfile_SelectNodesValues.aspx";
             string URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(REQUESTDOCUMENT.OuterXml, URL, 1000 * 60, 100000);
-            if (!returnStrDoc.Contains("err"))
+            XmlDocument returnDoc = new XmlDocument();
+            returnDoc.LoadXml(returnStrDoc);
+            if (returnDoc.SelectSingleNode("/root/err")==null)
             {
-                XmlDocument returnDoc = new XmlDocument();
-                returnDoc.LoadXml(returnStrDoc);
                 XmlNodeList msgNodes = returnDoc.SelectNodes("/root/msg");
                 foreach (XmlNode msgNode in msgNodes)
                 {

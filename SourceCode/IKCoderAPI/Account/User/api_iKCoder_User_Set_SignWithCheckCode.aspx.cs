@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 using iKCoder_Platform_SDK_Kit;
 using System.Xml;
 
-public partial class Account_User_api_iKCoder_User_Set_SignWithCheckCode : class_WebBase_IKCoderAPI_UA
+public partial class Account_User_api_iKCoder_User_Set_SignWithCheckCode : class_WebBase_IKCoderAPI_NUA
 {
     protected override void ExtendedAction()
     {

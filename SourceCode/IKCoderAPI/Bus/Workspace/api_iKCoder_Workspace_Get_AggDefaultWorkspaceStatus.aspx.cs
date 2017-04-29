@@ -16,7 +16,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_AggWorkspaceStatus 
         {
             Object_CommonData.PrepareDataOperation();
             class_Data_SqlSPEntry activeSPEntry_configWorkStatus = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_WORKSPACESTATUS);
-            DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_configWorkStatus, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+            DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPForDT(activeSPEntry_configWorkStatus, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
             foreach (DataRow activeRow in textDataTable.Rows)
             {
                 string symbol = string.Empty;

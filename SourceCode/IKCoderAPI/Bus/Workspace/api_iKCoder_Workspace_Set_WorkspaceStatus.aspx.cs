@@ -45,7 +45,7 @@ public partial class Bus_Workspace_api_iKCoder_Data_Set_WorkspaceStatus : class_
             }
             else
             {
-                activeSPEntry_configSence.ClearAllParams();
+                activeSPEntry_configSence.ClearAllParamsValues();
                 activeSPEntry_configSence.ModifyParameterValue("@symbol", symbol);
                 activeSPEntry_configSence.ModifyParameterValue("@config", base64Doc);
                 Object_CommonData.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry_configSence, class_CommonDefined.enumDataOperaqtionType.insert.ToString(), this.GetType());

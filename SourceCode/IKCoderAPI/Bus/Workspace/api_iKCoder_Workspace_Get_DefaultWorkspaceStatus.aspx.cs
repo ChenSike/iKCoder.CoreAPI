@@ -43,7 +43,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_WorkspaceStatus : c
             foreach (DataRow activeRow in textDataTable.Rows)
             {
                 string config = string.Empty;
-                class_Data_SqlDataHelper.GetColumnData(activeRow, "config", out config);
+                class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeRow, "config", out config);
                 config = class_CommonUtil.Decoder_Base64(config);
                 RESPONSEDOCUMENT = new XmlDocument();
                 RESPONSEDOCUMENT.LoadXml(config);
