@@ -31,7 +31,7 @@ public class class_Bus_SenceDoc
             class_Data_SqlDataHelper.GetActiveRow(textDataTable, 0, out activeDataRow);
             activeSenceDataRow = activeDataRow;
             string strBaseSenceDoc = string.Empty;
-            class_Data_SqlDataHelper.GetColumnData(activeSenceDataRow, "config", out strBaseSenceDoc);
+            class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeSenceDataRow, "config", out strBaseSenceDoc);
             if (!string.IsNullOrEmpty(strBaseSenceDoc))
             {
                 sourceDoc_sence.LoadXml(class_CommonUtil.Decoder_Base64(strBaseSenceDoc));

@@ -25,20 +25,20 @@ public class class_Bus_ProfileDoc
         string requestAPI = "/Profile/api_AccountProfile_SelectProfileBySymbol.aspx?symbol=" + profileSymbol;
         string URL = Server_API + Virtul_Folder_API + requestAPI;
         string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 100000);
+        XmlDocument tmpData = new XmlDocument();
+        tmpData.LoadXml(returnStrDoc);
         XmlDocument sourceDoc_profile = new XmlDocument();
-        if (!returnStrDoc.Contains("err"))
-        {
-            XmlDocument tmpData = new XmlDocument();
-            tmpData.LoadXml(returnStrDoc);
+        if (tmpData.SelectSingleNode("/root/err")==null)
+        {            
             XmlNode msgNode = tmpData.SelectSingleNode("/root/msg");
             if (msgNode != null)
             {
                 string strDourceDoc = class_XmlHelper.GetAttrValue(msgNode, "msg");
                 if (!string.IsNullOrEmpty(strDourceDoc))
                 {
-                    if (!strDourceDoc.Contains("err"))
-                    {
-                        sourceDoc_profile.LoadXml(class_XmlHelper.GetAttrValue(msgNode, "msg"));
+                    sourceDoc_profile.LoadXml(strDourceDoc);
+                    if (sourceDoc_profile.SelectSingleNode("/root/err")==null)
+                    {                        
                         return sourceDoc_profile;
                     }
                     else

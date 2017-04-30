@@ -42,7 +42,7 @@ public class class_Bus_WorkspaceStatus
             class_Data_SqlDataHelper.GetActiveRow(textDataTable, 0, out activeDataRow);
             activeWorkspaceStatusDataRow = activeDataRow;
             string strBaseSenceDoc = string.Empty;
-            class_Data_SqlDataHelper.GetColumnData(activeDataRow, "config", out strBaseSenceDoc);
+            class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "config", out strBaseSenceDoc);
             if (!string.IsNullOrEmpty(strBaseSenceDoc))
             {
                 sourceDoc_worskspacestatus.LoadXml(class_CommonUtil.Decoder_Base64(strBaseSenceDoc));

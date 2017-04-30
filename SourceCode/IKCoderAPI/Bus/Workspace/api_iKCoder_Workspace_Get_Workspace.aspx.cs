@@ -132,10 +132,8 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
         basicNode.AppendChild(usrNode);
         string user_id = Session["logined_user_id"].ToString();
         string user_nickname = Session["logined_user_nickname"].ToString();
-        string user_header = "/Account/Profile/api_iKCoder_Profile_Get_HeaderImg.aspx";
         class_XmlHelper.SetAttribute(usrNode, "id", user_id);
         class_XmlHelper.SetAttribute(usrNode, "nickname", user_nickname);
-        class_XmlHelper.SetAttribute(usrNode, "header", user_header);
         XmlNode senceNode = class_XmlHelper.CreateNode(workspaceDoc, "sence", "");
         workspaceDoc_rootNode.AppendChild(senceNode);
         XmlNode source_senceNode = sourceDoc_sence.SelectSingleNode("/sence");
@@ -163,7 +161,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             DataRow activeDataRow = null;
             class_Data_SqlDataHelper.GetActiveRow(textDataTable, 0, out activeDataRow);
             string strConfigDoc = string.Empty;
-            class_Data_SqlDataHelper.GetColumnData(activeDataRow, "config", out strConfigDoc);
+            class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "config", out strConfigDoc);
             strConfigDoc = class_CommonUtil.Decoder_Base64(strConfigDoc);
             XmlDocument sourceDoc_configsTips = new XmlDocument();
             sourceDoc_configsTips.LoadXml(strConfigDoc);
@@ -201,7 +199,9 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
     {
         XmlNode toolbox = class_XmlHelper.CreateNode(workspaceDoc, "toolbox", "");
         workspaceDoc_rootNode.AppendChild(toolbox);
-        class_XmlHelper.SetAttribute(toolbox, "src", class_Bus_ToolboxDoc.GetToolboxSymbol(symbol, currentStage));
+        XmlNode toolboxNode = sourceDoc_sence.SelectSingleNode("/sence/stages/stage[@step='" + currentStage + "']/toolbox");
+        string src = class_XmlHelper.GetAttrValue(toolboxNode, "src");
+        class_XmlHelper.SetAttribute(toolbox, "src", src);
         XmlNode toolBoxNode = workspaceDoc.ImportNode(sourceDoc_toolBox.DocumentElement, true);
         toolbox.AppendChild(toolBoxNode);
     }
@@ -257,6 +257,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
         }
     }
 
+    
     protected override void ExtendedAction()
     {
         switchResponseMode(enumResponseMode.text);

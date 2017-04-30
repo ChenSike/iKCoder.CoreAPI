@@ -101,10 +101,10 @@ public partial class Account_User_api_iKCoder_User_Set_SignWithCheckCode : class
             string requestAPI = "/Profile/api_AccountProfile_SelectNodeValue.aspx?account=" + user_name + "&produce=" + Produce_Name + "&xpath=/root/usrbasic/usr_nickname";
             URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 100000);
-            if (!returnStrDoc.Contains("err"))
-            {
-                XmlDocument returnDoc = new XmlDocument();
-                returnDoc.LoadXml(returnStrDoc);
+            XmlDocument returnDoc = new XmlDocument();
+            returnDoc.LoadXml(returnStrDoc);
+            if (returnDoc.SelectSingleNode("/root/err")==null)
+            {               
                 XmlNode msgNod = returnDoc.SelectSingleNode("/root/msg");
                 string msg = class_XmlHelper.GetAttrValue(msgNod, "msg");
                 Session["logined_user_nickname"] = msg;

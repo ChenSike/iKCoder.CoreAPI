@@ -12,15 +12,15 @@ public partial class Account_Profile_api_iKCoder_Profile_Set_ClipHeaderImg : cla
 {
     protected override void ExtendedAction()
     {
-        switchResponseMode(enumResponseMode.text);        
-        int startX = 0;
-        int startY = 0;
-        int width = 0;
-        int height = 0;
-        int.TryParse(GetQuerystringParam("startx"), out startX);
-        int.TryParse(GetQuerystringParam("starty"), out startY);
-        int.TryParse(GetQuerystringParam("width"), out width);
-        int.TryParse(GetQuerystringParam("height"), out height);
+        switchResponseMode(enumResponseMode.text);
+        double startX = 0;
+        double startY = 0;
+        double width = 0;
+        double height = 0;
+        double.TryParse(GetQuerystringParam("startx"), out startX);
+        double.TryParse(GetQuerystringParam("starty"), out startY);
+        double.TryParse(GetQuerystringParam("width"), out width);
+        double.TryParse(GetQuerystringParam("height"), out height);
         string herderImgTmpsymbol = "img_header_tmp_" + logined_user_name;
         string herderImgSymbol = "img_header_" + logined_user_name;
         Object_CommonData.PrepareDataOperation();
@@ -40,7 +40,7 @@ public partial class Account_Profile_api_iKCoder_Profile_Set_ClipHeaderImg : cla
             if (headerImageData != null && headerImageData.Length > 0)
             {                
                 Bitmap sourceBitMap = class_Util_DrawingServices.CreateImage(headerImageData);
-                Bitmap clippedBitMap = class_Util_DrawingServices.ClipImage(sourceBitMap, startX, startY, width, height);
+                Bitmap clippedBitMap = class_Util_DrawingServices.ClipImage(sourceBitMap, (int)startX, (int)startY, (int)width, (int)height);
                 byte[] clipperImageData = class_Util_DrawingServices.GetBytesFromBitmap(clippedBitMap, type);
                 activeSPEntry_binData.ClearAllParamsValues();
                 activeSPEntry_binData.ModifyParameterValue("@symbol", herderImgSymbol);
