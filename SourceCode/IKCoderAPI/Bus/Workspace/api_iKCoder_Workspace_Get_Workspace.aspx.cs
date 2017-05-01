@@ -78,6 +78,48 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             return false;
     }
 
+    protected void Set_CheckFinishStage()
+    {
+        XmlNode studystatusNode = sourceDoc_profile.SelectSingleNode("/root/studystatus");
+        if(studystatusNode==null)
+        {
+            studystatusNode = class_XmlHelper.CreateNode(sourceDoc_profile, "studystatus", "");
+            sourceDoc_profile.SelectSingleNode("/root").AppendChild(studystatusNode);
+        }
+        XmlNode finishedSenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/finished");
+        if (finishedSenceNode == null)
+        {
+            finishedSenceNode = class_XmlHelper.CreateNode(sourceDoc_profile, "finished", "");
+            studystatusNode.AppendChild(finishedSenceNode);
+        }
+        XmlNode item = finishedSenceNode.SelectSingleNode("item[symbol[text()='" + symbol + "']]");
+        if (item == null)
+        {
+            XmlNode newItem = class_XmlHelper.CreateNode(sourceDoc_profile, "item", "");
+            finishedSenceNode.AppendChild(newItem);
+            XmlNode symbolNode = class_XmlHelper.CreateNode(sourceDoc_profile, "symbol", symbol);
+            newItem.AppendChild(symbolNode);
+            XmlNode startNode = class_XmlHelper.CreateNode(sourceDoc_profile, "start", DateTime.Now.ToString());
+            newItem.AppendChild(startNode);
+            XmlNode playNode = class_XmlHelper.CreateNode(sourceDoc_profile, "play", "1");
+            newItem.AppendChild(playNode);
+            XmlNode spendtimeNode = class_XmlHelper.CreateNode(sourceDoc_profile, "spendtime", "");
+            newItem.AppendChild(spendtimeNode);
+            XmlNode tmpEntryNode = class_XmlHelper.CreateNode(sourceDoc_profile, "tmpentry", DateTime.Now.ToString());
+            newItem.AppendChild(tmpEntryNode);
+        }
+        else
+        {
+            XmlNode playNode = item.SelectSingleNode("play");
+            int times = 1;
+            int.TryParse(class_XmlHelper.GetNodeValue(playNode), out times);
+            class_XmlHelper.SetNodeValue(playNode, (times++).ToString());
+            XmlNode tmpEntryNode = item.SelectSingleNode("tmpentry");
+            class_XmlHelper.SetNodeValue(tmpEntryNode, DateTime.Now.ToString());
+        }
+        XmlNodeList items = sourceDoc_profile.SelectNodes("/root/studystatus/finished/item");
+        finishstage = items.Count.ToString();
+    }
     
     protected void Get_CurrentStage()
     {
@@ -91,31 +133,16 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             XmlNode symbolNode = class_XmlHelper.CreateNode(sourceDoc_profile, "symbol", symbol);
             currentsenceNode.AppendChild(symbolNode);
             XmlNode currentStageNode = class_XmlHelper.CreateNode(sourceDoc_profile, "currentstage", currentStage);
-            currentsenceNode.AppendChild(currentStageNode);
-            XmlNode finishStageNode = class_XmlHelper.CreateNode(sourceDoc_profile, "finishstage", "");
-            currentsenceNode.AppendChild(finishStageNode);
-            XmlNodeList stageNodes = sourceDoc_sence.SelectNodes("/sence/stages/stage");
-            foreach (XmlNode activeStage in stageNodes)
-            {
-                string step = class_XmlHelper.GetAttrValue(activeStage, "step");
-                XmlNode itemNode = class_XmlHelper.CreateNode(sourceDoc_profile, "item", "");
-                class_XmlHelper.SetAttribute(itemNode, "step", step);
-                class_XmlHelper.SetAttribute(itemNode, "finish", "0");
-                finishStageNode.AppendChild(itemNode);
-            }
-            class_Bus_ProfileDoc.SetUserProfile(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name, sourceDoc_profile.OuterXml);            
+            currentsenceNode.AppendChild(currentStageNode);                              
         }
         else
         {
             XmlNode symbolNode = currentsenceNode.SelectSingleNode("symbol");
             XmlNode currentStageNode = currentsenceNode.SelectSingleNode("currentstage");
-            XmlNode finishStageNode = currentsenceNode.SelectSingleNode("finishstage");
             currentStage = class_XmlHelper.GetNodeValue(currentStageNode);
             if (string.IsNullOrEmpty(currentStage))
                 currentStage = "1";
         }
-        XmlNodeList senceNodes = sourceDoc_profile.SelectNodes("/root/studystatus/currentsence/finishstage/item[@finish='1']");
-        finishstage = senceNodes.Count.ToString();
     }
 
     protected void Set_Basic()
@@ -133,6 +160,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
         XmlNode source_senceNode = sourceDoc_sence.SelectSingleNode("/sence");
         int stageCount = (source_senceNode.SelectNodes("stages/stage")).Count;
         string stageName = class_XmlHelper.GetAttrValue(source_senceNode, "name");
+        string next = class_XmlHelper.GetAttrValue(source_senceNode, "next");
         string id = class_XmlHelper.GetAttrValue(source_senceNode, "id");
         class_XmlHelper.SetAttribute(senceNode, "name", stageName);
         class_XmlHelper.SetAttribute(senceNode, "symbol", symbol);
@@ -140,6 +168,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
         class_XmlHelper.SetAttribute(senceNode, "totalstage", stageCount.ToString());
         class_XmlHelper.SetAttribute(senceNode, "currentstage", currentStage);
         class_XmlHelper.SetAttribute(senceNode, "finishstage", finishstage);
+        class_XmlHelper.SetAttribute(senceNode, "next", next);
     }
 
     protected void Set_Tip()
@@ -269,7 +298,9 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
                 return;
             if (!Init_ProfileDoc())
                 return;
+            Set_CheckFinishStage();
             Get_CurrentStage();
+            class_Bus_ProfileDoc.SetUserProfile(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name, sourceDoc_profile.OuterXml);
             Init_ToolBoxDoc();                
 
             Set_Basic();

@@ -9,9 +9,10 @@ using System.Xml;
 
 public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBase_IKCoderAPI_NUA
 {
-    
+    XmlDocument centerDocument = new XmlDocument();
+
     protected override void ExtendedAction()
     {
-        
+        centerDocument.LoadXml("<root></root>");    
     }
 }
