@@ -29,39 +29,33 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
     protected bool Init_ProfileDoc()
     {
         sourceDoc_profile = class_Bus_ProfileDoc.GetProfileDocument(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name);
-        if (sourceDoc_profile == null)
+        if (sourceDoc_profile == null && string.IsNullOrEmpty(sourceDoc_profile.OuterXml))
         {
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "profiledoc->empty", "");
             return false;
         }
         else
-            return true;    
+            return true;
     }
 
     protected bool Init_SenceDoc()
     {
-        sourceDoc_sence = class_Bus_SenceDoc.GetSenceDocument(Object_CommonData, symbol, out activeSenceDataRow);
-        if (sourceDoc_sence == null)
+        string strDoc = class_Bus_SenceDoc.GetSenceStrDocument(Object_CommonData, symbol, out activeSenceDataRow);
+        if (!string.IsNullOrEmpty(strDoc))
         {
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "sencedoc->empty", "");
-            return false;
+            sourceDoc_sence.LoadXml(strDoc);            
+            return true;
         }
         else
         {
-            return true;
+            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "sencedoc->empty", "");
+            return false;
         }
     }
 
-    protected bool Init_ToolBoxDoc()
+    protected void Init_ToolBoxDoc()
     {
-        sourceDoc_toolBox = class_Bus_ToolboxDoc.GetToolboxDocument(Object_CommonData, symbol, currentStage, out activeToolboxDataRow);
-        if (sourceDoc_toolBox == null)
-        {
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "sencedoc->empty", "");
-            return false;
-        }
-        else
-            return true;        
+        sourceDoc_toolBox = class_Bus_ToolboxDoc.GetToolboxDocument(Object_CommonData, symbol, currentStage, out activeToolboxDataRow);        
     }
 
     protected bool Init_WordsDoc()
@@ -199,11 +193,14 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
     {
         XmlNode toolbox = class_XmlHelper.CreateNode(workspaceDoc, "toolbox", "");
         workspaceDoc_rootNode.AppendChild(toolbox);
-        XmlNode toolboxNode = sourceDoc_sence.SelectSingleNode("/sence/stages/stage[@step='" + currentStage + "']/toolbox");
-        string src = class_XmlHelper.GetAttrValue(toolboxNode, "src");
-        class_XmlHelper.SetAttribute(toolbox, "src", src);
-        XmlNode toolBoxNode = workspaceDoc.ImportNode(sourceDoc_toolBox.DocumentElement, true);
-        toolbox.AppendChild(toolBoxNode);
+        if (sourceDoc_toolBox != null && !string.IsNullOrEmpty(sourceDoc_toolBox.OuterXml))
+        {
+            XmlNode toolboxNode = sourceDoc_sence.SelectSingleNode("/sence/stages/stage[@step='" + currentStage + "']/toolbox");
+            string src = class_XmlHelper.GetAttrValue(toolboxNode, "src");
+            class_XmlHelper.SetAttribute(toolbox, "src", src);
+            XmlNode toolBoxNode = workspaceDoc.ImportNode(sourceDoc_toolBox.DocumentElement, true);
+            toolbox.AppendChild(toolBoxNode);
+        }
     }
 
     protected void Set_WorkspaceStatus()
@@ -273,8 +270,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             if (!Init_ProfileDoc())
                 return;
             Get_CurrentStage();
-            if (!Init_ToolBoxDoc())
-                return;
+            Init_ToolBoxDoc();                
 
             Set_Basic();
             Set_Tip();

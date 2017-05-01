@@ -18,9 +18,8 @@ public class class_Bus_SenceDoc
         //
     }
 
-    public static XmlDocument GetSenceDocument(class_CommonData Object_CommonData,string symbol,out DataRow activeSenceDataRow)
+    public static string GetSenceStrDocument(class_CommonData Object_CommonData,string symbol,out DataRow activeSenceDataRow)
     {
-        XmlDocument sourceDoc_sence = new XmlDocument();
         class_Data_SqlSPEntry activeSPEntry_configSence = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_SENCE);
         activeSPEntry_configSence.ClearAllParamsValues();
         activeSPEntry_configSence.ModifyParameterValue("@symbol", symbol);
@@ -33,9 +32,8 @@ public class class_Bus_SenceDoc
             string strBaseSenceDoc = string.Empty;
             class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeSenceDataRow, "config", out strBaseSenceDoc);
             if (!string.IsNullOrEmpty(strBaseSenceDoc))
-            {
-                sourceDoc_sence.LoadXml(class_CommonUtil.Decoder_Base64(strBaseSenceDoc));
-                return sourceDoc_sence;
+            {                 
+                return class_CommonUtil.Decoder_Base64(strBaseSenceDoc);
             }
             else
             {

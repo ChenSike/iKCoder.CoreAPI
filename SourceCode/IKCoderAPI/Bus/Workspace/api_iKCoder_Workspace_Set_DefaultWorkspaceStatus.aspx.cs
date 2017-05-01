@@ -24,7 +24,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_DefaultWorkspaceSta
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "symbol->empty", "");
                     return;
                 }
-                if (!string.IsNullOrEmpty(stage))
+                if (string.IsNullOrEmpty(stage))
                     stage = "1";
                 string symbol = class_Bus_WorkspaceStatus.GetWorkspaceStatusDefaultSymbol(senceSymbol, stage);
                 Object_CommonData.PrepareDataOperation();

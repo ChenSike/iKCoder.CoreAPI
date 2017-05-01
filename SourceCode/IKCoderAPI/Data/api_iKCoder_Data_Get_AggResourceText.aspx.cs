@@ -15,7 +15,7 @@ public partial class Data_api_iKCoder_Data_Get_AggResourceText : class_WebBase_I
         {
             Object_CommonData.PrepareDataOperation();
             class_Data_SqlSPEntry activeSPEntry_configBlockly = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_RESOURCE_TEXT);
-            DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_configBlockly, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+            DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPForDT(activeSPEntry_configBlockly, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
             foreach (DataRow activeRow in textDataTable.Rows)
             {
                 string symbol = string.Empty;

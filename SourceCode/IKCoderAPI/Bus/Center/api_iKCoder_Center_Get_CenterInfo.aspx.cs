@@ -9,6 +9,7 @@ using System.Xml;
 
 public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBase_IKCoderAPI_NUA
 {
+    
     protected override void ExtendedAction()
     {
         

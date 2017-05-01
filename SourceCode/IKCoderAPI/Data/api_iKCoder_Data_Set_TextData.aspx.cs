@@ -46,7 +46,7 @@ public partial class Data_api_iKCoder_Data_Set_TextData : class_WebBase_IKCoderA
             }
             else
             {
-                activeSPEntry_configSence.ClearAllParams();
+                activeSPEntry_configSence.ClearAllParamsValues();
                 activeSPEntry_configSence.ModifyParameterValue("@symbol", symbol);
                 activeSPEntry_configSence.ModifyParameterValue("@data", strBase64Data);
                 activeSPEntry_configSence.ModifyParameterValue("@owner", "sys");

@@ -36,6 +36,8 @@ public class class_WebBase_IKCoderAPI_UA:class_WebBase_IKCoderAPI
                     }
                     else
                     {
+                        Response.Cookies.Clear();
+                        Session.Clear();
                         Dictionary<string, string> errAttrs = new Dictionary<string, string>();
                         errAttrs.Add("issigndneeded", "1");
                         errAttrs.Add("type", "1");
@@ -45,6 +47,8 @@ public class class_WebBase_IKCoderAPI_UA:class_WebBase_IKCoderAPI
                 }
                 else
                 {
+                    Response.Cookies.Clear();
+                    Session.Clear();
                     Dictionary<string, string> errAttrs = new Dictionary<string, string>();
                     errAttrs.Add("issigndneeded", "1");
                     errAttrs.Add("type", "1");
@@ -54,6 +58,8 @@ public class class_WebBase_IKCoderAPI_UA:class_WebBase_IKCoderAPI
             }
             else
             {
+                Response.Cookies.Clear();
+                Session.Clear();
                 Dictionary<string, string> errAttrs = new Dictionary<string, string>();
                 errAttrs.Add("issigndneeded", "1");
                 errAttrs.Add("type", "1");
@@ -63,6 +69,8 @@ public class class_WebBase_IKCoderAPI_UA:class_WebBase_IKCoderAPI
         }
         else
         {
+            Response.Cookies.Clear();
+            Session.Clear();
             Dictionary<string, string> errAttrs = new Dictionary<string, string>();
             errAttrs.Add("issigndneeded", "1");
             errAttrs.Add("type", "1");

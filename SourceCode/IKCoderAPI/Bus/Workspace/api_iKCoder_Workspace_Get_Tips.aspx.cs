@@ -22,7 +22,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Tips : class_WebBas
                 return;
             }
             Object_CommonData.PrepareDataOperation();
-            class_Data_SqlSPEntry activeSPEntry_configBlockly = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_SENCE);
+            class_Data_SqlSPEntry activeSPEntry_configBlockly = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_TIPS);
             activeSPEntry_configBlockly.ClearAllParamsValues();
             activeSPEntry_configBlockly.ModifyParameterValue("@symbol", senceSymbol);
             DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_configBlockly, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);

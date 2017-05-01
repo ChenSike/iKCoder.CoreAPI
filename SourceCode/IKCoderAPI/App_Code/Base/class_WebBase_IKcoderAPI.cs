@@ -23,8 +23,8 @@ public class class_WebBase_IKCoderAPI : class_Base_WebBaseclass
     protected class_Base_Config Object_BaseConfig;
     protected class_Util_LabelsController Object_LabelController;
     protected class_CommonData Object_CommonData = new class_CommonData();
-    protected int Session_TimeOutMinutes = 60;
-    protected int Cookie_TimeOutHour = 1;  
+    protected int Session_TimeOutMinutes = 180;
+    protected int Cookie_TimeOutHour = 3;  
 
 
     public class_WebBase_IKCoderAPI()

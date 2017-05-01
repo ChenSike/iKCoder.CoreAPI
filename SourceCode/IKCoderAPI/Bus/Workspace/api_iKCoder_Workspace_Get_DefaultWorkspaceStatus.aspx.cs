@@ -19,11 +19,6 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_WorkspaceStatus : c
             string senceSymbol = GetQuerystringParam("symbol");
             string stage = GetQuerystringParam("stage");
             string fullySymbol = GetQuerystringParam("fullysymbol");
-            if (string.IsNullOrEmpty(senceSymbol))
-            {
-                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "symbol->empty", "");
-                return;
-            }
             string symbol = string.Empty;
             if (!string.IsNullOrEmpty(fullySymbol))
             {
