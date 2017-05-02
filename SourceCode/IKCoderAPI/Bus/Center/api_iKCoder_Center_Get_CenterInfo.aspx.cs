@@ -92,8 +92,25 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
         XmlNode finishedSenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/finished");
         if (finishedSenceNode != null)
         {
-            XmlNodeList newItemNodes = sourceDoc_profile.SelectNodes("item");
-            
+            XmlNodeList itemNodes = sourceDoc_profile.SelectNodes("item");
+            foreach(XmlNode item in itemNodes)
+            {
+                XmlNode symbolNode = item.SelectSingleNode("symbol");
+                if (symbolNode != null)
+                {
+                    string activeSymbol = class_XmlHelper.GetNodeValue(symbolNode);
+                    if (activeSymbol.StartsWith("a") && activeSymbol.StartsWith("A"))
+                        count_primerSence++;
+                    else if (activeSymbol.StartsWith("b") && activeSymbol.StartsWith("B"))
+                        count_primarySence++;
+                    else if (activeSymbol.StartsWith("c") && activeSymbol.StartsWith("C"))
+                        count_middleSence++;
+                    else if (activeSymbol.StartsWith("d") && activeSymbol.StartsWith("D"))
+                        count_seniorSence++;
+                    else
+                        count_advanceSence++;
+                }
+            }
         }
     }
 
