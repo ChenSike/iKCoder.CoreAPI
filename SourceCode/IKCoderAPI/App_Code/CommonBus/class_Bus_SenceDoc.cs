@@ -61,6 +61,44 @@ public class class_Bus_SenceDoc
         return resultLst;
     }
 
+    public static string GetSenceValue(class_CommonData Object_CommonData,string symbol,string xpath,string attrName)
+    {
+        class_Data_SqlSPEntry activeSPEntry_configSence = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_SENCE);
+        activeSPEntry_configSence.ClearAllParamsValues();
+        activeSPEntry_configSence.ModifyParameterValue("@symbol", symbol);
+        DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_configSence, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+        if (textDataTable != null && textDataTable.Rows.Count > 0)
+        {
+            DataRow activeDataRow = null;
+            class_Data_SqlDataHelper.GetActiveRow(textDataTable, 0, out activeDataRow);            
+            string strBaseSenceDoc = string.Empty;
+            class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "config", out strBaseSenceDoc);
+            if (!string.IsNullOrEmpty(strBaseSenceDoc))
+            {
+                XmlDocument dataDoc = new XmlDocument();
+                dataDoc.LoadXml(class_CommonUtil.Decoder_Base64(strBaseSenceDoc));
+                XmlNode dataNode = dataDoc.SelectSingleNode(xpath);
+                if (dataNode != null)
+                {
+                    if (string.IsNullOrEmpty(attrName))
+                        return class_XmlHelper.GetNodeValue(dataNode);
+                    else
+                        return class_XmlHelper.GetAttrValue(dataNode, attrName);
+                }
+                else
+                    return string.Empty;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+
 
 
 }

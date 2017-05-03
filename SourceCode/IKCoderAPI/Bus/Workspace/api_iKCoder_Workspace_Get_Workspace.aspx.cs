@@ -123,17 +123,19 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
     
     protected void Get_CurrentStage()
     {
-        XmlNode currentsenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/currentsence[symbol[text()='" + symbol + "']]");
+        XmlNode currentsenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/currentsence/item[symbol[text()='" + symbol + "']]");
         if (currentsenceNode == null)
         {
             currentStage = "1";
             currentsenceNode = class_XmlHelper.CreateNode(sourceDoc_profile, "currentsence", "");
             XmlNode studyStatusNode = sourceDoc_profile.SelectSingleNode("/root/studystatus");
             studyStatusNode.AppendChild(currentsenceNode);
+            XmlNode newItemNode = class_XmlHelper.CreateNode(sourceDoc_profile, "item", "");
+            currentsenceNode.AppendChild(newItemNode);
             XmlNode symbolNode = class_XmlHelper.CreateNode(sourceDoc_profile, "symbol", symbol);
-            currentsenceNode.AppendChild(symbolNode);
+            newItemNode.AppendChild(symbolNode);
             XmlNode currentStageNode = class_XmlHelper.CreateNode(sourceDoc_profile, "currentstage", currentStage);
-            currentsenceNode.AppendChild(currentStageNode);                              
+            newItemNode.AppendChild(currentStageNode);                              
         }
         else
         {

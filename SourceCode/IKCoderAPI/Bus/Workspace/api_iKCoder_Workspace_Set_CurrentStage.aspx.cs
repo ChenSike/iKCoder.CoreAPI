@@ -27,19 +27,11 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_CurrentStage : clas
             {                
                 XmlNode msgNode = tmpData.SelectSingleNode("/root/msg");
                 sourceDoc_profile.LoadXml(class_XmlHelper.GetAttrValue(msgNode, "msg"));
-                XmlNode currentsenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/currentsence[symbol[text()='" + symbol + "']]");
+                XmlNode currentsenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/currentsence/item[symbol[text()='" + symbol + "']]");
                 if (currentsenceNode != null)
                 {
                     XmlNode symbolNode = currentsenceNode.SelectSingleNode("symbol");
                     XmlNode currentStageNode = currentsenceNode.SelectSingleNode("currentstage");
-                    XmlNode finishStageNode = currentsenceNode.SelectSingleNode("finishstage");
-                    int iCurrentStage = 0;
-                    int.TryParse(class_XmlHelper.GetNodeValue(currentStageNode), out iCurrentStage);
-                    if (int.Parse(futurestage) > 1 && iCurrentStage < int.Parse(futurestage))
-                    {
-                        XmlNode activeFinishItemNode = finishStageNode.SelectSingleNode("item[@step='" + (iCurrentStage - 1).ToString() + "']");
-                        class_XmlHelper.SetAttribute(activeFinishItemNode, "finish", "1");
-                    }
                     class_XmlHelper.SetNodeValue(currentStageNode, futurestage);
                 }
                 string strBase64Data = class_CommonUtil.Encoder_Base64(sourceDoc_profile.OuterXml);
