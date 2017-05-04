@@ -136,15 +136,15 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
                 {
                     string activeSymbol = class_XmlHelper.GetNodeValue(symbolNode);
                     if (activeSymbol.StartsWith("a") && activeSymbol.StartsWith("A"))
-                        count_primerSence++;
+                        count_primerSence_Complete++;
                     else if (activeSymbol.StartsWith("b") && activeSymbol.StartsWith("B"))
-                        count_primarySence++;
+                        count_primarySence_Complete++;
                     else if (activeSymbol.StartsWith("c") && activeSymbol.StartsWith("C"))
-                        count_middleSence++;
+                        count_middleSence_Complete++;
                     else if (activeSymbol.StartsWith("d") && activeSymbol.StartsWith("D"))
-                        count_seniorSence++;
+                        count_seniorSence_Complete++;
                     else
-                        count_advanceSence++;
+                        count_advanceSence_Complete++;
                 }
             }
         }
