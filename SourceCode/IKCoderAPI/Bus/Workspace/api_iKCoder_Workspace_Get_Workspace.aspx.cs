@@ -120,22 +120,27 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
         XmlNodeList items = sourceDoc_profile.SelectNodes("/root/studystatus/finished/item");
         finishstage = items.Count.ToString();
     }
-    
+            
+
     protected void Get_CurrentStage()
     {
-        XmlNode currentsenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/currentsence/item[symbol[text()='" + symbol + "']]");
+        XmlNode currentsenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/currentsence");
         if (currentsenceNode == null)
         {
-            currentStage = "1";
             currentsenceNode = class_XmlHelper.CreateNode(sourceDoc_profile, "currentsence", "");
             XmlNode studyStatusNode = sourceDoc_profile.SelectSingleNode("/root/studystatus");
             studyStatusNode.AppendChild(currentsenceNode);
-            XmlNode newItemNode = class_XmlHelper.CreateNode(sourceDoc_profile, "item", "");
-            currentsenceNode.AppendChild(newItemNode);
+        }
+        XmlNode stageItem = currentsenceNode.SelectSingleNode("/item[symbol[text()='" + symbol + "']]");
+        if (stageItem == null)
+        {
+            currentStage = "1";
+            stageItem = class_XmlHelper.CreateNode(sourceDoc_profile, "item", "");
+            currentsenceNode.AppendChild(stageItem);
             XmlNode symbolNode = class_XmlHelper.CreateNode(sourceDoc_profile, "symbol", symbol);
-            newItemNode.AppendChild(symbolNode);
+            stageItem.AppendChild(symbolNode);
             XmlNode currentStageNode = class_XmlHelper.CreateNode(sourceDoc_profile, "currentstage", currentStage);
-            newItemNode.AppendChild(currentStageNode);                              
+            stageItem.AppendChild(currentStageNode);
         }
         else
         {
@@ -145,8 +150,30 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             if (string.IsNullOrEmpty(currentStage))
                 currentStage = "1";
         }
+        XmlNode lastNode = currentsenceNode.SelectSingleNode("last");
+        if(lastNode == null)
+        {
+            lastNode = class_XmlHelper.CreateNode(sourceDoc_profile, "last", "");
+            currentsenceNode.AppendChild(lastNode);
+            XmlNode itemNode = class_XmlHelper.CreateNode(sourceDoc_profile, "item", "");
+            lastNode.AppendChild(itemNode);
+            class_XmlHelper.SetAttribute(itemNode, "type", class_Bus_SenceDoc.GetSenceTypeString(symbol));
+            class_XmlHelper.SetAttribute(itemNode, "symbo", symbol);
+        }
+        else
+        {
+            XmlNode itemNode = lastNode.SelectSingleNode("item[@type='" + class_Bus_SenceDoc.GetSenceTypeString(symbol) + "']");
+            if (itemNode == null)
+            {
+                itemNode = class_XmlHelper.CreateNode(sourceDoc_profile, "item", "");
+                lastNode.AppendChild(itemNode);
+            }
+            class_XmlHelper.SetAttribute(itemNode, "type", class_Bus_SenceDoc.GetSenceTypeString(symbol));
+            class_XmlHelper.SetAttribute(itemNode, "symbo", symbol);
+        }
+        
     }
-
+     
     protected void Set_Basic()
     {
         XmlNode basicNode = class_XmlHelper.CreateNode(workspaceDoc, "basic", "");

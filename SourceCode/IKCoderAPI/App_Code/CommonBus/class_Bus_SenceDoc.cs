@@ -18,7 +18,7 @@ public class class_Bus_SenceDoc
         //
     }
 
-    public static string GetSenceStrDocument(class_CommonData Object_CommonData,string symbol,out DataRow activeSenceDataRow)
+    public static string GetSenceStrDocument(class_CommonData Object_CommonData, string symbol, out DataRow activeSenceDataRow)
     {
         class_Data_SqlSPEntry activeSPEntry_configSence = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_SENCE);
         activeSPEntry_configSence.ClearAllParamsValues();
@@ -32,7 +32,7 @@ public class class_Bus_SenceDoc
             string strBaseSenceDoc = string.Empty;
             class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeSenceDataRow, "config", out strBaseSenceDoc);
             if (!string.IsNullOrEmpty(strBaseSenceDoc))
-            {                 
+            {
                 return class_CommonUtil.Decoder_Base64(strBaseSenceDoc);
             }
             else
@@ -55,10 +55,40 @@ public class class_Bus_SenceDoc
         DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_configSence, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
         if (textDataTable != null && textDataTable.Rows.Count > 0)
         {
-            foreach(DataRow activeRow in textDataTable.Rows)            
-                resultLst.Add(activeRow);            
+            foreach (DataRow activeRow in textDataTable.Rows)
+                resultLst.Add(activeRow);
         }
         return resultLst;
+    }
+
+    public static class_CommonDefined.enumSenceType GetSenceType(string symbol)
+    {
+        if (symbol.StartsWith("a") || symbol.StartsWith("A"))
+            return class_CommonDefined.enumSenceType.primer;
+        else if (symbol.StartsWith("b") || symbol.StartsWith("B"))
+            return class_CommonDefined.enumSenceType.primary;
+        else if (symbol.StartsWith("c") || symbol.StartsWith("C"))
+            return class_CommonDefined.enumSenceType.middle;
+        else if (symbol.StartsWith("d") || symbol.StartsWith("D"))
+            return class_CommonDefined.enumSenceType.senior;
+        else if (symbol.StartsWith("e") || symbol.StartsWith("E"))
+            return class_CommonDefined.enumSenceType.advanced;
+        return class_CommonDefined.enumSenceType.primer;
+    }
+
+    public static string GetSenceTypeString(string symbol)
+    {
+        if (symbol.StartsWith("a") || symbol.StartsWith("A"))
+            return class_CommonDefined.enumSenceType.primer.ToString();
+        else if (symbol.StartsWith("b") || symbol.StartsWith("B"))
+            return class_CommonDefined.enumSenceType.primary.ToString();
+        else if (symbol.StartsWith("c") || symbol.StartsWith("C"))
+            return class_CommonDefined.enumSenceType.middle.ToString();
+        else if (symbol.StartsWith("d") || symbol.StartsWith("D"))
+            return class_CommonDefined.enumSenceType.senior.ToString();
+        else if (symbol.StartsWith("e") || symbol.StartsWith("E"))
+            return class_CommonDefined.enumSenceType.advanced.ToString();
+        return class_CommonDefined.enumSenceType.primer.ToString();
     }
 
     public static string GetSenceValue(class_CommonData Object_CommonData,string symbol,string xpath,string attrName)

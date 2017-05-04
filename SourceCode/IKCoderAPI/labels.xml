@@ -18,6 +18,11 @@
     <item code="sciencemastermind_condition" chinese="完成5个科学课程" english=""></item>
     <item code="littlepinter_condition" chinese="完成5个绘图课程" english=""></item>
     <item code="UAVpilot_condition" chinese="完成2项无人机控制课程" english=""></item>
+    <item code="Center_Level_Primer" chinese="启蒙课程" english=""></item>
+    <item code="Center_Level_Primary" chinese="初级课程" english=""></item>
+    <item code="Center_Level_Middle" chinese="中级课程" english=""></item>
+    <item code="Center_Level_Senior" chinese="高级课程" english=""></item>
+    <item code="Center_Level_Advanced" chinese="拓展课程" english=""></item>
   </group>
   <group type="message">
     <item code="Empty_Param_Reg_Symbol" chinese="手机号码或者EMAIL地址不可为空." english=""></item>
@@ -43,5 +48,6 @@
     <item code="ERR_Msg_Changed_Password" chinese="非常抱歉，修改密码失败，请联系客户服务中心解决." english=""></item>
     <item code="ERR_Msg_Workspce_Coding" chinese="非常抱歉，您的工作出现错误，请检查后继续运行." english=""></item>
     <item code="SC_Param_Workspace_Run" chinese="恭喜你，你已经完成了第 {P1} 步了.距离成为一个工程师已经不远了." english=""></item>
+  
   </group>
 </root>

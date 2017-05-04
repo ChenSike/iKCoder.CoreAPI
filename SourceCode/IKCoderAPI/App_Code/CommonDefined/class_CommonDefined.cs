@@ -45,4 +45,22 @@ public class class_CommonDefined
         other = 4004
     }
 
+    public enum enumSenceType
+    {
+        primer = 5001,
+        primary = 5002,
+        middle = 5003,
+        senior = 5004,
+        advanced = 5005
+    }
+
+    public enum enumSTEMLType
+    {
+        science = 6001,
+        technology = 6002,
+        engineering = 6003,
+        math = 6004,
+        language = 6005
+    }
+
 }
