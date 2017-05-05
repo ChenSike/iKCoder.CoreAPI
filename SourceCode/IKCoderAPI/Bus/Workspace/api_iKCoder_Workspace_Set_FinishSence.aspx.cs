@@ -62,6 +62,8 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_FinishSence : class
                     int.TryParse(class_XmlHelper.GetNodeValue(spendtimeNode), out iSpendtime);
                     class_XmlHelper.SetAttribute(spendtimeNode, "spendtime", (iSpendtime + minutes).ToString());
                 }
+                class_Bus_ProfileDoc.SetCodetimeLineHours(sourceDoc_profile, symbol);
+
                 string strBase64Data = class_CommonUtil.Encoder_Base64(sourceDoc_profile.OuterXml);
                 StringBuilder strInputDoc = new StringBuilder();
                 strInputDoc.Append("<root>");

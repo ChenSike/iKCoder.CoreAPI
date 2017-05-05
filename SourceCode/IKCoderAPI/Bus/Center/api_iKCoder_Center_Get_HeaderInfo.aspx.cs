@@ -4,11 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using iKCoder_Platform_SDK_Kit;
+using System.Data;
 
-public partial class Bus_Center_api_iKCoder_Center_Get_HeaderInfo : System.Web.UI.Page
+public partial class Bus_Center_api_iKCoder_Center_Get_HeaderInfo : class_WebBase_IKCoderAPI_UA
 {
-    protected void Page_Load(object sender, EventArgs e)
+    protected override void ExtendedAction()
     {
-
+        
     }
 }

@@ -208,7 +208,7 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
         }
     }
 
-    protected void set_distributio()
+    protected void set_Distributio()
     {
         XmlNode distributioNode = class_XmlHelper.CreateNode(centerDocument, "distributio", "");
         rootNode.AppendChild(distributioNode);
@@ -219,7 +219,7 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
         }
     }
 
-    protected void set_level()
+    protected void set_Level()
     {
         double total_exvalue_primer = 0;
         double total_exvalue_primary = 0;
@@ -328,6 +328,22 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
         
     }
 
+    protected void set_Codetimes()
+    {
+        XmlNode codetimesNode = class_XmlHelper.CreateNode(centerDocument, "codetimes", "");
+        rootNode.AppendChild(codetimesNode);
+        class_XmlHelper.SetAttribute(codetimesNode, "over", "95");
+        List<XmlNode> codetimelineItemNodes = class_Bus_ProfileDoc.GetCodetimeLineItems(sourceDoc_profile);
+        foreach(XmlNode activeItem in codetimelineItemNodes)
+        {
+            XmlNode item = class_XmlHelper.CreateNode(centerDocument, "item", "");
+            string strDate = class_XmlHelper.GetAttrValue(activeItem, "date");
+            string strValue = class_XmlHelper.GetAttrValue(activeItem, "value");
+            class_XmlHelper.SetAttribute(item, "date", strDate);
+            class_XmlHelper.SetAttribute(item, "value", strValue);
+            codetimesNode.AppendChild(item);
+        }
+    }
 
     protected override void ExtendedAction()
     {
@@ -343,7 +359,8 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
         rootNode = centerDocument.SelectSingleNode("/root");
         set_Honor();
         set_Course();
-        set_level();
+        set_Level();
+        set_Codetimes();
     }
 }
 
