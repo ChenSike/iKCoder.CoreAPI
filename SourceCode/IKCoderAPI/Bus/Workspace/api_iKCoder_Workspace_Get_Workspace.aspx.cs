@@ -120,58 +120,30 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
         XmlNodeList items = sourceDoc_profile.SelectNodes("/root/studystatus/finished/item");
         finishstage = items.Count.ToString();
     }
-            
+
 
     protected void Get_CurrentStage()
     {
-        XmlNode currentsenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/currentsence");
+        XmlNode currentsenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/currentsence[symbol[text()='" + symbol + "']]");
         if (currentsenceNode == null)
         {
             currentsenceNode = class_XmlHelper.CreateNode(sourceDoc_profile, "currentsence", "");
             XmlNode studyStatusNode = sourceDoc_profile.SelectSingleNode("/root/studystatus");
+            XmlNode symbolNode = class_XmlHelper.CreateNode(sourceDoc_profile, "symbol", symbol);
+            currentsenceNode.AppendChild(symbolNode);
+            XmlNode firststarttimeNode = class_XmlHelper.CreateNode(sourceDoc_profile, "fiststarttime", DateTime.Now.ToString());
+            currentsenceNode.AppendChild(firststarttimeNode);
+            XmlNode currentstageNode = class_XmlHelper.CreateNode(sourceDoc_profile, "currentstage", "1");
+            currentsenceNode.AppendChild(currentstageNode);
             studyStatusNode.AppendChild(currentsenceNode);
         }
-        XmlNode stageItem = currentsenceNode.SelectSingleNode("/item[symbol[text()='" + symbol + "']]");
-        if (stageItem == null)
-        {
-            currentStage = "1";
-            stageItem = class_XmlHelper.CreateNode(sourceDoc_profile, "item", "");
-            currentsenceNode.AppendChild(stageItem);
-            XmlNode symbolNode = class_XmlHelper.CreateNode(sourceDoc_profile, "symbol", symbol);
-            stageItem.AppendChild(symbolNode);
-            XmlNode currentStageNode = class_XmlHelper.CreateNode(sourceDoc_profile, "currentstage", currentStage);
-            stageItem.AppendChild(currentStageNode);
-        }
         else
         {
-            XmlNode symbolNode = currentsenceNode.SelectSingleNode("symbol");
             XmlNode currentStageNode = currentsenceNode.SelectSingleNode("currentstage");
             currentStage = class_XmlHelper.GetNodeValue(currentStageNode);
-            if (string.IsNullOrEmpty(currentStage))
-                currentStage = "1";
         }
-        XmlNode lastNode = currentsenceNode.SelectSingleNode("last");
-        if(lastNode == null)
-        {
-            lastNode = class_XmlHelper.CreateNode(sourceDoc_profile, "last", "");
-            currentsenceNode.AppendChild(lastNode);
-            XmlNode itemNode = class_XmlHelper.CreateNode(sourceDoc_profile, "item", "");
-            lastNode.AppendChild(itemNode);
-            class_XmlHelper.SetAttribute(itemNode, "type", class_Bus_SenceDoc.GetSenceTypeString(symbol));
-            class_XmlHelper.SetAttribute(itemNode, "symbo", symbol);
-        }
-        else
-        {
-            XmlNode itemNode = lastNode.SelectSingleNode("item[@type='" + class_Bus_SenceDoc.GetSenceTypeString(symbol) + "']");
-            if (itemNode == null)
-            {
-                itemNode = class_XmlHelper.CreateNode(sourceDoc_profile, "item", "");
-                lastNode.AppendChild(itemNode);
-            }
-            class_XmlHelper.SetAttribute(itemNode, "type", class_Bus_SenceDoc.GetSenceTypeString(symbol));
-            class_XmlHelper.SetAttribute(itemNode, "symbo", symbol);
-        }
-        
+        if (string.IsNullOrEmpty(currentStage))
+            currentStage = "1";
     }
      
     protected void Set_Basic()
@@ -203,47 +175,49 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
     protected void Set_Tip()
     {
         XmlNode stageNode = sourceDoc_sence.SelectSingleNode("/sence/stages/stage[@step='" + currentStage + "']");
+        if(stageNode!=null)
+        { 
         string symbol_tips = class_XmlHelper.GetAttrValue(stageNode.SelectSingleNode("tips"), "symbol");
         class_Data_SqlSPEntry activeSPEntry_configTips = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_TIPS);
         activeSPEntry_configTips.ClearAllParamsValues();
         activeSPEntry_configTips.ModifyParameterValue("@symbol", symbol_tips);
         DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_configTips, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
-        if (textDataTable != null && textDataTable.Rows.Count > 0)
-        {
-            DataRow activeDataRow = null;
-            class_Data_SqlDataHelper.GetActiveRow(textDataTable, 0, out activeDataRow);
-            string strConfigDoc = string.Empty;
-            class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "config", out strConfigDoc);
-            strConfigDoc = class_CommonUtil.Decoder_Base64(strConfigDoc);
-            XmlDocument sourceDoc_configsTips = new XmlDocument();
-            sourceDoc_configsTips.LoadXml(strConfigDoc);
-            XmlNode tipsNode = class_XmlHelper.CreateNode(workspaceDoc, "tips", "");
-            workspaceDoc_rootNode.AppendChild(tipsNode);
-            XmlNodeList tipItems = sourceDoc_configsTips.SelectNodes("/tip/step[@value='" + currentStage + "']/item");
-            int index = 1;
-            foreach (XmlNode tipItem in tipItems)
+            if (textDataTable != null && textDataTable.Rows.Count > 0)
             {
-                XmlNode newItemNode = class_XmlHelper.CreateNode(workspaceDoc, "item", "");
-                class_XmlHelper.SetAttribute(newItemNode, "index", index.ToString());
-                foreach (XmlNode contentNode in tipItem.SelectNodes("content"))
+                DataRow activeDataRow = null;
+                class_Data_SqlDataHelper.GetActiveRow(textDataTable, 0, out activeDataRow);
+                string strConfigDoc = string.Empty;
+                class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "config", out strConfigDoc);
+                strConfigDoc = class_CommonUtil.Decoder_Base64(strConfigDoc);
+                XmlDocument sourceDoc_configsTips = new XmlDocument();
+                sourceDoc_configsTips.LoadXml(strConfigDoc);
+                XmlNode tipsNode = class_XmlHelper.CreateNode(workspaceDoc, "tips", "");
+                workspaceDoc_rootNode.AppendChild(tipsNode);
+                XmlNodeList tipItems = sourceDoc_configsTips.SelectNodes("/tip/step[@value='" + currentStage + "']/item");
+                int index = 1;
+                foreach (XmlNode tipItem in tipItems)
                 {
-                    XmlNode newContentNode = class_XmlHelper.CreateNode(workspaceDoc, "content", "");
-                    string chinese = string.Empty;
-                    string english = string.Empty;
-                    string blocktype = string.Empty;
-                    chinese = class_XmlHelper.GetAttrValue(contentNode, "chinese");
-                    english = class_XmlHelper.GetAttrValue(contentNode, "english");
-                    blocktype = class_XmlHelper.GetAttrValue(contentNode, "blocktype");
-                    class_XmlHelper.SetAttribute(newContentNode, "chinese", chinese);
-                    class_XmlHelper.SetAttribute(newContentNode, "english", english);
-                    if (string.IsNullOrEmpty(blocktype))
-                        class_XmlHelper.SetAttribute(newContentNode, "blocktype", blocktype);
-                    newItemNode.AppendChild(newContentNode);
+                    XmlNode newItemNode = class_XmlHelper.CreateNode(workspaceDoc, "item", "");
+                    class_XmlHelper.SetAttribute(newItemNode, "index", index.ToString());
+                    foreach (XmlNode contentNode in tipItem.SelectNodes("content"))
+                    {
+                        XmlNode newContentNode = class_XmlHelper.CreateNode(workspaceDoc, "content", "");
+                        string chinese = string.Empty;
+                        string english = string.Empty;
+                        string blocktype = string.Empty;
+                        chinese = class_XmlHelper.GetAttrValue(contentNode, "chinese");
+                        english = class_XmlHelper.GetAttrValue(contentNode, "english");
+                        blocktype = class_XmlHelper.GetAttrValue(contentNode, "blocktype");
+                        class_XmlHelper.SetAttribute(newContentNode, "chinese", chinese);
+                        class_XmlHelper.SetAttribute(newContentNode, "english", english);
+                        if (string.IsNullOrEmpty(blocktype))
+                            class_XmlHelper.SetAttribute(newContentNode, "blocktype", blocktype);
+                        newItemNode.AppendChild(newContentNode);
+                    }
+                    tipsNode.AppendChild(newItemNode);
+                    index++;
                 }
-                tipsNode.AppendChild(newItemNode);
-                index++;
             }
-                        
         }
     }
 

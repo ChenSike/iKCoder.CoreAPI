@@ -48,7 +48,7 @@ public partial class Message_api_Message_RegRouter : class_WebClass_WA
             activeSPEntry.ModifyParameterValue("@produce", _fromProduct);
             activeSPEntry.ModifyParameterValue("@pushedapi", pushedapi);
             activeSPEntry.ModifyParameterValue("@getapi", getapi);
-            object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, class_CommonDefined.enumDataOperaqtionType.update.ToString(), this.GetType());
+            object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, class_CommonDefined.enumDataOperaqtionType.insert.ToString(), this.GetType());
 
         }
 

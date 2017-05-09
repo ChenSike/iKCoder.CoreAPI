@@ -27,10 +27,9 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_CurrentStage : clas
             {                
                 XmlNode msgNode = tmpData.SelectSingleNode("/root/msg");
                 sourceDoc_profile.LoadXml(class_XmlHelper.GetAttrValue(msgNode, "msg"));
-                XmlNode currentsenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/currentsence/item[symbol[text()='" + symbol + "']]");
+                XmlNode currentsenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/currentsence[symbol[text()='" + symbol + "']]");
                 if (currentsenceNode != null)
-                {
-                    XmlNode symbolNode = currentsenceNode.SelectSingleNode("symbol");
+                {                    
                     XmlNode currentStageNode = currentsenceNode.SelectSingleNode("currentstage");
                     class_XmlHelper.SetNodeValue(currentStageNode, futurestage);
                 }

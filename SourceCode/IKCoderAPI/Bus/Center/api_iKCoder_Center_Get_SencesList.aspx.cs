@@ -13,6 +13,7 @@ public partial class Bus_Center_api_iKCoder_Center_Get_SencesList : class_WebBas
     protected override void ExtendedAction()
     {
         switchResponseMode(enumResponseMode.text);
+        Object_CommonData.PrepareDataOperation();
         List<DataRow> symbolList = class_Bus_SenceDoc.GetAllSences(Object_CommonData);
         if (symbolList != null && symbolList.Count > 0)
         {

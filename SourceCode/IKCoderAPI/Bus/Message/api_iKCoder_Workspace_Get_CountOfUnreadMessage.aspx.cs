@@ -18,6 +18,15 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_CountOfUnreadMessage 
         activeSPEntry_resourceMesssage.ModifyParameterValue("@username", "*");
         activeSPEntry_resourceMesssage.ModifyParameterValue("@isread", "0");
         DataTable activeDTResourceMessage = Object_CommonData.Object_SqlHelper.ExecuteSelectSPForDT(activeSPEntry_resourceMesssage, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
-
+        int countOfmessage = 0;
+        if (activeDTResourceMessage!=null)
+            countOfmessage = activeDTResourceMessage.Rows.Count;
+        activeSPEntry_resourceMesssage.ClearAllParamsValues();
+        activeSPEntry_resourceMesssage.ModifyParameterValue("@username", User);
+        activeSPEntry_resourceMesssage.ModifyParameterValue("@isread", "0");
+        activeDTResourceMessage = Object_CommonData.Object_SqlHelper.ExecuteSelectSPForDT(activeSPEntry_resourceMesssage, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+        if (activeDTResourceMessage != null)
+            countOfmessage = countOfmessage + activeDTResourceMessage.Rows.Count;
+        AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), countOfmessage.ToString(), "");
     }
 }

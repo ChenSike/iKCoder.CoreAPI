@@ -1,1 +1,0 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="api_iKCoder_Message_Get_MessageContent.aspx.cs" Inherits="Message_api_iKCoder_Message_Get_MessageContent" %>

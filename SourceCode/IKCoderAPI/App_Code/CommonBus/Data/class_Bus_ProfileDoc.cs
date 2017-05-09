@@ -71,17 +71,19 @@ public class class_Bus_ProfileDoc
             class_XmlHelper.SetAttribute(codetimelineNode, "recordtime", DateTime.Now.ToString());
             resourceDoc_Profile.SelectSingleNode("/root/studystatus").AppendChild(codetimelineNode);
         }
-        XmlNodeList itemNodes = codetimelineNode.SelectNodes("item");        
+        XmlNodeList itemNodes = codetimelineNode.SelectNodes("item");
         if (itemNodes.Count >= 10)
         {
             XmlNode lastNode = codetimelineNode.SelectSingleNode("item[@index='10']");
-            codetimelineNode.RemoveChild(lastNode);
+            if (lastNode != null)
+                codetimelineNode.RemoveChild(lastNode);
         }
-        XmlNode activeItemNode = codetimelineNode.SelectSingleNode("item[date='" + DateTime.Now.ToString("yyyy-MM-dd") + "']");
+        XmlNode activeItemNode = codetimelineNode.SelectSingleNode("item[@date='" + DateTime.Now.ToString("yyyy-MM-dd") + "']");
         if (activeItemNode==null)
         {            
             activeItemNode = class_XmlHelper.CreateNode(resourceDoc_Profile, "item", "");
             class_XmlHelper.SetAttribute(activeItemNode, "index", (itemNodes.Count+1).ToString());
+            class_XmlHelper.SetAttribute(activeItemNode, "date", DateTime.Now.ToString("yyyy-MM-dd"));
             codetimelineNode.AppendChild(activeItemNode);
         }
         string strRecordTime = class_XmlHelper.GetAttrValue(codetimelineNode, "recordtime");

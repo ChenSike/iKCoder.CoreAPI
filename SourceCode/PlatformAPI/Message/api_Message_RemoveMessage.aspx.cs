@@ -26,5 +26,6 @@ public partial class Message_api_Message_RemoveMessage : class_WebClass_WA
         activeSPEntry.ClearAllParamsValues();
         activeSPEntry.ModifyParameterValue("@id", id);
         object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, class_CommonDefined.enumDataOperaqtionType.delete.ToString(), this.GetType());
+
     }
 }

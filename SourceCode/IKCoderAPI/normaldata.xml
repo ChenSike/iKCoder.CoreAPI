@@ -10,5 +10,7 @@
     </item>
     <item name="localhost" domain="http://localhost">
     </item>
+    <item name="carlipad" domain="http://10.86.18.168">
+    </item>
   </session>
 </root>

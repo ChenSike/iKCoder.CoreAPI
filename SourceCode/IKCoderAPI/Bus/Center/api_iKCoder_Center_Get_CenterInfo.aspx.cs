@@ -107,6 +107,7 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
     protected void init_Honor()
     {
         class_Bus_Hornor objectHornor = new class_Bus_Hornor();
+        objectHornor.init_SourceDoc(Object_CommonData);
         honorResult = objectHornor.get_HornorConfig(symbolList);
     }   
 
@@ -114,13 +115,13 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
     {     
         foreach (string activeSymbol in symbolList)
         {
-            if (activeSymbol.StartsWith("a") && activeSymbol.StartsWith("A"))
+            if (activeSymbol.StartsWith("a") || activeSymbol.StartsWith("A"))
                 count_primerSence++;
-            else if (activeSymbol.StartsWith("b") && activeSymbol.StartsWith("B"))
+            else if (activeSymbol.StartsWith("b") || activeSymbol.StartsWith("B"))
                 count_primarySence++;
-            else if (activeSymbol.StartsWith("c") && activeSymbol.StartsWith("C"))
+            else if (activeSymbol.StartsWith("c") || activeSymbol.StartsWith("C"))
                 count_middleSence++;
-            else if (activeSymbol.StartsWith("d") && activeSymbol.StartsWith("D"))
+            else if (activeSymbol.StartsWith("d") || activeSymbol.StartsWith("D"))
                 count_seniorSence++;
             else
                 count_advanceSence++;
@@ -178,7 +179,7 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
             }
             itemNode = class_XmlHelper.CreateNode(centerDocument, "item", "");
             courseNode.AppendChild(itemNode);
-            class_XmlHelper.SetAttribute(itemNode, "id", "primer");
+            class_XmlHelper.SetAttribute(itemNode, "id", key);
             class_XmlHelper.SetAttribute(itemNode, "title", "跟着博士学Scratch编程(启蒙)");
             class_XmlHelper.SetAttribute(itemNode, "total", count_primerSence.ToString());
             class_XmlHelper.SetAttribute(itemNode, "complete", count_primerSence_Complete.ToString());
@@ -186,10 +187,10 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
             itemNode.AppendChild(symbolLstNode);
             foreach (string activeSymbol in typedSymbols[key])
             {
-                XmlNode symbolItemNode = class_XmlHelper.CreateNode(centerDocument, "item", "");
-                symbolLstNode.AppendChild(symbolLstNode);
-                class_XmlHelper.SetAttribute(symbolLstNode, "symbol", activeSymbol);
-                class_XmlHelper.SetAttribute(symbolLstNode, "title", class_Bus_SenceDoc.GetSenceValue(Object_CommonData, activeSymbol, "/sence", "name"));
+                XmlNode lessonNode = class_XmlHelper.CreateNode(centerDocument, "lesson", "");
+                symbolLstNode.AppendChild(lessonNode);
+                class_XmlHelper.SetAttribute(lessonNode, "symbol", activeSymbol);
+                class_XmlHelper.SetAttribute(lessonNode, "title", class_Bus_SenceDoc.GetSenceValue(Object_CommonData, activeSymbol, "/sence", "name"));
             }
         }
 
@@ -212,11 +213,9 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
     {
         XmlNode distributioNode = class_XmlHelper.CreateNode(centerDocument, "distributio", "");
         rootNode.AppendChild(distributioNode);
-        for(int i=1;i<=5;i++)
-        {
-            XmlNode itemNode = class_XmlHelper.CreateNode(centerDocument, "item", "");
-            distributioNode.AppendChild(itemNode);            
-        }
+        class_Bus_Dis disObject = new class_Bus_Dis();
+        disObject.init_SourceDoc(Object_CommonData);
+        disObject.set_CreateDisItems(ref distributioNode, sourceRows_sence, finishedSymbolList);
     }
 
     protected void set_Level()
@@ -241,9 +240,7 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
                     DataRow activeDataRow = sourceRows_sence[activeTypedSymbol];
                     string configDoc = string.Empty;
                     class_Data_SqlDataHelper.GetColumnData(activeDataRow, "config", out configDoc);
-                    XmlDocument tmpConfigDoc = new XmlDocument();
-                    tmpConfigDoc.LoadXml(configDoc);
-                    XmlNode scoreNode = tmpConfigDoc.SelectSingleNode("/root/score");
+                    XmlNode scoreNode = sourceDoc_sence.SelectSingleNode("/root/score");
                     string strBasicScore = class_XmlHelper.GetAttrValue(scoreNode, "score");
                     string strDiffScore = class_XmlHelper.GetAttrValue(scoreNode, "diff");
                     double iBasicScore = 0;
@@ -269,9 +266,9 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
             {
                 DataRow activeDataRow = sourceRows_sence[activeFinishSymbol];
                 string configDoc = string.Empty;
-                class_Data_SqlDataHelper.GetColumnData(activeDataRow, "config", out configDoc);
+                class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "config", out configDoc);
                 XmlDocument tmpConfigDoc = new XmlDocument();
-                tmpConfigDoc.LoadXml(configDoc);
+                tmpConfigDoc.LoadXml(class_CommonUtil.Decoder_Base64(configDoc));
                 XmlNode scoreNode = tmpConfigDoc.SelectSingleNode("/root/score");
                 string strBasicScore = class_XmlHelper.GetAttrValue(scoreNode, "score");
                 string strDiffScore = class_XmlHelper.GetAttrValue(scoreNode, "diff");
@@ -301,27 +298,27 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
             if (typeKey == strPrimerKey)
             {
                 class_XmlHelper.SetAttribute(itemNode, "name", Object_LabelController.GetString("labels", "Center_Level_Primer"));
-                class_XmlHelper.SetAttribute(itemNode, "value", (u_exvalue_primer / total_exvalue_primer).ToString());
+                class_XmlHelper.SetAttribute(itemNode, "value", total_exvalue_primer > 0 ? (u_exvalue_primer / total_exvalue_primer).ToString() : "0");
             }
             else if(typeKey==strPrimaryKey)
             {
                 class_XmlHelper.SetAttribute(itemNode, "name", Object_LabelController.GetString("labels", "Center_Level_Primary"));
-                class_XmlHelper.SetAttribute(itemNode, "value", (u_exvalue_primary / total_exvalue_primary).ToString());
+                class_XmlHelper.SetAttribute(itemNode, "value", total_exvalue_primary > 0 ? (u_exvalue_primary / total_exvalue_primary).ToString() : "0");
             }
             else if (typeKey == strMiddlekey)
             {
                 class_XmlHelper.SetAttribute(itemNode, "name", Object_LabelController.GetString("labels", "Center_Level_Middle"));
-                class_XmlHelper.SetAttribute(itemNode, "value", (u_exvalue_middle / total_exvalue_middle).ToString());
+                class_XmlHelper.SetAttribute(itemNode, "value", total_exvalue_middle > 0 ? (u_exvalue_middle / total_exvalue_middle).ToString() : "0");
             }
             else if (typeKey == strSeniorKey)
             {
                 class_XmlHelper.SetAttribute(itemNode, "name", Object_LabelController.GetString("labels", "Center_Level_Senior"));
-                class_XmlHelper.SetAttribute(itemNode, "value", (u_exvalue_senior / total_exvalue_senior).ToString());
+                class_XmlHelper.SetAttribute(itemNode, "value", total_exvalue_senior > 0 ? (u_exvalue_senior / total_exvalue_senior).ToString() : "0");
             }
             else if (typeKey == strAdvancedKey)
             {
                 class_XmlHelper.SetAttribute(itemNode, "name", Object_LabelController.GetString("labels", "Center_Level_Advanced"));
-                class_XmlHelper.SetAttribute(itemNode, "value", (u_exvalue_advanced / total_exvalue_advanced).ToString());
+                class_XmlHelper.SetAttribute(itemNode, "value", total_exvalue_advanced > 0 ? (u_exvalue_advanced / total_exvalue_advanced).ToString() : "0");
             }
         }
         
@@ -347,6 +344,7 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
 
     protected override void ExtendedAction()
     {
+        switchResponseMode(enumResponseMode.text);
         Object_CommonData.PrepareDataOperation();
         init_sourceDoc_Sence();
         init_sourceDoc_Profile();
@@ -359,8 +357,10 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
         rootNode = centerDocument.SelectSingleNode("/root");
         set_Honor();
         set_Course();
+        set_Distributio();
         set_Level();
         set_Codetimes();
+        RESPONSEDOCUMENT.LoadXml(centerDocument.OuterXml);
     }
 }
 
