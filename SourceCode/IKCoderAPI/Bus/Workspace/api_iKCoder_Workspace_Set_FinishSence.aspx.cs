@@ -36,22 +36,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_FinishSence : class
                     studystatusNode.AppendChild(finishedSenceNode);
                 }
                 XmlNode item = finishedSenceNode.SelectSingleNode("item[symbol[text()='" + symbol + "']]");
-                if (item == null)
-                {
-                    XmlNode newItem = class_XmlHelper.CreateNode(sourceDoc_profile, "item", "");
-                    finishedSenceNode.AppendChild(newItem);
-                    XmlNode symbolNode = class_XmlHelper.CreateNode(sourceDoc_profile, "symbol", symbol);
-                    newItem.AppendChild(symbolNode);
-                    XmlNode startNode = class_XmlHelper.CreateNode(sourceDoc_profile, "start", DateTime.Now.ToString());
-                    newItem.AppendChild(startNode);
-                    XmlNode playNode = class_XmlHelper.CreateNode(sourceDoc_profile, "play", "1");
-                    newItem.AppendChild(playNode);
-                    XmlNode spendtimeNode = class_XmlHelper.CreateNode(sourceDoc_profile, "spendtime", "");
-                    newItem.AppendChild(spendtimeNode);
-                    XmlNode tmpEntryNode = class_XmlHelper.CreateNode(sourceDoc_profile, "tmpentry", DateTime.Now.ToString());
-                    newItem.AppendChild(tmpEntryNode);
-                }
-                else
+                if (item != null)
                 {
                     XmlNode tmpEntryNode = item.SelectSingleNode("tmpentry");
                     DateTime tmpEntryDT = DateTime.Now;
@@ -61,9 +46,10 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_FinishSence : class
                     XmlNode spendtimeNode = item.SelectSingleNode("spendtime");
                     int.TryParse(class_XmlHelper.GetNodeValue(spendtimeNode), out iSpendtime);
                     class_XmlHelper.SetAttribute(spendtimeNode, "spendtime", (iSpendtime + minutes).ToString());
+                    XmlNode finishNode = item.SelectSingleNode("finish");
+                    class_XmlHelper.SetNodeValue(finishNode, "1");
                 }
                 class_Bus_ProfileDoc.SetCodetimeLineHours(sourceDoc_profile, symbol);
-
                 string strBase64Data = class_CommonUtil.Encoder_Base64(sourceDoc_profile.OuterXml);
                 StringBuilder strInputDoc = new StringBuilder();
                 strInputDoc.Append("<root>");

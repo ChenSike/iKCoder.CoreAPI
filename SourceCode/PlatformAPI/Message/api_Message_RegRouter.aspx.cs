@@ -19,7 +19,7 @@ public partial class Message_api_Message_RegRouter : class_WebClass_WA
             return;
         }
         string pushedapi = string.Empty;
-        pushedapi = GetQuerystringParam("pushedapi");
+        pushedapi = GetQuerystringParam("pushapi");
         string getapi = string.Empty;
         getapi = GetQuerystringParam("getapi");
         object_CommonLogic.ConnectToDatabase();
@@ -37,7 +37,7 @@ public partial class Message_api_Message_RegRouter : class_WebClass_WA
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "id", out id);
             activeSPEntry.ClearAllParamsValues();
             activeSPEntry.ModifyParameterValue("@id", id);
-            activeSPEntry.ModifyParameterValue("@pushedapi", pushedapi);
+            activeSPEntry.ModifyParameterValue("@pushapi", pushedapi);
             activeSPEntry.ModifyParameterValue("@getapi", getapi);
             object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, class_CommonDefined.enumDataOperaqtionType.update.ToString(), this.GetType());
         }
@@ -46,7 +46,7 @@ public partial class Message_api_Message_RegRouter : class_WebClass_WA
             activeSPEntry.ClearAllParamsValues();
             activeSPEntry.ModifyParameterValue("@symbol", symbol);
             activeSPEntry.ModifyParameterValue("@produce", _fromProduct);
-            activeSPEntry.ModifyParameterValue("@pushedapi", pushedapi);
+            activeSPEntry.ModifyParameterValue("@pushapi", pushedapi);
             activeSPEntry.ModifyParameterValue("@getapi", getapi);
             object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, class_CommonDefined.enumDataOperaqtionType.insert.ToString(), this.GetType());
 

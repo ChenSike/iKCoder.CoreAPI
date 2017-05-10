@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="api_Message_RemoveRouter.aspx.cs" Inherits="Message_api_Message_RemoveRouter" %>

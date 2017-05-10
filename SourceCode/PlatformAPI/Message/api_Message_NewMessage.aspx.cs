@@ -56,14 +56,33 @@ public partial class Message_api_Message_NewMessage : class_WebClass_WA
             }
             object_CommonLogic.ConnectToDatabase();
             object_CommonLogic.LoadStoreProcedureList();
+            string createTime = DateTime.Now.ToString();
             class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_message_content");
             activeSPEntry.ClearAllParamsValues();
             activeSPEntry.ModifyParameterValue("@title", title);
             activeSPEntry.ModifyParameterValue("@username", username);
             activeSPEntry.ModifyParameterValue("@message", message);
-            activeSPEntry.ModifyParameterValue("@createtime", DateTime.Now.ToString());
+            activeSPEntry.ModifyParameterValue("@createtime", createTime);
             activeSPEntry.ModifyParameterValue("@type", type);
-            object_CommonLogic.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry, class_CommonDefined.enumDataOperaqtionType.insert.ToString(), this.GetType());
+            class_Data_SqlHelper objectSqlHelper = new class_Data_SqlHelper();
+            objectSqlHelper.ExecuteInsertSP(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+            activeSPEntry.ClearAllParamsValues();
+            activeSPEntry.ModifyParameterValue("@title", title);
+            activeSPEntry.ModifyParameterValue("@username", username);
+            activeSPEntry.ModifyParameterValue("@createtime", createTime);
+            DataTable dtActiveMessage = objectSqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+            if(dtActiveMessage!=null && dtActiveMessage.Rows.Count>0)
+            {
+                DataRow activeRow = null;
+                string id;
+                class_Data_SqlDataHelper.GetColumnData(activeRow, "id", out id);
+                Dictionary<string, string> attrs = new Dictionary<string, string>();
+                AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
+            }
+            else
+            {
+                AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "new->error", "");
+            }
         }
         else
         {

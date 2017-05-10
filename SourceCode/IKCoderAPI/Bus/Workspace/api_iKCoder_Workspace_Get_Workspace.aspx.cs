@@ -99,6 +99,8 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             finishedSenceNode.AppendChild(newItem);
             XmlNode symbolNode = class_XmlHelper.CreateNode(sourceDoc_profile, "symbol", symbol);
             newItem.AppendChild(symbolNode);
+            XmlNode finsihNode = class_XmlHelper.CreateNode(sourceDoc_profile, "finish", "0");
+            newItem.AppendChild(finsihNode);
             XmlNode startNode = class_XmlHelper.CreateNode(sourceDoc_profile, "start", DateTime.Now.ToString());
             newItem.AppendChild(startNode);
             XmlNode playNode = class_XmlHelper.CreateNode(sourceDoc_profile, "play", "1");
@@ -107,6 +109,18 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             newItem.AppendChild(spendtimeNode);
             XmlNode tmpEntryNode = class_XmlHelper.CreateNode(sourceDoc_profile, "tmpentry", DateTime.Now.ToString());
             newItem.AppendChild(tmpEntryNode);
+            XmlNode stagesNode = class_XmlHelper.CreateNode(sourceDoc_profile, "stages", "");
+            newItem.AppendChild(stagesNode);
+            XmlNodeList stagesItems = sourceDoc_sence.SelectNodes("/sence/stages/stage");
+            foreach(XmlNode activeStageNode in stagesItems)
+            {
+                string step = class_XmlHelper.GetAttrValue(activeStageNode, "step");
+                XmlNode stepItemNode = class_XmlHelper.CreateNode(sourceDoc_profile, "stage", "");
+                stagesNode.AppendChild(stepItemNode);
+                class_XmlHelper.SetAttribute(stepItemNode, "step", step);
+                class_XmlHelper.SetAttribute(stepItemNode, "finish", "0");
+            }
+            finishstage = "0";
         }
         else
         {
@@ -116,9 +130,11 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             class_XmlHelper.SetNodeValue(playNode, (times++).ToString());
             XmlNode tmpEntryNode = item.SelectSingleNode("tmpentry");
             class_XmlHelper.SetNodeValue(tmpEntryNode, DateTime.Now.ToString());
+            XmlNodeList finishItems = item.SelectNodes("stages/stage[@finish='1']");
+            finishstage = finishItems.Count.ToString();
         }
         XmlNodeList items = sourceDoc_profile.SelectNodes("/root/studystatus/finished/item");
-        finishstage = items.Count.ToString();
+        
     }
 
 

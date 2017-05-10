@@ -22,8 +22,7 @@ public partial class Message_api_Message_Send : class_WebClass_WA
         }
         if(string.IsNullOrEmpty(toproduce))
         {
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "produce->empty", "");
-            return;
+            toproduce = _fromProduct;
         }
         if(string.IsNullOrEmpty(to))
         {
