@@ -25,7 +25,7 @@ public partial class Message_api_Message_NewMessage : class_WebClass_WA
             XmlNode node_message = REQUESTDOCUMENT.SelectSingleNode("/root/message");
             XmlNode node_type = REQUESTDOCUMENT.SelectSingleNode("/root/type");
             XmlNode node_produce = REQUESTDOCUMENT.SelectSingleNode("/root/produce");
-            if(node_title !=null)            
+            if (node_title !=null)            
                 title = class_XmlHelper.GetNodeValue(node_title);
             if (node_username != null)
                 username = class_XmlHelper.GetNodeValue(node_username);
@@ -52,7 +52,7 @@ public partial class Message_api_Message_NewMessage : class_WebClass_WA
             }
             if(string.IsNullOrEmpty(produce))
             {
-                produce = "iKCoder";
+                produce = "ikcoder";
             }
             object_CommonLogic.ConnectToDatabase();
             object_CommonLogic.LoadStoreProcedureList();
@@ -67,16 +67,16 @@ public partial class Message_api_Message_NewMessage : class_WebClass_WA
             class_Data_SqlHelper objectSqlHelper = new class_Data_SqlHelper();
             objectSqlHelper.ExecuteInsertSP(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
             activeSPEntry.ClearAllParamsValues();
-            activeSPEntry.ModifyParameterValue("@title", title);
-            activeSPEntry.ModifyParameterValue("@username", username);
             activeSPEntry.ModifyParameterValue("@createtime", createTime);
-            DataTable dtActiveMessage = objectSqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+            DataTable dtActiveMessage = objectSqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
             if(dtActiveMessage!=null && dtActiveMessage.Rows.Count>0)
             {
                 DataRow activeRow = null;
+                class_Data_SqlDataHelper.GetActiveRow(dtActiveMessage, 0, out activeRow);
                 string id;
                 class_Data_SqlDataHelper.GetColumnData(activeRow, "id", out id);
                 Dictionary<string, string> attrs = new Dictionary<string, string>();
+                attrs.Add("id", id);
                 AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
             }
             else

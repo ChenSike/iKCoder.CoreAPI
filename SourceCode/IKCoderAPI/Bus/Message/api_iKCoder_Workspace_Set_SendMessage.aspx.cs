@@ -34,7 +34,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Set_SendMessage : class_W
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "to->Empty", "");
                 return;
             }
-            if(username=="*")
+            if(username=="all")
                 issys = "1";
             Object_CommonData.PrepareDataOperation();
             class_Data_SqlSPEntry activeSPEntry_resourceMesssage = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_RESOURCE_MESSAGE);

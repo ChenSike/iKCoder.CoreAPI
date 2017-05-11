@@ -336,8 +336,14 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
             XmlNode item = class_XmlHelper.CreateNode(centerDocument, "item", "");
             string strDate = class_XmlHelper.GetAttrValue(activeItem, "date");
             string strValue = class_XmlHelper.GetAttrValue(activeItem, "value");
+            if (string.IsNullOrEmpty(strValue))
+                strValue = "0";
             class_XmlHelper.SetAttribute(item, "date", strDate);
-            class_XmlHelper.SetAttribute(item, "value", strValue);
+            double dHours = 0;
+            double dMintues = 0;
+            double.TryParse(strValue, out dMintues);
+            dHours = dMintues / 60;
+            class_XmlHelper.SetAttribute(item, "value", dHours.ToString(".##"));
             codetimesNode.AppendChild(item);
         }
     }

@@ -13,6 +13,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_CountOfUnreadMessage 
     protected override void ExtendedAction()
     {
         switchResponseMode(enumResponseMode.text);
+        Object_CommonData.PrepareDataOperation();
         class_Data_SqlSPEntry activeSPEntry_resourceMesssage = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_RESOURCE_MESSAGE);
         activeSPEntry_resourceMesssage.ClearAllParamsValues();
         activeSPEntry_resourceMesssage.ModifyParameterValue("@username", "*");

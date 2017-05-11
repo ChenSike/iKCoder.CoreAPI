@@ -18,7 +18,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_MessageList : class_W
         activeSPEntry_resourceMesssage.ClearAllParamsValues();
         activeSPEntry_resourceMesssage.ModifyParameterValue("@username", logined_user_name);
         DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_resourceMesssage, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
-        int index = 1;
+        int index = 1;        
         foreach (DataRow activeDataRow in activeDataTable.Rows.Cast<DataRow>().OrderBy(r => DateTime.Parse(r["crreated"].ToString())))
         {
             string messageid = string.Empty;
@@ -26,9 +26,11 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_MessageList : class_W
             string operationid = string.Empty;
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "id", out operationid);
             string messagetype = string.Empty;
-            string isread = string.Empty; ;
+            string isread = string.Empty;
+            string istop = string.Empty;
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "issys", out messagetype);
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "isread", out isread);
+            class_Data_SqlDataHelper.GetColumnData(activeDataRow, "istop", out istop);
             string requestAPI = "/Message/api_Message_GetMessage.aspx&id = " + messageid;
             string URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024*1024);
@@ -42,7 +44,10 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_MessageList : class_W
             attrs.Add("index", index.ToString());
             attrs.Add("username", messageUsername);
             attrs.Add("isread", isread);
-            AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
+            attrs.Add("operationid", operationid);
+            attrs.Add("messageid", messageid);
+            attrs.Add("istop", istop);
+            
             activeSPEntry_resourceMesssage.ClearAllParamsValues();
             activeSPEntry_resourceMesssage.ModifyParameterValue("@isread", "1");
             activeSPEntry_resourceMesssage.ModifyParameterValue("@messageid", operationid);

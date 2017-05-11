@@ -15,6 +15,7 @@ public partial class Message_api_Message_Send : class_WebClass_WA
         string messageid = GetQuerystringParam("messageid");
         string toproduce = GetQuerystringParam("produce");
         string to = GetQuerystringParam("to");
+        string istop = GetQuerystringParam("istop");
         if(string.IsNullOrEmpty(messageid))
         {
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "messageid->empty", "");
@@ -29,6 +30,8 @@ public partial class Message_api_Message_Send : class_WebClass_WA
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "to->empty", "");
             return;
         }
+        if (string.IsNullOrEmpty(istop))
+            istop = "0";
         object_CommonLogic.ConnectToDatabase();
         object_CommonLogic.LoadStoreProcedureList();
         class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_message_router");
@@ -47,10 +50,10 @@ public partial class Message_api_Message_Send : class_WebClass_WA
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "router->empty", "");
             return;
         }
-        string paramerters = "&messageid=" + messageid + "&to=" + to;
+        string paramerters = "&messageid=" + messageid + "&to=" + to + "&istop=" + istop;
         string url = pushapi + paramerters;
         class_Net_RemoteRequest netObject = new class_Net_RemoteRequest();
-        netObject.getRemoteRequestToStringWithCookieHeader("<root></root>", url, 60, 1024 * 1024);
+        netObject.getRemoteRequestToString("<root></root>", url, 60, 1024 * 1024, null);
         AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "sent","");
     }
 }
