@@ -27,7 +27,7 @@ public partial class Message_api_Message_GetMessage : class_WebClass_WA
             class_Data_SqlSPEntry activeSPEntry = object_CommonLogic.GetActiveSP(object_CommonLogic.dbServer, "spa_operation_message_content");
             activeSPEntry.ClearAllParamsValues();
             activeSPEntry.ModifyParameterValue("@id", id);
-            DataTable activeDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
+            DataTable activeDataTable = object_CommonLogic.Object_SqlHelper.ExecuteSelectSPKeyForDT(activeSPEntry, object_CommonLogic.Object_SqlConnectionHelper, object_CommonLogic.dbServer);
             if (activeDataTable != null && activeDataTable.Rows.Count > 0)
             {
                 foreach (DataRow activeRow in activeDataTable.Rows)
@@ -36,11 +36,12 @@ public partial class Message_api_Message_GetMessage : class_WebClass_WA
                     string title = string.Empty;
                     string username = string.Empty;
                     string createtime = string.Empty;
-                    class_Data_SqlDataHelper.GetColumnData(activeRow, "message", out message);
+                    class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeRow, "message", out message);
                     class_Data_SqlDataHelper.GetColumnData(activeRow, "title", out title);
                     class_Data_SqlDataHelper.GetColumnData(activeRow, "username", out username);
                     class_Data_SqlDataHelper.GetColumnData(activeRow, "createtime", out createtime);
                     Dictionary<string, string> attrs = new Dictionary<string, string>();
+                    message = class_CommonUtil.Decoder_Base64(message);
                     attrs.Add("message", message);
                     attrs.Add("title", title);
                     attrs.Add("username", username);

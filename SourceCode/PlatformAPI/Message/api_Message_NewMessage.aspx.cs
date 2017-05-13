@@ -30,7 +30,10 @@ public partial class Message_api_Message_NewMessage : class_WebClass_WA
             if (node_username != null)
                 username = class_XmlHelper.GetNodeValue(node_username);
             if (node_message != null)
+            {
                 message = class_XmlHelper.GetNodeValue(node_message);
+                message = class_CommonUtil.Encoder_Base64(message);
+            }
             if (node_type != null)
                 type = class_XmlHelper.GetNodeValue(node_type);
             if (node_produce != null)

@@ -29,7 +29,7 @@ public class class_Bus_TextData
             DataRow activeDataRow = null;
             class_Data_SqlDataHelper.GetActiveRow(textDataTable, 0, out activeDataRow);
             string data = string.Empty;
-            class_Data_SqlDataHelper.GetColumnData(activeDataRow, "data", out data);
+            class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "data", out data);
             data = class_CommonUtil.Decoder_Base64(data);
             return data;
         }

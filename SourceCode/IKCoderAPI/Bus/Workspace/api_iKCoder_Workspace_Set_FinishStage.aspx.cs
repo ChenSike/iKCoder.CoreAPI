@@ -46,7 +46,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_FinishStage : class
                 int.TryParse(class_XmlHelper.GetNodeValue(spendtimeNode), out iSpendtime);
                 class_XmlHelper.SetAttribute(spendtimeNode, "spendtime", (iSpendtime + minutes).ToString());
 
-                XmlNode finishItem = finishedSenceNode.SelectSingleNode("stages/stage[@step='" + currentStage + "']");
+                XmlNode finishItem = item.SelectSingleNode("stages/stage[@step='" + currentStage + "']");
                 if (finishItem == null)
                 {
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false", "");

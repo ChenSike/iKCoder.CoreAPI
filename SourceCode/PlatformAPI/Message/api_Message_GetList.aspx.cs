@@ -30,6 +30,7 @@ public partial class Message_api_Message_GetList : class_WebClass_WA
                 Dictionary<string, string> attrs = new Dictionary<string, string>();
                 attrs.Add("id", id);
                 attrs.Add("title", title);
+                message = class_CommonUtil.Decoder_Base64(message);
                 attrs.Add("message", message);
                 AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
             }

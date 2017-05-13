@@ -13,7 +13,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Set_RemoveMessage : class
     {
         string messageid = GetQuerystringParam("id");
         string operationid = GetQuerystringParam("operationid");
-        if(string.IsNullOrEmpty( operationid))
+        if (string.IsNullOrEmpty(operationid))
         {
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false.", "operationid->empty", enum_MessageType.Exception);
             return;
@@ -23,7 +23,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Set_RemoveMessage : class
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false.", "messageid->empty", enum_MessageType.Exception);
             return;
         }
-            string URL = Server_API + Virtul_Folder_API + "/Message/api_Message_RemoveMessage.aspx?id=" + messageid;
+        string URL = Server_API + Virtul_Folder_API + "/Message/api_Message_RemoveMessage.aspx?id=" + messageid;
         string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
         XmlDocument resultDoc = new XmlDocument();
         resultDoc.LoadXml(returnDoc);

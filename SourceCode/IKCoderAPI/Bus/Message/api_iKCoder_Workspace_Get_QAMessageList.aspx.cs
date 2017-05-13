@@ -20,7 +20,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_QAMessageList : class
         activeSPEntry_resourceMesssage.ModifyParameterValue("@issys", "2");
         DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry_resourceMesssage, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
         int index = 1;
-        foreach (DataRow activeDataRow in activeDataTable.Rows.Cast<DataRow>().OrderBy(r => DateTime.Parse(r["crreated"].ToString())))
+        foreach (DataRow activeDataRow in activeDataTable.Rows.Cast<DataRow>().OrderBy(r => DateTime.Parse(r["created"].ToString())))
         {
             string messageid = string.Empty;
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "messageid", out messageid);
@@ -29,9 +29,11 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_QAMessageList : class
             string messagetype = string.Empty;
             string isread = string.Empty;
             string istop = string.Empty;
+            string time = string.Empty;
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "issys", out messagetype);
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "isread", out isread);
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "istop", out istop);
+            class_Data_SqlDataHelper.GetColumnData(activeDataRow, "created", out time);
             string requestAPI = "/Message/api_Message_GetMessage.aspx&id = " + messageid;
             string URL = Server_API + Virtul_Folder_API + requestAPI;
             string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
@@ -50,6 +52,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_QAMessageList : class
                 attrs.Add("operationid", operationid);
                 attrs.Add("messageid", messageid);
                 attrs.Add("istop", istop);
+                attrs.Add("datetime", time);
                 AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
                 index++;
                 activeSPEntry_resourceMesssage.ClearAllParamsValues();
@@ -57,12 +60,6 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_QAMessageList : class
                 activeSPEntry_resourceMesssage.ModifyParameterValue("@messageid", operationid);
                 Object_CommonData.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry_resourceMesssage, class_CommonDefined.enumDataOperaqtionType.update.ToString(), this.GetType());
                 index++;
-            }
-            else
-            {
-                activeSPEntry_resourceMesssage.ClearAllParamsValues();
-                activeSPEntry_resourceMesssage.ModifyParameterValue("@id", operationid);
-                Object_CommonData.Object_SqlHelper.ExecuteDeleteSP(activeSPEntry_resourceMesssage, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
             }
         }
     }

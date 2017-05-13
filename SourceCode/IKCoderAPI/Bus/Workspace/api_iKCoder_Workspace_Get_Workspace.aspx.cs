@@ -133,8 +133,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             XmlNodeList finishItems = item.SelectNodes("stages/stage[@finish='1']");
             finishstage = finishItems.Count.ToString();
         }
-        XmlNodeList items = sourceDoc_profile.SelectNodes("/root/studystatus/finished/item");
-        
+        XmlNodeList items = sourceDoc_profile.SelectNodes("/root/studystatus/finished/item");        
     }
 
 
@@ -320,13 +319,15 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             Set_CheckFinishStage();
             Get_CurrentStage();
             class_Bus_ProfileDoc.SetUserProfile(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name, sourceDoc_profile.OuterXml);
-            Init_ToolBoxDoc();                
+            Init_ToolBoxDoc();
+            Init_WordsDoc();
 
             Set_Basic();
             Set_Tip();
             Set_ToolBox();
             Set_WorkspaceStatus();
             Set_Game();
+            Set_Words();
             Set_Message();
 
             if (Init_WordsDoc())

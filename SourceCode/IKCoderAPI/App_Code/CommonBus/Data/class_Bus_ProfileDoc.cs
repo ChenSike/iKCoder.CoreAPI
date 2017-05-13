@@ -71,6 +71,8 @@ public class class_Bus_ProfileDoc
             class_XmlHelper.SetAttribute(codetimelineNode, "recordtime", DateTime.Now.ToString());
             resourceDoc_Profile.SelectSingleNode("/root/studystatus").AppendChild(codetimelineNode);
         }
+        else
+            class_XmlHelper.SetAttribute(codetimelineNode, "recordtime", DateTime.Now.ToString());        
         XmlNodeList itemNodes = codetimelineNode.SelectNodes("item");
         if (itemNodes.Count >= 10)
         {

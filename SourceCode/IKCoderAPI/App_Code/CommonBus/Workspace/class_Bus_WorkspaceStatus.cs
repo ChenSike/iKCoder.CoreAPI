@@ -30,11 +30,11 @@ public class class_Bus_WorkspaceStatus
 
     public static XmlDocument GetWorkspaceStatusDocument(class_CommonData Object_CommonData, string symbol, string currentStage, string username,out DataRow activeWorkspaceStatusDataRow)
     {
-        XmlDocument sourceDoc_worskspacestatus = new XmlDocument();
-        symbol = GetWorkspaceStatusSymbol(symbol, currentStage, username);        
+        XmlDocument sourceDoc_worskspacestatus = new XmlDocument();        
+        string personalSymbol = GetWorkspaceStatusSymbol(symbol, currentStage, username);        
         class_Data_SqlSPEntry activeSPEntry_configSence = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_WORKSPACESTATUS);
         activeSPEntry_configSence.ClearAllParamsValues();
-        activeSPEntry_configSence.ModifyParameterValue("@symbol", symbol);
+        activeSPEntry_configSence.ModifyParameterValue("@symbol", personalSymbol);
         DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_configSence, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
         if (textDataTable != null && textDataTable.Rows.Count > 0)
         {
@@ -65,7 +65,7 @@ public class class_Bus_WorkspaceStatus
                 class_Data_SqlDataHelper.GetActiveRow(textDataTable, 0, out activeDataRow);
                 activeWorkspaceStatusDataRow = activeDataRow;
                 string strBaseSenceDoc = string.Empty;
-                class_Data_SqlDataHelper.GetColumnData(activeDataRow, "config", out strBaseSenceDoc);
+                class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "config", out strBaseSenceDoc);
                 if (!string.IsNullOrEmpty(strBaseSenceDoc))
                 {
                     sourceDoc_worskspacestatus.LoadXml(class_CommonUtil.Decoder_Base64(strBaseSenceDoc));
