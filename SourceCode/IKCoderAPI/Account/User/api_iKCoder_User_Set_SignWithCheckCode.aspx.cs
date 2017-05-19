@@ -111,6 +111,8 @@ public partial class Account_User_api_iKCoder_User_Set_SignWithCheckCode : class
                 Response.Cookies["logined_user_nickname"].Value = msg;
                 attrs.Add("logined_user_nickname", msg);
             }
+            Object_CommonData.PrepareDataOperation();
+            Object_ProfileDocs.Verify_All(user_name);
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
         }
         else

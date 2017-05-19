@@ -44,6 +44,21 @@ public partial class Account_Profile_api_iKCoder_Profile_Get_SelectNodes : class
             }
             else
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false", "", enum_MessageType.Exception);
+
+
+            List<string> lstSelectXpath = new List<string>();
+            XmlNodeList selectItems = REQUESTDOCUMENT.SelectNodes("/root/select/items");
+            foreach(XmlNode activeItem in selectItems)
+            {
+                string selectXpath = class_XmlHelper.GetNodeValue(activeItem);
+                lstSelectXpath.Add(selectXpath);
+            }
+            Dictionary<string, string> resultLst = new Dictionary<string, string>();
+            resultLst = Object_ProfileDocs.GetDocNotesValues(logined_user_name, class_CommonDefined.enumProfileDoc.doc_basic, lstSelectXpath, true);
+
         }
+        else
+            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false", "", enum_MessageType.Exception);
+
     }
 }

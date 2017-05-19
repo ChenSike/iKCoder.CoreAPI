@@ -12,8 +12,7 @@ public partial class Account_api_LoginAccount : class_WebClass_WA
 {
     protected override void ExtenedFunction()
     {
-        ISRESPONSEDOC = true;
-        ISBINRESPONSE = false;
+        switchResponseMode(enumResponseMode.text);
         object_CommonLogic.ConnectToDatabase();
         object_CommonLogic.LoadStoreProcedureList();
         XmlNode usernameNode = REQUESTDOCUMENT.SelectSingleNode("/root/username");
@@ -87,6 +86,5 @@ public partial class Account_api_LoginAccount : class_WebClass_WA
         }
         else
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "failed to do action : select.", "");
-        object_CommonLogic.CloseDBConnection();
     }
 }

@@ -76,6 +76,16 @@ public class class_Bus_SenceDoc
         return class_CommonDefined.enumSenceType.primer;
     }
 
+    public static int GetCountOfStages(class_CommonData Object_CommonData,string symbol)
+    {
+        DataRow activeDataRow;
+        string strDoc = GetSenceStrDocument(Object_CommonData, symbol, out activeDataRow);
+        XmlDocument doc = new XmlDocument();
+        doc.LoadXml(strDoc);
+        XmlNodeList stagesNodes = doc.SelectNodes("/sence/stages/stage");
+        return stagesNodes.Count;
+    }
+
     public static string GetSenceTypeString(string symbol)
     {
         if (symbol.StartsWith("a") || symbol.StartsWith("A"))

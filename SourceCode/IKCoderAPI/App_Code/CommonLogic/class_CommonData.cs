@@ -112,7 +112,7 @@ public class class_CommonData
         if (storeProceduresList.ContainsKey(dbServer))
         {
             if (storeProceduresList[dbServer].ContainsKey(SPName))
-                return storeProceduresList[dbServer][SPName];
+                return (class_Data_SqlSPEntry)storeProceduresList[dbServer][SPName].Clone();
             else
                 return null;
         }

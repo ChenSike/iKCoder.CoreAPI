@@ -78,6 +78,35 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             return false;
     }
 
+    protected void Set_Knowledge()
+    {        
+        string kpsymbol = "data_list_kps";
+        string strDataDoc = class_Bus_TextData.GetTextData(kpsymbol, Object_CommonData);
+        XmlDocument sourceDoc_kps = new XmlDocument();
+        if (!string.IsNullOrEmpty(strDataDoc))
+        {
+            try
+            {
+                sourceDoc_kps.LoadXml(strDataDoc);
+                XmlNode kpnode = class_XmlHelper.CreateNode(workspaceDoc, "kps", "");
+                workspaceDoc_rootNode.AppendChild(kpnode);
+                XmlNode activeKPNode = sourceDoc_kps.SelectSingleNode("/root/kp[@symbol='" + symbol + "']");
+                if(activeKPNode!=null)
+                {
+                    XmlNode stepNode = activeKPNode.SelectSingleNode("step[@value='" + currentStage + "']");
+                    foreach(XmlNode activekp in stepNode.SelectNodes("item"))
+                    {
+                        XmlNode kpitemNode = workspaceDoc.ImportNode(activekp, true);
+                        kpnode.AppendChild(kpitemNode);
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+    }
+
     protected void Set_CheckFinishStage()
     {
         XmlNode studystatusNode = sourceDoc_profile.SelectSingleNode("/root/studystatus");
@@ -159,6 +188,32 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
         }
         if (string.IsNullOrEmpty(currentStage))
             currentStage = "1";
+        XmlNode stageNode = sourceDoc_sence.SelectSingleNode("/sence/stages/stage[@step='" + currentStage + "']");
+        if (stageNode == null)
+        {
+            currentStage = "1";
+            XmlNode studystatusNode = sourceDoc_profile.SelectSingleNode("/root/studystatus");
+            if (studystatusNode != null)
+            {
+                XmlNode finishedSenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/finished");
+                if (finishedSenceNode != null)
+                {
+                    XmlNode item = finishedSenceNode.SelectSingleNode("item[symbol[text()='" + symbol + "']]");
+                    if (item != null)
+                    {
+                        XmlNode stagesNode = item.SelectSingleNode("stages");
+                        if (stagesNode != null)
+                        {
+                            XmlNode stageItem = stagesNode.SelectSingleNode("stage[@step='" + currentStage + "']");
+                            if (stageItem == null)
+                            {
+                                stagesNode.RemoveChild(stageItem);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
      
     protected void Set_Basic()
@@ -320,15 +375,14 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             Get_CurrentStage();
             class_Bus_ProfileDoc.SetUserProfile(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name, sourceDoc_profile.OuterXml);
             Init_ToolBoxDoc();
-            Init_WordsDoc();
-
+            
             Set_Basic();
             Set_Tip();
             Set_ToolBox();
             Set_WorkspaceStatus();
             Set_Game();
-            Set_Words();
             Set_Message();
+            Set_Knowledge();
 
             if (Init_WordsDoc())
                 Set_Words();

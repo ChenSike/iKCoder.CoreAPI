@@ -22,10 +22,10 @@ public class class_WebBase_IKCoderAPI : class_Base_WebBaseclass
     protected class_Net_RemoteRequest Object_NetRemote;
     protected class_Base_Config Object_BaseConfig;
     protected class_Util_LabelsController Object_LabelController;
-    protected class_CommonData Object_CommonData = new class_CommonData();
+    protected class_CommonData Object_CommonData = new class_CommonData();    
     protected int Session_TimeOutMinutes = 180;
-    protected int Cookie_TimeOutHour = 3;  
-
+    protected int Cookie_TimeOutHour = 3;
+    protected class_Bus_ProfileDocs Object_ProfileDocs;
 
     public class_WebBase_IKCoderAPI()
     {
@@ -73,7 +73,10 @@ public class class_WebBase_IKCoderAPI : class_Base_WebBaseclass
         if (verifyToken())
         {
             if (BeforeExtenedAction())
+            {
+                Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
                 ExtendedAction();
+            }
         }
         if (Object_CommonData.isExecutedConnectedDB)
             Object_CommonData.CloseDBConnection();

@@ -9,37 +9,35 @@ using System.Xml;
 
 public partial class Bus_Message_api_iKCoder_Workspace_Set_RemoveMessage : class_WebBase_IKCoderAPI_UA
 {
+    XmlDocument sourceDoc_profile = new XmlDocument();
     protected override void ExtendedAction()
     {
+        switchResponseMode(enumResponseMode.text);
         string messageid = GetQuerystringParam("id");
         string operationid = GetQuerystringParam("operationid");
+        Object_CommonData.PrepareDataOperation();
         if (string.IsNullOrEmpty(operationid))
-        {
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false.", "operationid->empty", enum_MessageType.Exception);
-            return;
-        }
-        if (string.IsNullOrEmpty(messageid))
         {
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false.", "messageid->empty", enum_MessageType.Exception);
             return;
         }
-        string URL = Server_API + Virtul_Folder_API + "/Message/api_Message_RemoveMessage.aspx?id=" + messageid;
-        string returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
-        XmlDocument resultDoc = new XmlDocument();
-        resultDoc.LoadXml(returnDoc);
-        XmlNode msgNode = resultDoc.SelectSingleNode("/root/msg");
-        if (msgNode != null)
+        sourceDoc_profile = class_Bus_ProfileDoc.GetProfileDocument(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name);
+        class_Bus_Message obj = new class_Bus_Message(sourceDoc_profile);
+        obj.checkMessageStatus();
+        obj.switchMessageToRemove(operationid);
+        string requestAPI = "/Message/api_Message_GetMessage.aspx?id=" + messageid;
+        string URL = Server_API + Virtul_Folder_API + requestAPI;
+        string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
+        XmlDocument returnDoc = new XmlDocument();
+        returnDoc.LoadXml(returnStrDoc);
+        XmlNode msgNode = returnDoc.SelectSingleNode("/root/msg");
+        class_Data_SqlSPEntry activeSPEntry_resourceMesssage = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_RESOURCE_MESSAGE);
+        if (msgNode == null)
         {
-            Object_CommonData.PrepareDataOperation();
-            class_Data_SqlSPEntry activeSPEntry_resourceMesssage = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_RESOURCE_MESSAGE);
             activeSPEntry_resourceMesssage.ClearAllParamsValues();
             activeSPEntry_resourceMesssage.ModifyParameterValue("@id", operationid);
-            Object_CommonData.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry_resourceMesssage, class_CommonDefined.enumDataOperaqtionType.delete.ToString(), this.GetType());
-            AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
+            Object_CommonData.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry_resourceMesssage, class_CommonDefined.enumDataOperaqtionType.delete.ToString(), this.GetType());           
         }
-        else
-        {
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false.", "", enum_MessageType.Exception);
-        }
+        class_Bus_ProfileDoc.SetUserProfile(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name, sourceDoc_profile.OuterXml);
     }
 }

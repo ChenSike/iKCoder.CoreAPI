@@ -63,4 +63,15 @@ public class class_CommonDefined
         language = 6005
     }
 
+    public enum enumProfileDoc
+    {
+        doc_basic = 7001,
+        doc_studystatus = 7002,
+        doc_commnunication = 7003,
+        doc_payment = 7004,
+        doc_datastore = 7005,
+        doc_recored = 7006,
+        doc_message = 7007
+    }
+
 }

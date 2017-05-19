@@ -48,19 +48,22 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_SysMessageList : clas
             {
                 string messageContent = class_XmlHelper.GetAttrValue(msgNode, "message");
                 string messageUsername = class_XmlHelper.GetAttrValue(msgNode, "username");
-                Dictionary<string, string> attrs = new Dictionary<string, string>();
-                attrs.Add("message", messageContent);
-                attrs.Add("index", index.ToString());
-                attrs.Add("username", messageUsername);
-                attrs.Add("isread", isread);
-                attrs.Add("operationid", operationid);
-                attrs.Add("messageid", messageid);
-                attrs.Add("istop", istop);
-                attrs.Add("messagetype", messagetype);
-                attrs.Add("datetime", time);
-                AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
-                index++;
-                messageLogicObject.switchMessageToRead(operationid);
+                if (!messageLogicObject.isRemoved(operationid))
+                {
+                    Dictionary<string, string> attrs = new Dictionary<string, string>();
+                    attrs.Add("message", messageContent);
+                    attrs.Add("index", index.ToString());
+                    attrs.Add("username", messageUsername);
+                    attrs.Add("isread", isread);
+                    attrs.Add("operationid", operationid);
+                    attrs.Add("messageid", messageid);
+                    attrs.Add("istop", istop);
+                    attrs.Add("messagetype", messagetype);
+                    attrs.Add("datetime", time);
+                    AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
+                    index++;
+                    messageLogicObject.switchMessageToRead(operationid);
+                }
             }
         }
         class_Bus_ProfileDoc.SetUserProfile(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name, sourceDoc_profile.OuterXml);

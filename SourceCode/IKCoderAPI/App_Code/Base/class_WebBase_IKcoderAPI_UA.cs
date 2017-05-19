@@ -14,7 +14,7 @@ public class class_WebBase_IKCoderAPI_UA:class_WebBase_IKCoderAPI
 
     protected override bool BeforeExtenedAction()
     {
-        switchResponseMode(enumResponseMode.text);
+        switchResponseMode(enumResponseMode.text);        
         if (Request.Cookies["logined_marked"] != null && Request.Cookies["logined_user_signedid"] != null && Request.Cookies["logined_user_id"] != null && Session["logined_user_name"] != null)
         {
             string logined_marked = Request.Cookies["logined_marked"].Value;

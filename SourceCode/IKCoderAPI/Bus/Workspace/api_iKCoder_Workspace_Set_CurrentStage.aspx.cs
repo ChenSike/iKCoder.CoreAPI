@@ -33,21 +33,8 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_CurrentStage : clas
                     XmlNode currentStageNode = currentsenceNode.SelectSingleNode("currentstage");
                     class_XmlHelper.SetNodeValue(currentStageNode, futurestage);
                 }
-                string strBase64Data = class_CommonUtil.Encoder_Base64(sourceDoc_profile.OuterXml);
-                StringBuilder strInputDoc = new StringBuilder();
-                strInputDoc.Append("<root>");
-                strInputDoc.Append("<symbol>");
-                strInputDoc.Append(profileSymbol);
-                strInputDoc.Append("</symbol>");
-                strInputDoc.Append("<data>");
-                strInputDoc.Append(strBase64Data);
-                strInputDoc.Append("</data>");
-                strInputDoc.Append("</root>");
-                requestAPI = "/Profile/api_AccountProfile_UpdateBySymbol.aspx";
-                URL = Server_API + Virtul_Folder_API + requestAPI;
-                returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(strInputDoc.ToString(), URL, 1000 * 60, 100000);
-                if (!returnStrDoc.Contains("err"))
-                    AddResponseMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
+                if (class_Bus_ProfileDoc.SetUserProfile(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name, sourceDoc_profile.OuterXml))
+                    AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
                 else
                     AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false", "");
             }

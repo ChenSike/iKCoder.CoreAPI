@@ -81,7 +81,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_AllMessageList : clas
             string messageid = string.Empty;
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "messageid", out messageid);
             string operationid = string.Empty;
-            class_Data_SqlDataHelper.GetColumnData(activeDataRow, "id", out operationid);
+            class_Data_SqlDataHelper.GetColumnData(activeDataRow, "id", out operationid); 
             string messagetype = string.Empty;
             string isread = string.Empty;
             string istop = string.Empty;
@@ -99,19 +99,22 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_AllMessageList : clas
             {
                 string messageContent = class_XmlHelper.GetAttrValue(msgNode, "message");
                 string messageUsername = class_XmlHelper.GetAttrValue(msgNode, "username");
-                Dictionary<string, string> attrs = new Dictionary<string, string>();
-                attrs.Add("message", messageContent);
-                attrs.Add("index", index.ToString());
-                attrs.Add("username", messageUsername);
-                attrs.Add("isread", isread);
-                attrs.Add("operationid", operationid);
-                attrs.Add("messageid", messageid);
-                attrs.Add("istop", istop);
-                attrs.Add("messagetype", messagetype);
-                attrs.Add("datetime", time);
-                AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
-                index++;
-                messageLogicObject.switchMessageToRead(operationid);
+                if (!messageLogicObject.isRemoved(operationid))
+                {
+                    Dictionary<string, string> attrs = new Dictionary<string, string>();
+                    attrs.Add("message", messageContent);
+                    attrs.Add("index", index.ToString());
+                    attrs.Add("username", messageUsername);
+                    attrs.Add("isread", isread);
+                    attrs.Add("operationid", operationid);
+                    attrs.Add("messageid", messageid);
+                    attrs.Add("istop", istop);
+                    attrs.Add("messagetype", messagetype);
+                    attrs.Add("datetime", time);
+                    AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
+                    index++;
+                    messageLogicObject.switchMessageToRead(operationid);
+                }
             }
             else
             {
