@@ -16,4 +16,5 @@ public class class_SPSMap
     public static string SP_OPERATION_RESOURCE_TEXT = "spa_operation_resource_text";
     public static string SP_OPERATION_RESOURCE_MESSAGE = "spa_operation_resource_message";
     public static string SP_OPERATION_CONFIG_PROFILEDOCS = "spa_operation_config_profiledocs";
+    public static string SP_OPERATION_CONFIG_TMPSENCES = "spa_operation_config_tmpsences_status";
 }

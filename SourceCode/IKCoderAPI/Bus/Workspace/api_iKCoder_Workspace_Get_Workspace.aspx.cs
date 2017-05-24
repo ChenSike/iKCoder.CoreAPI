@@ -11,10 +11,11 @@ using System.Text;
 
 public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_WebBase_IKCoderAPI_UA
 {
-    protected XmlDocument sourceDoc_profile = new XmlDocument();
+    //protected XmlDocument sourceDoc_profile = new XmlDocument();
     protected XmlDocument sourceDoc_sence = new XmlDocument();
     protected XmlDocument sourceDoc_toolBox = new XmlDocument();
     protected XmlDocument sourceDoc_words = new XmlDocument();
+    protected Dictionary<class_CommonDefined.enumProfileDoc, XmlDocument> sourceDoc_profile = new Dictionary<class_CommonDefined.enumProfileDoc, XmlDocument>();
 
     protected DataRow activeSenceDataRow = null;
     protected DataRow activeToolboxDataRow = null;
@@ -26,16 +27,11 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
     protected XmlNode workspaceDoc_rootNode = null;
     private string finishstage = "";
 
-    protected bool Init_ProfileDoc()
+    protected void Init_ProfileDoc()
     {
-        sourceDoc_profile = class_Bus_ProfileDoc.GetProfileDocument(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name);
-        if (sourceDoc_profile == null && string.IsNullOrEmpty(sourceDoc_profile.OuterXml))
-        {
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "profiledoc->empty", "");
-            return false;
-        }
-        else
-            return true;
+        XmlDocument sourceDoc_StudyStatus = new XmlDocument();
+        Object_ProfileDocs.GetProfileDocObject(logined_user_name, class_CommonDefined.enumProfileDoc.doc_studystatus);
+        sourceDoc_profile.Add(class_CommonDefined.enumProfileDoc.doc_studystatus, sourceDoc_StudyStatus);
     }
 
     protected bool Init_SenceDoc()
@@ -109,111 +105,12 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
 
     protected void Set_CheckFinishStage()
     {
-        XmlNode studystatusNode = sourceDoc_profile.SelectSingleNode("/root/studystatus");
-        if(studystatusNode==null)
-        {
-            studystatusNode = class_XmlHelper.CreateNode(sourceDoc_profile, "studystatus", "");
-            sourceDoc_profile.SelectSingleNode("/root").AppendChild(studystatusNode);
-        }
-        XmlNode finishedSenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/finished");
-        if (finishedSenceNode == null)
-        {
-            finishedSenceNode = class_XmlHelper.CreateNode(sourceDoc_profile, "finished", "");
-            studystatusNode.AppendChild(finishedSenceNode);
-        }
-        XmlNode item = finishedSenceNode.SelectSingleNode("item[symbol[text()='" + symbol + "']]");
-        if (item == null)
-        {
-            XmlNode newItem = class_XmlHelper.CreateNode(sourceDoc_profile, "item", "");
-            finishedSenceNode.AppendChild(newItem);
-            XmlNode symbolNode = class_XmlHelper.CreateNode(sourceDoc_profile, "symbol", symbol);
-            newItem.AppendChild(symbolNode);
-            XmlNode finsihNode = class_XmlHelper.CreateNode(sourceDoc_profile, "finish", "0");
-            newItem.AppendChild(finsihNode);
-            XmlNode startNode = class_XmlHelper.CreateNode(sourceDoc_profile, "start", DateTime.Now.ToString());
-            newItem.AppendChild(startNode);
-            XmlNode playNode = class_XmlHelper.CreateNode(sourceDoc_profile, "play", "1");
-            newItem.AppendChild(playNode);
-            XmlNode spendtimeNode = class_XmlHelper.CreateNode(sourceDoc_profile, "spendtime", "");
-            newItem.AppendChild(spendtimeNode);
-            XmlNode tmpEntryNode = class_XmlHelper.CreateNode(sourceDoc_profile, "tmpentry", DateTime.Now.ToString());
-            newItem.AppendChild(tmpEntryNode);
-            XmlNode stagesNode = class_XmlHelper.CreateNode(sourceDoc_profile, "stages", "");
-            newItem.AppendChild(stagesNode);
-            XmlNodeList stagesItems = sourceDoc_sence.SelectNodes("/sence/stages/stage");
-            foreach(XmlNode activeStageNode in stagesItems)
-            {
-                string step = class_XmlHelper.GetAttrValue(activeStageNode, "step");
-                XmlNode stepItemNode = class_XmlHelper.CreateNode(sourceDoc_profile, "stage", "");
-                stagesNode.AppendChild(stepItemNode);
-                class_XmlHelper.SetAttribute(stepItemNode, "step", step);
-                class_XmlHelper.SetAttribute(stepItemNode, "finish", "0");
-            }
-            finishstage = "0";
-        }
-        else
-        {
-            XmlNode playNode = item.SelectSingleNode("play");
-            int times = 1;
-            int.TryParse(class_XmlHelper.GetNodeValue(playNode), out times);
-            class_XmlHelper.SetNodeValue(playNode, (times++).ToString());
-            XmlNode tmpEntryNode = item.SelectSingleNode("tmpentry");
-            class_XmlHelper.SetNodeValue(tmpEntryNode, DateTime.Now.ToString());
-            XmlNodeList finishItems = item.SelectNodes("stages/stage[@finish='1']");
-            finishstage = finishItems.Count.ToString();
-        }
-        XmlNodeList items = sourceDoc_profile.SelectNodes("/root/studystatus/finished/item");        
+        finishstage = Object_ProfileDocs.GetCountOfFinishedStages(logined_user_name, symbol).ToString();
     }
-
 
     protected void Get_CurrentStage()
     {
-        XmlNode currentsenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/currentsence[symbol[text()='" + symbol + "']]");
-        if (currentsenceNode == null)
-        {
-            currentsenceNode = class_XmlHelper.CreateNode(sourceDoc_profile, "currentsence", "");
-            XmlNode studyStatusNode = sourceDoc_profile.SelectSingleNode("/root/studystatus");
-            XmlNode symbolNode = class_XmlHelper.CreateNode(sourceDoc_profile, "symbol", symbol);
-            currentsenceNode.AppendChild(symbolNode);
-            XmlNode firststarttimeNode = class_XmlHelper.CreateNode(sourceDoc_profile, "fiststarttime", DateTime.Now.ToString());
-            currentsenceNode.AppendChild(firststarttimeNode);
-            XmlNode currentstageNode = class_XmlHelper.CreateNode(sourceDoc_profile, "currentstage", "1");
-            currentsenceNode.AppendChild(currentstageNode);
-            studyStatusNode.AppendChild(currentsenceNode);
-        }
-        else
-        {
-            XmlNode currentStageNode = currentsenceNode.SelectSingleNode("currentstage");
-            currentStage = class_XmlHelper.GetNodeValue(currentStageNode);
-        }
-        if (string.IsNullOrEmpty(currentStage))
-            currentStage = "1";
-        XmlNode stageNode = sourceDoc_sence.SelectSingleNode("/sence/stages/stage[@step='" + currentStage + "']");
-        if (stageNode == null)
-        {
-            currentStage = "1";
-            XmlNode studystatusNode = sourceDoc_profile.SelectSingleNode("/root/studystatus");
-            if (studystatusNode != null)
-            {
-                XmlNode finishedSenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/finished");
-                if (finishedSenceNode != null)
-                {
-                    XmlNode item = finishedSenceNode.SelectSingleNode("item[symbol[text()='" + symbol + "']]");
-                    if (item != null)
-                    {
-                        XmlNode stagesNode = item.SelectSingleNode("stages");
-                        if (stagesNode != null)
-                        {
-                            XmlNode stageItem = stagesNode.SelectSingleNode("stage[@step='" + currentStage + "']");
-                            if (stageItem == null)
-                            {
-                                stagesNode.RemoveChild(stageItem);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        currentStage = Object_ProfileDocs.GetCurrentStage(logined_user_name, symbol);
     }
      
     protected void Set_Basic()
@@ -369,13 +266,11 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             Object_CommonData.PrepareDataOperation();
             if (!Init_SenceDoc())
                 return;
-            if (!Init_ProfileDoc())
-                return;
+            Init_ProfileDoc();                
             Set_CheckFinishStage();
-            Get_CurrentStage();
-            class_Bus_ProfileDoc.SetUserProfile(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name, sourceDoc_profile.OuterXml);
+            Get_CurrentStage();            
             Init_ToolBoxDoc();
-            
+
             Set_Basic();
             Set_Tip();
             Set_ToolBox();
@@ -383,7 +278,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             Set_Game();
             Set_Message();
             Set_Knowledge();
-
+            
             if (Init_WordsDoc())
                 Set_Words();
             RESPONSEDOCUMENT.LoadXml(workspaceDoc.OuterXml);            

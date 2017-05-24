@@ -15,9 +15,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_AllMessageList : clas
     {
         switchResponseMode(enumResponseMode.text);
         Object_CommonData.PrepareDataOperation();
-        sourceDoc_profile = class_Bus_ProfileDoc.GetProfileDocument(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name);        
-        class_Bus_Message messageLogicObject = new class_Bus_Message(sourceDoc_profile);
-        messageLogicObject.checkMessageStatus();
+        sourceDoc_profile = Object_ProfileDocs.GetProfileDocObject(logined_user_name, class_CommonDefined.enumProfileDoc.doc_message);        
         class_Data_SqlSPEntry activeSPEntry_resourceMesssage = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_RESOURCE_MESSAGE);
         activeSPEntry_resourceMesssage.ClearAllParamsValues();
         activeSPEntry_resourceMesssage.ModifyParameterValue("@username", logined_user_name);
@@ -72,7 +70,6 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_AllMessageList : clas
 
             }
         }
-
         activeSPEntry_resourceMesssage.ClearAllParamsValues();
         activeSPEntry_resourceMesssage.ModifyParameterValue("@username", "all");
         activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry_resourceMesssage, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
@@ -85,8 +82,8 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_AllMessageList : clas
             string messagetype = string.Empty;
             string isread = string.Empty;
             string istop = string.Empty;
-            class_Data_SqlDataHelper.GetColumnData(activeDataRow, "issys", out messagetype);
-            isread = messageLogicObject.isRead(operationid) ? "1" : "0";
+            class_Data_SqlDataHelper.GetColumnData(activeDataRow, "issys", out messagetype);            ;
+            isread = Object_ProfileDocs.GetMessageIsRead(logined_user_name, operationid) ? "1" : "0";
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "istop", out istop);
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "created", out time);
             string requestAPI = "/Message/api_Message_GetMessage.aspx?id=" + messageid;
@@ -99,7 +96,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_AllMessageList : clas
             {
                 string messageContent = class_XmlHelper.GetAttrValue(msgNode, "message");
                 string messageUsername = class_XmlHelper.GetAttrValue(msgNode, "username");
-                if (!messageLogicObject.isRemoved(operationid))
+                if (!Object_ProfileDocs.GetMessageIsRMV(logined_user_name, operationid))
                 {
                     Dictionary<string, string> attrs = new Dictionary<string, string>();
                     attrs.Add("message", messageContent);
@@ -113,7 +110,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_AllMessageList : clas
                     attrs.Add("datetime", time);
                     AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
                     index++;
-                    messageLogicObject.switchMessageToRead(operationid);
+                    Object_ProfileDocs.SetMessageToRead(logined_user_name, operationid);
                 }
             }
             else
@@ -121,9 +118,8 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_AllMessageList : clas
                 activeSPEntry_resourceMesssage.ClearAllParamsValues();
                 activeSPEntry_resourceMesssage.ModifyParameterValue("@id", operationid);
                 Object_CommonData.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry_resourceMesssage, class_CommonDefined.enumDataOperaqtionType.delete.ToString(), this.GetType());
-
             }
         }
-        class_Bus_ProfileDoc.SetUserProfile(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name, sourceDoc_profile.OuterXml);        
+
     }
 }

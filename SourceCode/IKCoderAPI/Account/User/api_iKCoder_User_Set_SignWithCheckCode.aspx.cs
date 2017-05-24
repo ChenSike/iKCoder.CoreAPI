@@ -98,21 +98,17 @@ public partial class Account_User_api_iKCoder_User_Set_SignWithCheckCode : class
             Dictionary<string, string> attrs = new Dictionary<string, string>();
             attrs.Add("logined_user_name", user_name);
             attrs.Add("logined_marked", "1");
-            string requestAPI = "/Profile/api_AccountProfile_SelectNodeValue.aspx?account=" + user_name + "&produce=" + Produce_Name + "&xpath=/root/usrbasic/usr_nickname";
-            URL = Server_API + Virtul_Folder_API + requestAPI;
-            string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 100000);
-            XmlDocument returnDoc = new XmlDocument();
-            returnDoc.LoadXml(returnStrDoc);
-            if (returnDoc.SelectSingleNode("/root/err")==null)
-            {               
-                XmlNode msgNod = returnDoc.SelectSingleNode("/root/msg");
-                string msg = class_XmlHelper.GetAttrValue(msgNod, "msg");
-                Session["logined_user_nickname"] = msg;
-                Response.Cookies["logined_user_nickname"].Value = msg;
-                attrs.Add("logined_user_nickname", msg);
-            }
             Object_CommonData.PrepareDataOperation();
-            Object_ProfileDocs.Verify_All(user_name);
+            Object_ProfileDocs.VerifyAll(user_name);
+            string value_nickname = Object_ProfileDocs.GetDocNoteValue(user_name, class_CommonDefined.enumProfileDoc.doc_basic, "/usrbasic/usr_nickname");
+            Session["logined_user_nickname"] = value_nickname;
+            Response.Cookies["logined_user_nickname"].Value = value_nickname;
+            attrs.Add("logined_user_nickname", value_nickname); 
+            List<string> finishedSencesSymbols = Object_ProfileDocs.GetFinishedSymbols(user_name);
+            XmlDocument sourceDoc_StudyStatus = Object_ProfileDocs.GetProfileDocObject(user_name, class_CommonDefined.enumProfileDoc.doc_studystatus);
+            class_Bus_Exp ObjectEXP = new class_Bus_Exp(Object_CommonData, finishedSencesSymbols);
+            double totalExp = ObjectEXP.Get_UserTotalExp();
+            Object_ProfileDocs.SetTotalExp(user_name, totalExp);
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
         }
         else

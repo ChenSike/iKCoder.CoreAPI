@@ -109,37 +109,17 @@ public partial class Account_User_api_iKCoder_User_Set_Reg : class_WebBase_IKCod
             inputDoc.Append("<product>");
             inputDoc.Append(Produce_Name);
             inputDoc.Append("</product>");
-            inputDoc.Append("<template>");
-            inputDoc.Append("</template>");
             inputDoc.Append("</root>");
-            requestAPI = "/Account/api_CreateUserAccountWithProfile.aspx";
+            requestAPI = "/Account/api_CreateUserAccount.aspx";
             URL = Server_API + Virtul_Folder_API + requestAPI;
             returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(inputDoc.ToString(), URL, 1000 * 60, 1024 * 1024);
             if (!returnDoc.Contains("<err>"))
             {
-                requestAPI = "/Profile/api_AccountProfile_SetNodes.aspx";
-                URL = Server_API + Virtul_Folder_API + requestAPI;
-                StringBuilder strRequestDoc = new StringBuilder();
-                strRequestDoc.Append("<root>");
-                strRequestDoc.Append("<account>");
-                strRequestDoc.Append(userSymbol);
-                strRequestDoc.Append("</account>");
-                strRequestDoc.Append("<produce>");
-                strRequestDoc.Append(Produce_Name);
-                strRequestDoc.Append("</produce>");
-                strRequestDoc.Append("<parent>");
-                strRequestDoc.Append("/root/usrbasic");
-                strRequestDoc.Append("</parent>");
-                strRequestDoc.Append("<newnodes>");
-                strRequestDoc.Append("<item name=\"usr_nickname\" value=\"" + nickname + "\" >");
-                strRequestDoc.Append("</item>");
-                strRequestDoc.Append("</newnodes>");
-                strRequestDoc.Append("</root>");
-                returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(strRequestDoc.ToString(), URL, 1000 * 60, 100000);
-                if (!returnDoc.Contains("err"))
-                    AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), Object_LabelController.GetString("message", "SC_Param_Reg_Account"), "");
-                else
-                    AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Param_Reg_Account"), "");
+                Object_ProfileDocs.VerifyAll(userSymbol);
+                Dictionary<string, string> newValuesMap = new Dictionary<string, string>();
+                newValuesMap.Add("/root/usrbasic/usr_nickname", nickname);
+                Object_ProfileDocs.SetNodesValues(userSymbol, newValuesMap, class_CommonDefined.enumProfileDoc.doc_basic, true);
+                AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), Object_LabelController.GetString("message", "SC_Param_Reg_Account"), "");
             }
             else
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Param_Reg_Account"), "");

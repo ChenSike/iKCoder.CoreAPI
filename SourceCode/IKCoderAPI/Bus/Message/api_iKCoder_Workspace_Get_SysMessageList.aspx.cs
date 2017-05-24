@@ -10,16 +10,11 @@ using System.Xml;
 
 public partial class Bus_Message_api_iKCoder_Workspace_Get_SysMessageList : class_WebBase_IKCoderAPI_UA
 {
-    XmlDocument sourceDoc_profile = new XmlDocument();
     protected override void ExtendedAction()
     {
         switchResponseMode(enumResponseMode.text);
         Object_CommonData.PrepareDataOperation();
-        sourceDoc_profile = class_Bus_ProfileDoc.GetProfileDocument(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name);
-        class_Bus_Message messageLogicObject = new class_Bus_Message(sourceDoc_profile);
-        messageLogicObject.checkMessageStatus();
         class_Data_SqlSPEntry activeSPEntry_resourceMesssage = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_RESOURCE_MESSAGE);
-        activeSPEntry_resourceMesssage.ClearAllParamsValues();
         int index = 1;
         activeSPEntry_resourceMesssage.ClearAllParamsValues();
         activeSPEntry_resourceMesssage.ModifyParameterValue("@username", "all");
@@ -36,7 +31,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_SysMessageList : clas
             string istop = string.Empty;
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "issys", out messagetype);
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "created", out time);
-            isread = messageLogicObject.isRead(operationid) ? "1" : "0";
+            isread = Object_ProfileDocs.GetMessageIsRead(logined_user_name,operationid) ? "1" : "0";
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "istop", out istop);
             string requestAPI = "/Message/api_Message_GetMessage.aspx?id=" + messageid;
             string URL = Server_API + Virtul_Folder_API + requestAPI;
@@ -48,7 +43,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_SysMessageList : clas
             {
                 string messageContent = class_XmlHelper.GetAttrValue(msgNode, "message");
                 string messageUsername = class_XmlHelper.GetAttrValue(msgNode, "username");
-                if (!messageLogicObject.isRemoved(operationid))
+                if (!Object_ProfileDocs.GetMessageIsRMV(logined_user_name,operationid))
                 {
                     Dictionary<string, string> attrs = new Dictionary<string, string>();
                     attrs.Add("message", messageContent);
@@ -62,11 +57,9 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_SysMessageList : clas
                     attrs.Add("datetime", time);
                     AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
                     index++;
-                    messageLogicObject.switchMessageToRead(operationid);
+                    Object_ProfileDocs.SetMessageToRead(logined_user_name, operationid);
                 }
             }
         }
-        class_Bus_ProfileDoc.SetUserProfile(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name, sourceDoc_profile.OuterXml);
-
     }
 }

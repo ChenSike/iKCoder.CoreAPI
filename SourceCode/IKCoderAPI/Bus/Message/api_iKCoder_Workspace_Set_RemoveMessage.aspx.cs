@@ -9,7 +9,6 @@ using System.Xml;
 
 public partial class Bus_Message_api_iKCoder_Workspace_Set_RemoveMessage : class_WebBase_IKCoderAPI_UA
 {
-    XmlDocument sourceDoc_profile = new XmlDocument();
     protected override void ExtendedAction()
     {
         switchResponseMode(enumResponseMode.text);
@@ -21,10 +20,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Set_RemoveMessage : class
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false.", "messageid->empty", enum_MessageType.Exception);
             return;
         }
-        sourceDoc_profile = class_Bus_ProfileDoc.GetProfileDocument(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name);
-        class_Bus_Message obj = new class_Bus_Message(sourceDoc_profile);
-        obj.checkMessageStatus();
-        obj.switchMessageToRemove(operationid);
+        Object_ProfileDocs.SetMessageToRMV(logined_user_name, operationid);
         string requestAPI = "/Message/api_Message_GetMessage.aspx?id=" + messageid;
         string URL = Server_API + Virtul_Folder_API + requestAPI;
         string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 1024 * 1024);
@@ -38,6 +34,6 @@ public partial class Bus_Message_api_iKCoder_Workspace_Set_RemoveMessage : class
             activeSPEntry_resourceMesssage.ModifyParameterValue("@id", operationid);
             Object_CommonData.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry_resourceMesssage, class_CommonDefined.enumDataOperaqtionType.delete.ToString(), this.GetType());           
         }
-        class_Bus_ProfileDoc.SetUserProfile(Server_API, Virtul_Folder_API, Object_NetRemote, logined_user_name, sourceDoc_profile.OuterXml);
+        Object_ProfileDocs.SetMessageToRMV(logined_user_name, operationid);
     }
 }

@@ -48,7 +48,7 @@ public partial class Util_api_iKCoder_Util_Get_CheckCode : class_WebBase_IKCoder
         int.TryParse(strImageHeight, out imageHeight);
         _objectCheckCode.NextCode(activeCodeLength);
         RESPONSEBUFFER = _objectCheckCode.CreateImage(Color.Transparent, imageWidth, imageHeight);
-        Object_DomainPersistance.Add(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), codeName, -1, _objectCheckCode.CheckCode);
+        Object_DomainPersistance.Add(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), codeName, 10, _objectCheckCode.CheckCode);
         Response.ContentType = "image/Gif";
     }
 }

@@ -22,6 +22,7 @@ public class class_Bus_ProfileDocs
     {
         Object_CommonData = refCommonDataObject;
         Object_CommonData.PrepareDataOperation();
+        
     }
 
     public DataRow GetProfileItem(string username)
@@ -36,6 +37,39 @@ public class class_Bus_ProfileDocs
         if (textDataTable != null || textDataTable.Rows.Count > 0)
             class_Data_SqlDataHelper.GetActiveRow(textDataTable, 0, out resultRow);
         return resultRow;
+    }
+
+    public List<string> GetUsersInProfilePool()
+    {
+        List<string> result = new List<string>();
+        class_Data_SqlSPEntry activeSPEntry = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_PROFILEDOCS);
+        activeSPEntry.ClearAllParamsValues();        
+        DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPForDT(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+        if (textDataTable != null || textDataTable.Rows.Count > 0)
+        {
+            foreach(DataRow activeDataRow in textDataTable.Rows)
+            {
+                string username = string.Empty;
+                class_Data_SqlDataHelper.GetColumnData(activeDataRow, "username", out username);
+                result.Add(username);
+            }
+        }
+        return result;
+    }
+
+    public string GetCurrentStage(string username,string symbol)
+    {
+        XmlDocument doc = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_studystatus);
+        XmlNode currentsenceNode = doc.SelectSingleNode("/studystatus/currentsence[symbol='" + symbol + "']");
+        string currentStage = string.Empty;
+        if (currentsenceNode != null)
+        {            
+            XmlNode currentStageNode = currentsenceNode.SelectSingleNode("currentstage");
+            currentStage = class_XmlHelper.GetNodeValue(currentStageNode);
+        }
+        else
+            currentStage = "1";
+        return currentStage;
     }
 
     public string GetProfileDoc(string username,class_CommonDefined.enumProfileDoc profileDocType)
@@ -59,7 +93,7 @@ public class class_Bus_ProfileDocs
                     class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeProfileItem, "doc_payment", out strDoc);
                     break;
                 case class_CommonDefined.enumProfileDoc.doc_studystatus:
-                    class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeProfileItem, "doc_studytatus", out strDoc);
+                    class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeProfileItem, "doc_studystatus", out strDoc);
                     break;
                 case class_CommonDefined.enumProfileDoc.doc_recored:
                     class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeProfileItem, "doc_recored", out strDoc);
@@ -73,6 +107,45 @@ public class class_Bus_ProfileDocs
         }
         else
             return string.Empty;
+    }
+
+    public XmlDocument GetProfileDocObject(string username, class_CommonDefined.enumProfileDoc profileDocType)
+    {
+        DataRow activeProfileItem = GetProfileItem(username);
+        if (activeProfileItem != null)
+        {
+            string strDoc = string.Empty;
+            switch (profileDocType)
+            {
+                case class_CommonDefined.enumProfileDoc.doc_basic:
+                    class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeProfileItem, "doc_basic", out strDoc);
+                    break;
+                case class_CommonDefined.enumProfileDoc.doc_commnunication:
+                    class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeProfileItem, "doc_commnunication", out strDoc);
+                    break;
+                case class_CommonDefined.enumProfileDoc.doc_datastore:
+                    class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeProfileItem, "doc_datastore", out strDoc);
+                    break;
+                case class_CommonDefined.enumProfileDoc.doc_payment:
+                    class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeProfileItem, "doc_payment", out strDoc);
+                    break;
+                case class_CommonDefined.enumProfileDoc.doc_studystatus:
+                    class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeProfileItem, "doc_studystatus", out strDoc);
+                    break;
+                case class_CommonDefined.enumProfileDoc.doc_recored:
+                    class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeProfileItem, "doc_recored", out strDoc);
+                    break;
+                case class_CommonDefined.enumProfileDoc.doc_message:
+                    class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeProfileItem, "doc_message", out strDoc);
+                    break;
+            }
+            strDoc = class_CommonUtil.Decoder_Base64(strDoc);
+            XmlDocument result = new XmlDocument();
+            result.LoadXml(strDoc);
+            return result;
+        }
+        else
+            return null;
     }
 
     public string GetProfileItemID(string username)
@@ -147,7 +220,7 @@ public class class_Bus_ProfileDocs
                     class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "doc_payment", out strDoc);
                     break;
                 case class_CommonDefined.enumProfileDoc.doc_studystatus:
-                    class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "doc_studytatus", out strDoc);
+                    class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "doc_studystatus", out strDoc);
                     break;
                 case class_CommonDefined.enumProfileDoc.doc_recored:
                     class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "doc_recored", out strDoc);
@@ -164,7 +237,44 @@ public class class_Bus_ProfileDocs
         else
             return false;
     }
-        
+
+    public void SetCodetimeLineHours(string username, string symbol)
+    {
+        XmlDocument resourceDoc_Profile = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_studystatus);
+        XmlNode codetimelineNode = resourceDoc_Profile.SelectSingleNode("/studystatus/codetimeline");
+        if (codetimelineNode == null)
+        {
+            codetimelineNode = class_XmlHelper.CreateNode(resourceDoc_Profile, "codetimeline", "");
+            class_XmlHelper.SetAttribute(codetimelineNode, "recordtime", DateTime.Now.ToString());
+            resourceDoc_Profile.SelectSingleNode("/studystatus").AppendChild(codetimelineNode);
+        }
+        else
+            class_XmlHelper.SetAttribute(codetimelineNode, "recordtime", DateTime.Now.ToString());
+        XmlNodeList itemNodes = codetimelineNode.SelectNodes("item");
+        if (itemNodes.Count >= 10)
+        {
+            XmlNode lastNode = codetimelineNode.SelectSingleNode("item[@index='10']");
+            if (lastNode != null)
+                codetimelineNode.RemoveChild(lastNode);
+        }
+        XmlNode activeItemNode = codetimelineNode.SelectSingleNode("item[@date='" + DateTime.Now.ToString("yyyy-MM-dd") + "']");
+        if (activeItemNode == null)
+        {
+            activeItemNode = class_XmlHelper.CreateNode(resourceDoc_Profile, "item", "");
+            class_XmlHelper.SetAttribute(activeItemNode, "index", (itemNodes.Count + 1).ToString());
+            class_XmlHelper.SetAttribute(activeItemNode, "date", DateTime.Now.ToString("yyyy-MM-dd"));
+            codetimelineNode.AppendChild(activeItemNode);
+        }
+        string strRecordTime = class_XmlHelper.GetAttrValue(codetimelineNode, "recordtime");
+        DateTime dtRecordTime = DateTime.Parse(strRecordTime);
+        string strValue = class_XmlHelper.GetAttrValue(activeItemNode, "value");
+        int iValue = 0;
+        int.TryParse(strValue, out iValue);
+        int iTotalMinutesDate = iValue + (DateTime.Now - dtRecordTime).Minutes;
+        class_XmlHelper.SetAttribute(activeItemNode, "value", iTotalMinutesDate.ToString());
+        SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_studystatus,resourceDoc_Profile.OuterXml);
+    }
+
     public void SetUpdateProfileItem(string username,class_CommonDefined.enumProfileDoc ProfileDocType,string profileDoc)
     {       
         class_Data_SqlSPEntry activeSPEntry = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_PROFILEDOCS);
@@ -204,6 +314,35 @@ public class class_Bus_ProfileDocs
             activeSPEntry.ModifyParameterValue("@username", username);
             Object_CommonData.Object_SqlHelper.ExecuteInsertSP(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
         }
+    }
+
+    public List<string> GetFinishedSymbols(string username)
+    {
+        List<string> returnList = new List<string>();
+        XmlDocument doc = new XmlDocument();
+        doc.LoadXml(GetProfileDoc(username, class_CommonDefined.enumProfileDoc.doc_studystatus));
+        XmlNodeList finishItems = doc.SelectNodes("/studystatus/finished/item[@finished='1']");
+        foreach(XmlNode finishItem in finishItems)
+        {
+            string symbol = class_XmlHelper.GetAttrValue(finishItem, "symbol");
+            returnList.Add(symbol);
+        }
+        return returnList;
+    }
+
+    public int GetCountOfFinishedStages(string username,string symbol)
+    {
+        List<string> returnList = new List<string>();
+        XmlDocument doc = new XmlDocument();
+        doc.LoadXml(GetProfileDoc(username, class_CommonDefined.enumProfileDoc.doc_studystatus));
+        XmlNode finishItem = doc.SelectSingleNode("/studystatus/finished/item[@symbol='"+symbol+"']");
+        if (finishItem != null)
+        {
+            XmlNodeList finishStagesNodes = finishItem.SelectNodes("stages/stage[@finish='1']");
+            return finishStagesNodes.Count;
+        }
+        else
+            return 0;
     }
 
     public void VerifyDoc_TimeLineInStatus(string username,ref XmlDocument ref_doc_studystatus)
@@ -317,9 +456,20 @@ public class class_Bus_ProfileDocs
         SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_studystatus, doc_studystatus.OuterXml);
     }
 
+    public void SetFinishSence(string username,string symbol, XmlDocument refdocStudystatus)
+    {
+        VerifyDoc_FinishItemNodes(username, symbol, ref refdocStudystatus);
+        XmlNode node_item = refdocStudystatus.SelectSingleNode("/studystatus/finished/item[@symbol='" + symbol + "']");
+        class_XmlHelper.SetAttribute(node_item, "finish", "1");
+        XmlNode node_stages = node_item.SelectSingleNode("stages");
+        foreach (XmlNode activeNodeStage in node_stages.SelectNodes("stage"))
+            class_XmlHelper.SetAttribute(activeNodeStage, "finish", "1");
+        SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_studystatus, refdocStudystatus.OuterXml);
+    }
+
     public void SetFinishItemStage(string username,string symbol,string currentStage, XmlDocument refdocStudystatus)
     {
-        Verify_FinishItemNodes(username, symbol, ref refdocStudystatus);
+        VerifyDoc_FinishItemNodes(username, symbol,ref refdocStudystatus);
         XmlNode node_item = refdocStudystatus.SelectSingleNode("/studystatus/finished/item[@symbol='" + symbol + "']");
         XmlNode node_stages = node_item.SelectSingleNode("stages");
         XmlNode node_stage = node_stages.SelectSingleNode("stage[@step='" + currentStage + "']");
@@ -335,9 +485,10 @@ public class class_Bus_ProfileDocs
         }
         if (isSenceFinished)
             class_XmlHelper.SetAttribute(node_item, "finish", "1");
+        SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_studystatus, refdocStudystatus.OuterXml);
     }
 
-    public void SetNodesValues(string username,Dictionary<string,string> newValuesMap, class_CommonDefined.enumProfileDoc profileType)
+    public void SetNodesValues(string username,Dictionary<string,string> newValuesMap, class_CommonDefined.enumProfileDoc profileType,bool filterRootNode)
     {        
         string strDoc = GetProfileDoc(username, profileType);
         XmlDocument doc_basic = new XmlDocument();
@@ -345,14 +496,18 @@ public class class_Bus_ProfileDocs
         bool isUpdated = false;
         foreach(string xpath in newValuesMap.Keys)
         {
-            XmlNode itemNode = doc_basic.SelectSingleNode(xpath);
+            string tmpXpath = xpath;
+            if (filterRootNode)
+                if (tmpXpath.StartsWith("/root"))
+                    tmpXpath = tmpXpath.Replace("/root", "");
+            XmlNode itemNode = doc_basic.SelectSingleNode(tmpXpath);
             if (itemNode != null)
             {                
                 class_XmlHelper.SetNodeValue(itemNode, newValuesMap[xpath]);
             }
             else
             {
-                itemNode = class_XmlHelper.CreateNodeByXpath(doc_basic, xpath, newValuesMap[xpath]);
+                itemNode = class_XmlHelper.CreateNodeByXpath(doc_basic, tmpXpath, newValuesMap[xpath]);
 
             }
             isUpdated = true;
@@ -361,7 +516,7 @@ public class class_Bus_ProfileDocs
             SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_basic, doc_basic.OuterXml);
     }
         
-    public void Verify_FinishItemNodes(string username,string symbol,ref XmlDocument refdocStudystatus)
+    public void VerifyDoc_FinishItemNodes(string username,string symbol,ref XmlDocument refdocStudystatus)
     {
         XmlNode node_item = refdocStudystatus.SelectSingleNode("/studystatus/finished/item[@symbol='" + symbol + "']");
         if(node_item==null)
@@ -437,6 +592,86 @@ public class class_Bus_ProfileDocs
         SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_studystatus, doc_studystatus.OuterXml);
     }
 
+    public void SetCurrentStage(string username,string symbol,string currentstage)
+    {
+        VerifyDoc_Currentsence(username, symbol);
+        XmlDocument doc = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_studystatus);
+        XmlNode currentsenceNode = doc.SelectSingleNode("/studystatus/currentsence[symbol[text()='" + symbol + "']]");
+        if (currentsenceNode != null)
+        {
+            string currentStage = string.Empty;
+            XmlNode currentStageNode = currentsenceNode.SelectSingleNode("currentstage");
+            class_XmlHelper.SetNodeValue(currentStageNode, currentstage);
+            SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_studystatus, doc.OuterXml);
+        }
+    }
+
+    public bool GetMessageIsRMV(string username,string operationID)
+    {
+        XmlDocument resourceDoc = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_message);
+        XmlNode messagestatusNode = resourceDoc.SelectSingleNode("/messagestatus");
+        XmlNode rmv_msg_node = messagestatusNode.SelectSingleNode("rmv_msg");
+        XmlNode item = rmv_msg_node.SelectSingleNode("item[@id='" + operationID + "']");
+        if (item != null)
+            return true;
+        else
+            return false;
+    }
+
+    public List<XmlNode> GetCodetimeLineItems(string username,XmlDocument sourceDoc_StudyStatus)
+    {
+        List<XmlNode> resultList = new List<XmlNode>();
+        XmlNodeList codetimelineItemNodes = sourceDoc_StudyStatus.SelectNodes("/studystatus/codetimeline/item");
+        foreach (XmlNode activeItem in codetimelineItemNodes)
+            resultList.Add(activeItem);
+        return resultList;
+    }
+
+    public bool GetMessageIsRead(string username,string operationID)
+    {
+        XmlDocument resourceDoc = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_message);
+        XmlNode messagestatusNode = resourceDoc.SelectSingleNode("/messagestatus");
+        XmlNode read_sys_Node = messagestatusNode.SelectSingleNode("read_sys");
+        XmlNode item = read_sys_Node.SelectSingleNode("item[@id='" + operationID + "']");
+        if (item != null)
+            return true;
+        else
+            return false;
+    }
+
+    public int GetCountOfUnreadMessage(string username)
+    {
+        XmlDocument resourceDoc = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_message);
+        XmlNode messagestatusNode = resourceDoc.SelectSingleNode("/message");
+        XmlNode read_sys_Node = messagestatusNode.SelectSingleNode("read_sys");
+        XmlNodeList items = read_sys_Node.SelectNodes("item");
+        if (items != null)
+            return items.Count;
+        else
+            return 0;
+    }
+
+    public void VerifyDoc_Currentsence(string username,string symbol)
+    {
+        XmlDocument sourceDoc_studyStatus = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_studystatus);
+        XmlNode node_studystatus = sourceDoc_studyStatus.SelectSingleNode("/studystatus");
+        XmlNode node_currentsence = node_studystatus.SelectSingleNode("currentsence[symbol='" + symbol + "']");
+        if(node_currentsence==null)
+        {
+            node_currentsence = class_XmlHelper.CreateNode(sourceDoc_studyStatus, "currentsence", "");
+            node_studystatus.AppendChild(node_currentsence);
+            XmlNode node_symbol = class_XmlHelper.CreateNode(sourceDoc_studyStatus, "symbol", symbol);
+            node_currentsence.AppendChild(node_symbol);
+            XmlNode node_fiststarttime = class_XmlHelper.CreateNode(sourceDoc_studyStatus, "fiststarttime", DateTime.Now.ToString());
+            node_currentsence.AppendChild(node_fiststarttime);
+            XmlNode node_currentstage = class_XmlHelper.CreateNode(sourceDoc_studyStatus, "currentstage", "1");
+            node_currentsence.AppendChild(node_currentstage);
+            SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_studystatus, sourceDoc_studyStatus.OuterXml);
+        }
+    }
+
+    
+
     public void SetMessageToRead(string username,string operationID)
     {
         string strDoc = GetProfileDoc(username, class_CommonDefined.enumProfileDoc.doc_message);
@@ -450,6 +685,22 @@ public class class_Bus_ProfileDocs
             node_readsys.AppendChild(node_newitem);
             SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_message, doc_message.OuterXml);
         }
+    }
+
+    public void SetTotalExp(string username,double totalExp)
+    {
+        XmlDocument sourceDoc_studystatus = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_studystatus);
+        XmlNode node_studystatus = sourceDoc_studystatus.SelectSingleNode("/studystatus");
+        XmlNode node_exp = node_studystatus.SelectSingleNode("exp");
+        class_XmlHelper.SetAttribute(node_exp, "total", totalExp.ToString());
+    }
+
+    public string GetTotalExp(string username)
+    {
+        XmlDocument sourceDoc_studystatus = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_studystatus);
+        XmlNode node_studystatus = sourceDoc_studystatus.SelectSingleNode("/studystatus");
+        XmlNode node_exp = node_studystatus.SelectSingleNode("exp");
+        return class_XmlHelper.GetAttrValue(node_exp, "total");
     }
 
     public bool VerifyReadedMessage(string username,string operationID)
@@ -612,7 +863,7 @@ public class class_Bus_ProfileDocs
         XmlNode node_usrnickname = node_usrbasic.SelectSingleNode("usr_nickname");
         if (node_usrnickname == null)
         {
-            node_usrnickname = class_XmlHelper.CreateNode(doc_basic, "usr_nickname", "");
+            node_usrnickname = class_XmlHelper.CreateNode(doc_basic, "usr_nickname", username);
             node_usrbasic.AppendChild(node_usrnickname);
             isUpdated = true;
         }
@@ -681,6 +932,13 @@ public class class_Bus_ProfileDocs
             strDoc = "<studystatus></studystatus>";
             doc_studystatus.LoadXml(strDoc);
         }
+        XmlNode node_exp = node_studystatus.SelectSingleNode("exp");
+        if(node_exp==null)
+        {
+            node_exp = class_XmlHelper.CreateNode(doc_studystatus, "exp", "");
+            class_XmlHelper.SetAttribute(node_exp, "total", "0");
+            node_studystatus.AppendChild(node_exp);
+        }
         VerifyDoc_TimeLineInStatus(username,ref doc_studystatus);
         VerifyDoc_Finished(username, ref doc_studystatus);
         SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_studystatus, doc_studystatus.OuterXml);
@@ -710,7 +968,7 @@ public class class_Bus_ProfileDocs
         XmlNode node_rmvsys = node_messsage.SelectSingleNode("rmv_sys");
         if(node_rmvsys==null)
         {
-            node_rmvsys = class_XmlHelper.CreateNode(doc_message, "rmv_sts","");
+            node_rmvsys = class_XmlHelper.CreateNode(doc_message, "rmv_sys","");
             node_messsage.AppendChild(node_rmvsys);
             isUpdated = true;
         }
@@ -718,12 +976,28 @@ public class class_Bus_ProfileDocs
             SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_message, doc_message.OuterXml);
     }   
 
-    public void Verify_All(string username)
+    public void VerifyDataStore(string username)
+    {
+        XmlDocument doc_datastore = new XmlDocument();
+        bool isUpdated = false;
+        string strDoc = string.Empty;
+        if (GetISProfileDocExisted(username, class_CommonDefined.enumProfileDoc.doc_datastore))
+            doc_datastore = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_datastore);
+        else
+        {
+            strDoc = "<datastore></datastore>";
+            isUpdated = true;
+            doc_datastore.LoadXml(strDoc);
+        }
+        
+    }
+
+    public void VerifyAll(string username)
     {
         VerifyProfileItem(username);
         VerifyDoc_Basic(username);
         VerifyDoc_Studystatus(username);
-        VerifyDoc_Message(username);
+        VerifyDoc_Message(username);        
     }
 
 }

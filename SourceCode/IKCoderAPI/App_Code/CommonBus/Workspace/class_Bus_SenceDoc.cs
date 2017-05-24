@@ -61,6 +61,12 @@ public class class_Bus_SenceDoc
         return resultLst;
     }
 
+    public int GetCountOfSences(class_CommonData Object_CommonData)
+    {
+        List<DataRow> result = GetAllSences(Object_CommonData);
+        return result.Count;
+    }
+
     public static class_CommonDefined.enumSenceType GetSenceType(string symbol)
     {
         if (symbol.StartsWith("a") || symbol.StartsWith("A"))

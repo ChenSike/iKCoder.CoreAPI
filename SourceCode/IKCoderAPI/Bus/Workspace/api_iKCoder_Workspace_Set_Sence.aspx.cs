@@ -46,7 +46,6 @@ public partial class Bus_Workspace_api_iKCoder_Data_Set_Sence : class_WebBase_IK
                     activeSPEntry_configSence.ModifyParameterValue("@config", config);
                     activeSPEntry_configSence.ModifyParameterValue("@isfree", isfree);
                     Object_CommonData.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry_configSence, class_CommonDefined.enumDataOperaqtionType.update.ToString(), this.GetType());
-                    AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
                 }
                 else
                 {

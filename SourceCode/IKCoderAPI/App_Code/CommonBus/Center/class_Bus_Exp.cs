@@ -11,7 +11,6 @@ using System.Xml;
 /// </summary>
 public class class_Bus_Exp
 {
-    XmlDocument sourceDoc_profile = new XmlDocument();
     Dictionary<string, List<string>> typedSymbols = new Dictionary<string, List<string>>();
     Dictionary<string, DataRow> sourceRows_sence = new Dictionary<string, DataRow>();
     List<string> symbolList = new List<string>();
@@ -35,38 +34,18 @@ public class class_Bus_Exp
     double u_exvalue_senior = 0;
     double u_exvalue_advanced = 0;
 
-    public class_Bus_Exp(class_CommonData refCommonDataObject, XmlDocument refsourceDoc)
+    public class_Bus_Exp(class_CommonData refCommonDataObject,List<string> finishedSymbolList)
     {
         Object_CommonData = refCommonDataObject;
-        sourceDoc_profile = refsourceDoc;
         init_sourceDoc_Sence();
         init_typedSymbols();
-        init_finishedSymbols();
-        init_Calc();
+        init_Calc(finishedSymbolList);
         //
         // TODO: Add constructor logic here
         //
     }
 
-    protected void init_finishedSymbols()
-    {
-        XmlNodeList finishItems = sourceDoc_profile.SelectNodes("/root/studystatus/finished/item");
-        foreach (XmlNode item in finishItems)
-        {
-            string symbol = string.Empty;
-            XmlNode symbolNode = item.SelectSingleNode("symbol");
-            string finish = string.Empty;
-            XmlNode finishNode = item.SelectSingleNode("finish");
-            finish = class_XmlHelper.GetNodeValue(finishNode);
-            if (finish == "1")
-            {
-                symbol = class_XmlHelper.GetNodeValue(symbolNode);
-                finishedSymbolList.Add(symbol);
-            }
-        }
-    }
-
-    protected void init_sourceDoc_Sence()
+      protected void init_sourceDoc_Sence()
     {
         class_Data_SqlSPEntry activeSPEntry_configSence = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_SENCE);
         DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPForDT(activeSPEntry_configSence, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
@@ -149,7 +128,7 @@ public class class_Bus_Exp
             return 0.0;
     }
 
-    public void init_Calc()
+    public void init_Calc(List<string> finishedSymbolList)
     {
         foreach (string typeKey in typedSymbols.Keys)
         {

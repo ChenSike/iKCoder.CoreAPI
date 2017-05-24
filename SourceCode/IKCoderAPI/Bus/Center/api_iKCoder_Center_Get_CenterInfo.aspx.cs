@@ -12,7 +12,8 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
 {
     XmlDocument centerDocument = new XmlDocument();
     XmlDocument sourceDoc_sence = new XmlDocument();
-    XmlDocument sourceDoc_profile = new XmlDocument();
+    Dictionary<class_CommonDefined.enumProfileDoc, XmlDocument> sourceDocs_Profile = new Dictionary<class_CommonDefined.enumProfileDoc, XmlDocument>();
+
     Dictionary<string, DataRow> sourceRows_sence = new Dictionary<string, DataRow>();
 
     List<string> symbolList = new List<string>();
@@ -28,6 +29,13 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
     string strSeniorKey = "senior";
     string strAdvancedKey = "advanced";
 
+    protected void init_sourceDocs_Profile()
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.LoadXml(Object_ProfileDocs.GetProfileDoc(logined_user_name, class_CommonDefined.enumProfileDoc.doc_studystatus));
+        sourceDocs_Profile.Add(class_CommonDefined.enumProfileDoc.doc_studystatus, doc);
+    }
+
     protected void init_sourceDoc_Sence()
     {        
         class_Data_SqlSPEntry activeSPEntry_configSence = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_SENCE);
@@ -40,22 +48,7 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
             sourceRows_sence.Add(symbol, activeRow);
         }
     }
-
-    protected void init_sourceDoc_Profile()
-    {
-        string profileSymbol = "profile_" + "ikcoder_" + logined_user_name;        
-        string requestAPI = "/Profile/api_AccountProfile_SelectProfileBySymbol.aspx?symbol=" + profileSymbol;
-        string URL = Server_API + Virtul_Folder_API + requestAPI;
-        string returnStrDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader("<root></root>", URL, 1000 * 60, 100000);
-        XmlDocument tmpData = new XmlDocument();
-        tmpData.LoadXml(returnStrDoc);
-        if (tmpData.SelectSingleNode("/root/err") == null)
-        {
-            XmlNode msgNode = tmpData.SelectSingleNode("/root/msg");
-            sourceDoc_profile.LoadXml(class_XmlHelper.GetAttrValue(msgNode, "msg"));
-        }
-    }
-
+       
     protected void init_typedSymbols()
     {
         List<string> primerList = new List<string>();
@@ -86,27 +79,14 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
 
     protected void init_finishedSymbols()
     {
-        XmlNodeList finishItems = sourceDoc_profile.SelectNodes("/root/studystatus/finished/item");
-        foreach (XmlNode item in finishItems)
-        {
-            string symbol = string.Empty;
-            XmlNode symbolNode = item.SelectSingleNode("symbol");
-            string finish = string.Empty;
-            XmlNode finishNode = item.SelectSingleNode("finish");
-            finish = class_XmlHelper.GetNodeValue(finishNode);
-            if (finish == "1")
-            {
-                symbol = class_XmlHelper.GetNodeValue(symbolNode);
-                finishedSymbolList.Add(symbol);
-            }
-        }
+        finishedSymbolList = Object_ProfileDocs.GetFinishedSymbols(logined_user_name);
     }
 
     protected void init_Honor()
     {
         class_Bus_Hornor objectHornor = new class_Bus_Hornor();
         objectHornor.init_SourceDoc(Object_CommonData);
-        honorResult = objectHornor.get_HornorConfig(symbolList);
+        honorResult = objectHornor.get_HornorConfig(finishedSymbolList);
     }   
 
     protected void init_Course()
@@ -149,53 +129,35 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
             else
                 count_sences[strAdvancedKey]++;
         }
-        XmlNode finishedSenceNode = sourceDoc_profile.SelectSingleNode("/root/studystatus/finished");
-        if (finishedSenceNode != null)
+        foreach(string finishedSYmbol in finishedSymbolList)
         {
-            XmlNodeList itemNodes = finishedSenceNode.SelectNodes("item");
-            foreach(XmlNode item in itemNodes)
-            {
-                XmlNode finishNode = item.SelectSingleNode("finish");
-                if (finishNode != null)
-                {
-                    string finishvalue = class_XmlHelper.GetNodeValue(finishNode);
-                    if (finishvalue == "1")
-                    {
-                        XmlNode symbolNode = item.SelectSingleNode("symbol");
-                        if (symbolNode != null)
-                        {
-
-                            string activeSymbol = class_XmlHelper.GetNodeValue(symbolNode);
-                            if (activeSymbol.StartsWith("a") || activeSymbol.StartsWith("A"))
-                                if (!complete_sences.ContainsKey(strPrimerKey))
-                                    complete_sences.Add(strPrimerKey, ++count_primerSence_Complete);
-                                else
-                                    complete_sences[strPrimerKey]++;
-                            else if (activeSymbol.StartsWith("b") || activeSymbol.StartsWith("B"))
-                                if (!complete_sences.ContainsKey(strPrimaryKey))
-                                    complete_sences.Add(strPrimaryKey, ++count_primarySence_Complete);
-                                else
-                                    complete_sences[strPrimaryKey]++;
-                            else if (activeSymbol.StartsWith("c") || activeSymbol.StartsWith("C"))
-                                if (!complete_sences.ContainsKey(strMiddlekey))
-                                    complete_sences.Add(strMiddlekey, ++count_middleSence_Complete);
-                                else
-                                    complete_sences[strMiddlekey]++;
-                            else if (activeSymbol.StartsWith("d") || activeSymbol.StartsWith("D"))
-                                if (!complete_sences.ContainsKey(strSeniorKey))
-                                    complete_sences.Add(strSeniorKey, ++count_seniorSence_Complete);
-                                else
-                                    complete_sences[strSeniorKey]++;
-                            else
-                                if (!complete_sences.ContainsKey(strAdvancedKey))
-                                complete_sences.Add(strAdvancedKey, ++count_advanceSence_Complete);
-                            else
-                                complete_sences[strAdvancedKey]++;
-                        }
-                    }
-                }
-            }
-        }
+            if (finishedSYmbol.StartsWith("a") || finishedSYmbol.StartsWith("A"))
+                if (!complete_sences.ContainsKey(strPrimerKey))
+                    complete_sences.Add(strPrimerKey, ++count_primerSence_Complete);
+                else
+                    complete_sences[strPrimerKey]++;
+            else if (finishedSYmbol.StartsWith("b") || finishedSYmbol.StartsWith("B"))
+                if (!complete_sences.ContainsKey(strPrimaryKey))
+                    complete_sences.Add(strPrimaryKey, ++count_primarySence_Complete);
+                else
+                    complete_sences[strPrimaryKey]++;
+            else if (finishedSYmbol.StartsWith("c") || finishedSYmbol.StartsWith("C"))
+                if (!complete_sences.ContainsKey(strMiddlekey))
+                    complete_sences.Add(strMiddlekey, ++count_middleSence_Complete);
+                else
+                    complete_sences[strMiddlekey]++;
+            else if (finishedSYmbol.StartsWith("d") || finishedSYmbol.StartsWith("D"))
+                if (!complete_sences.ContainsKey(strSeniorKey))
+                    complete_sences.Add(strSeniorKey, ++count_seniorSence_Complete);
+                else
+                    complete_sences[strSeniorKey]++;
+            else
+                if (!complete_sences.ContainsKey(strAdvancedKey))
+                complete_sences.Add(strAdvancedKey, ++count_advanceSence_Complete);
+            else
+                complete_sences[strAdvancedKey]++;
+        }      
+     
     }
         
     protected void set_Course()
@@ -244,6 +206,7 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
                 symbolLstNode.AppendChild(lessonNode);
                 class_XmlHelper.SetAttribute(lessonNode, "symbol", activeSymbol);
                 class_XmlHelper.SetAttribute(lessonNode, "title", class_Bus_SenceDoc.GetSenceValue(Object_CommonData, activeSymbol, "/sence", "name"));
+                class_XmlHelper.SetAttribute(lessonNode, "finish", finishedSymbolList.Contains(activeSymbol) ? "1" : "0");
             }
         }
 
@@ -385,8 +348,9 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
     {
         XmlNode codetimesNode = class_XmlHelper.CreateNode(centerDocument, "codetimes", "");
         rootNode.AppendChild(codetimesNode);
-        class_XmlHelper.SetAttribute(codetimesNode, "over", "95");
-        List<XmlNode> codetimelineItemNodes = class_Bus_ProfileDoc.GetCodetimeLineItems(sourceDoc_profile);
+        
+        XmlDocument sourceDoc_CodeLine = Object_ProfileDocs.GetProfileDocObject(logined_user_name, class_CommonDefined.enumProfileDoc.doc_studystatus);
+        List<XmlNode> codetimelineItemNodes = Object_ProfileDocs.GetCodetimeLineItems(logined_user_name,sourceDoc_CodeLine);
         foreach(XmlNode activeItem in codetimelineItemNodes)
         {
             XmlNode item = class_XmlHelper.CreateNode(centerDocument, "item", "");
@@ -409,7 +373,6 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
         switchResponseMode(enumResponseMode.text);
         Object_CommonData.PrepareDataOperation();
         init_sourceDoc_Sence();
-        init_sourceDoc_Profile();
         init_finishedSymbols();
         init_typedSymbols();
         init_Honor();
