@@ -6,26 +6,50 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using iKCoder_Platform_SDK_Kit;
 using System.Xml;
+using System.Data;
 
 public partial class Bus_Report_api_iKCoder_Workspace_Get_HtmlReport : class_WebBase_IKCoderAPI_UA
 {
     protected XmlDocument sourceDoc_sence = new XmlDocument();
-    
+    Dictionary<string, DataRow> sourceRows_sence = new Dictionary<string, DataRow>();
+    List<string> finishSymbol = new List<string>();
+
     XmlDocument reportDoc = new XmlDocument();
 
     protected XmlNode node_report_root;
-        
+    Dictionary<string, List<string>> typedSymbols = new Dictionary<string, List<string>>();
+
+    string strPrimerKey = "primer";
+    string strPrimaryKey = "primary";
+    string strMiddlekey = "middle";
+    string strSeniorKey = "senior";
+    string strAdvancedKey = "advanced";
+
     protected override void ExtendedAction()
     {
         switchResponseMode(enumResponseMode.text);
         Object_CommonData.PrepareDataOperation();
         reportDoc.LoadXml("<root></root>");
         node_report_root = reportDoc.SelectSingleNode("/root");
+        init_sourceDoc_Sence();
         Set_Report();
         Set_Overview();
         Set_Honor();
         set_Codetimes();
+        RESPONSEDOCUMENT.LoadXml(reportDoc.OuterXml);
     }
+    protected void init_sourceDoc_Sence()
+    {
+        class_Data_SqlSPEntry activeSPEntry_configSence = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_SENCE);
+        DataTable textDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPForDT(activeSPEntry_configSence, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+        foreach (DataRow activeRow in textDataTable.Rows)
+        {
+            string symbol = string.Empty;
+            class_Data_SqlDataHelper.GetColumnData(activeRow, "symbol", out symbol);
+            sourceRows_sence.Add(symbol, activeRow);
+        }
+    }
+
 
     protected void Set_Report()
     {
@@ -40,12 +64,12 @@ public partial class Bus_Report_api_iKCoder_Workspace_Get_HtmlReport : class_Web
         node_report_root.AppendChild(overviewNode);
         class_XmlHelper.SetAttribute(overviewNode, "date", DateTime.Now.ToString("yyyy-MM-dd"));
         XmlDocument sourceDoc_studystatus = Object_ProfileDocs.GetProfileDocObject(logined_user_name, class_CommonDefined.enumProfileDoc.doc_studystatus);
-        List<string> finishSymbol = Object_ProfileDocs.GetFinishedSymbols(logined_user_name);
+        finishSymbol = Object_ProfileDocs.GetFinishedSymbols(logined_user_name);
         class_XmlHelper.SetAttribute(overviewNode, "finish", finishSymbol.Count.ToString());
         class_Bus_Exp objectExp = new class_Bus_Exp(Object_CommonData, finishSymbol);
         double loginedUserTotalExp = 0;
         double.TryParse(Object_ProfileDocs.GetTotalExp(logined_user_name), out loginedUserTotalExp);
-        class_XmlHelper.SetAttribute(overviewNode, "exprate", ((int)(loginedUserTotalExp / objectExp.Get_TotalExp())).ToString());
+        class_XmlHelper.SetAttribute(overviewNode, "exprate", ((int)((loginedUserTotalExp / objectExp.Get_TotalExp())*100)).ToString());
         List<string> usersInProfilePool = Object_ProfileDocs.GetUsersInProfilePool();
         List<double> usersExpLst = new List<double>();
         foreach (string activeUser in usersInProfilePool)
@@ -63,7 +87,11 @@ public partial class Bus_Report_api_iKCoder_Workspace_Get_HtmlReport : class_Web
             else
                 break;
         }
-        class_XmlHelper.SetAttribute(overviewNode, "overrate", ((int)(position / usersInProfilePool.Count)).ToString());
+        class_XmlHelper.SetAttribute(overviewNode, "overrate", ((int)((position / usersInProfilePool.Count)*100)).ToString());
+        class_XmlHelper.SetAttribute(overviewNode, "usr_nickname", Session["logined_user_nickname"].ToString());
+        class_Bus_Title objectTitle = new class_Bus_Title(Object_CommonData);
+        class_XmlHelper.SetAttribute(overviewNode, "usr_title", objectTitle.GetTitle(finishSymbol));
+
     }
 
     public void Set_Honor()
@@ -80,6 +108,114 @@ public partial class Bus_Report_api_iKCoder_Workspace_Get_HtmlReport : class_Web
             honorNode.AppendChild(newItem);
             foreach (string keyName in activeItem.Keys)
                 class_XmlHelper.SetAttribute(newItem, keyName, activeItem[keyName]);
+        }
+    }
+
+    protected void set_Level()
+    {
+        double total_exvalue_primer = 0;
+        double total_exvalue_primary = 0;
+        double total_exvalue_middle = 0;
+        double total_exvalue_senior = 0;
+        double total_exvalue_advanced = 0;
+        double u_exvalue_primer = 0;
+        double u_exvalue_primary = 0;
+        double u_exvalue_middle = 0;
+        double u_exvalue_senior = 0;
+        double u_exvalue_advanced = 0;
+        foreach (string typeKey in typedSymbols.Keys)
+        {
+            List<string> tmpList = typedSymbols[typeKey];
+            foreach (string activeTypedSymbol in tmpList)
+            {
+                if (sourceRows_sence.ContainsKey(activeTypedSymbol))
+                {
+                    DataRow activeDataRow = sourceRows_sence[activeTypedSymbol];
+                    string configDoc = string.Empty;
+                    class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "config", out configDoc);
+                    XmlDocument activeSourceDoc_sence = new XmlDocument();
+                    activeSourceDoc_sence.LoadXml(class_CommonUtil.Decoder_Base64(configDoc));
+                    XmlNode scoreNode = activeSourceDoc_sence.SelectSingleNode("/sence/score");
+                    string strBasicScore = class_XmlHelper.GetAttrValue(scoreNode, "score");
+                    string strDiffScore = class_XmlHelper.GetAttrValue(scoreNode, "diff");
+                    double iBasicScore = 0;
+                    double.TryParse(strBasicScore, out iBasicScore);
+                    double iDiffScore = 0;
+                    double.TryParse(strDiffScore, out iDiffScore);
+                    if (typeKey.Contains("primer"))
+                        total_exvalue_primer = total_exvalue_primer + (iBasicScore * (1 + iDiffScore));
+                    else if (typeKey.Contains("primary"))
+                        total_exvalue_primary = total_exvalue_primary + (iBasicScore * (1 + iDiffScore));
+                    else if (typeKey.Contains("middle"))
+                        total_exvalue_middle = total_exvalue_middle + (iBasicScore * (1 + iDiffScore));
+                    else if (typeKey.Contains("senior"))
+                        total_exvalue_senior = total_exvalue_senior + (iBasicScore * (1 + iDiffScore));
+                    else if (typeKey.Contains("advanced"))
+                        total_exvalue_advanced = total_exvalue_advanced + (iBasicScore * (1 + iDiffScore));
+                }
+            }
+        }
+        foreach (string activeFinishSymbol in finishSymbol)
+        {
+            if (sourceRows_sence.ContainsKey(activeFinishSymbol))
+            {
+                DataRow activeDataRow = sourceRows_sence[activeFinishSymbol];
+                string configDoc = string.Empty;
+                class_Data_SqlDataHelper.GetArrByteColumnDataToString(activeDataRow, "config", out configDoc);
+                XmlDocument tmpConfigDoc = new XmlDocument();
+                tmpConfigDoc.LoadXml(class_CommonUtil.Decoder_Base64(configDoc));
+                XmlNode scoreNode = tmpConfigDoc.SelectSingleNode("/sence/score");
+                string strBasicScore = class_XmlHelper.GetAttrValue(scoreNode, "score");
+                string strDiffScore = class_XmlHelper.GetAttrValue(scoreNode, "diff");
+                double iBasicScore = 0;
+                double.TryParse(strBasicScore, out iBasicScore);
+                double iDiffScore = 0;
+                double.TryParse(strDiffScore, out iDiffScore);
+                if (activeFinishSymbol.StartsWith("a") || activeFinishSymbol.StartsWith("A"))
+                    u_exvalue_primer = u_exvalue_primer + (iBasicScore * (1 + iDiffScore));
+                else if (activeFinishSymbol.StartsWith("b") || activeFinishSymbol.StartsWith("B"))
+                    u_exvalue_primary = u_exvalue_primary + (iBasicScore * (1 + iDiffScore));
+                else if (activeFinishSymbol.StartsWith("c") || activeFinishSymbol.StartsWith("C"))
+                    u_exvalue_middle = u_exvalue_middle + (iBasicScore * (1 + iDiffScore));
+                else if (activeFinishSymbol.StartsWith("d") || activeFinishSymbol.StartsWith("D"))
+                    u_exvalue_senior = u_exvalue_senior + (iBasicScore * (1 + iDiffScore));
+                else if (activeFinishSymbol.StartsWith("e") || activeFinishSymbol.StartsWith("E"))
+                    u_exvalue_advanced = u_exvalue_advanced + (iBasicScore * (1 + iDiffScore));
+            }
+        }
+        XmlNode levelNode = class_XmlHelper.CreateNode(reportDoc, "level", "");
+        class_XmlHelper.SetAttribute(levelNode, "total", (u_exvalue_primer + u_exvalue_primary + u_exvalue_middle + u_exvalue_senior + u_exvalue_advanced).ToString());
+        node_report_root.AppendChild(levelNode);
+        foreach (string typeKey in typedSymbols.Keys)
+        {
+            XmlNode itemNode = class_XmlHelper.CreateNode(reportDoc, "item", "");
+            levelNode.AppendChild(itemNode);
+            class_XmlHelper.SetAttribute(itemNode, "id", typeKey);
+            if (typeKey == strPrimerKey)
+            {
+                class_XmlHelper.SetAttribute(itemNode, "name", Object_LabelController.GetString("labels", "Center_Level_Primer"));
+                class_XmlHelper.SetAttribute(itemNode, "value", total_exvalue_primer > 0 ? ((u_exvalue_primer / total_exvalue_primer) * 100).ToString(".") : "0");
+            }
+            else if (typeKey == strPrimaryKey)
+            {
+                class_XmlHelper.SetAttribute(itemNode, "name", Object_LabelController.GetString("labels", "Center_Level_Primary"));
+                class_XmlHelper.SetAttribute(itemNode, "value", total_exvalue_primary > 0 ? ((u_exvalue_primary / total_exvalue_primary) * 100).ToString(".") : "0");
+            }
+            else if (typeKey == strMiddlekey)
+            {
+                class_XmlHelper.SetAttribute(itemNode, "name", Object_LabelController.GetString("labels", "Center_Level_Middle"));
+                class_XmlHelper.SetAttribute(itemNode, "value", total_exvalue_middle > 0 ? ((u_exvalue_middle / total_exvalue_middle) * 100).ToString(".") : "0");
+            }
+            else if (typeKey == strSeniorKey)
+            {
+                class_XmlHelper.SetAttribute(itemNode, "name", Object_LabelController.GetString("labels", "Center_Level_Senior"));
+                class_XmlHelper.SetAttribute(itemNode, "value", total_exvalue_senior > 0 ? ((u_exvalue_senior / total_exvalue_senior) * 100).ToString() : "0");
+            }
+            else if (typeKey == strAdvancedKey)
+            {
+                class_XmlHelper.SetAttribute(itemNode, "name", Object_LabelController.GetString("labels", "Center_Level_Advanced"));
+                class_XmlHelper.SetAttribute(itemNode, "value", total_exvalue_advanced > 0 ? ((u_exvalue_advanced / total_exvalue_advanced) * 100).ToString() : "0");
+            }
         }
     }
 

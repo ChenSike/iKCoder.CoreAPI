@@ -40,10 +40,10 @@ public class class_WebBase_IKCoderAPI : class_Base_WebBaseclass
             return;
         Object_CommonData.InitServices(Object_BaseConfig, APPFOLDERPATH);
         XmlNodeList RSDomainItems = Object_BaseConfig.GetItemNodes("RSDomain");
-        Object_BaseConfig.SwitchToDESModeOFF();
-        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), "RSDOMAIN") != null)
+        Object_BaseConfig.SwitchToDESModeOFF();        
+        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), "RSDOMAIN") != null)
         {
-            string perinstanceDomain = Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), "RSDOMAIN").ToString();
+            string perinstanceDomain = Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), "RSDOMAIN").ToString();
             foreach (XmlNode activeDomainItem in RSDomainItems)
             {
                 string itemName = Object_BaseConfig.GetAttrValue(activeDomainItem, "name");
@@ -66,8 +66,8 @@ public class class_WebBase_IKCoderAPI : class_Base_WebBaseclass
     {
         CookieContainer activeCookieContainerObject = new CookieContainer();
         Object_DomainPersistance.ClearBuffer();
-        Object_DomainPersistance.AddSingle(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), CookieContainer_Name, 3600, activeCookieContainerObject);
-        CookieContainer activeCookieContainer = (CookieContainer)Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), CookieContainer_Name);
+        Object_DomainPersistance.AddSingle(Object_DomainPersistance.GetKeyName(REQUESTIP), CookieContainer_Name, 3600, activeCookieContainerObject);
+        CookieContainer activeCookieContainer = (CookieContainer)Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), CookieContainer_Name);
         Object_NetRemote = new class_Net_RemoteRequest(ref activeCookieContainer);
         ISRESPONSEDOC = true;
         if (verifyToken())

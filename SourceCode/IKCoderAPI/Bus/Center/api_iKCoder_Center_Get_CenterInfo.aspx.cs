@@ -165,6 +165,7 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
         XmlNode courseNode = class_XmlHelper.CreateNode(centerDocument, "course", "");
         rootNode.AppendChild(courseNode);
         XmlNode itemNode = null;
+        string labelKey = "Center_Level_Primer";
         for (int index = 1; index <= 5; index++)
         {
             string key = string.Empty;
@@ -172,25 +173,30 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
             {
                 case 1:
                     key = strPrimerKey;
+                    labelKey = "Center_Level_Primer";
                     break;
                 case 2:
                     key = strPrimaryKey;
+                    labelKey = "Center_Level_Primary";
                     break;
                 case 3:
                     key = strMiddlekey;
+                    labelKey = "Center_Level_Middle";
                     break;
                 case 4:
                     key = strSeniorKey;
+                    labelKey = "Center_Level_Senior";
                     break;
                 case 5:
                     key = strAdvancedKey;
+                    labelKey = "Center_Level_Advanced";
                     break;
             }
             itemNode = class_XmlHelper.CreateNode(centerDocument, "item", "");
             courseNode.AppendChild(itemNode);
             class_XmlHelper.SetAttribute(itemNode, "id", key);
-            class_XmlHelper.SetAttribute(itemNode, "title", "跟着博士学Scratch编程(启蒙)");
-            if(count_sences.ContainsKey(key))
+            class_XmlHelper.SetAttribute(itemNode, "title", Object_LabelController.GetString("labels", labelKey));
+            if (count_sences.ContainsKey(key))
                 class_XmlHelper.SetAttribute(itemNode, "total", count_sences[key].ToString());
             else
                 class_XmlHelper.SetAttribute(itemNode, "total", "0");
@@ -207,6 +213,8 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
                 class_XmlHelper.SetAttribute(lessonNode, "symbol", activeSymbol);
                 class_XmlHelper.SetAttribute(lessonNode, "title", class_Bus_SenceDoc.GetSenceValue(Object_CommonData, activeSymbol, "/sence", "name"));
                 class_XmlHelper.SetAttribute(lessonNode, "finish", finishedSymbolList.Contains(activeSymbol) ? "1" : "0");
+                class_XmlHelper.SetAttribute(lessonNode, "title", class_Bus_SenceDoc.GetSenceValue(Object_CommonData, activeSymbol, "/sence", "name"));
+                class_XmlHelper.SetAttribute(lessonNode, "unit", "");
             }
         }
 

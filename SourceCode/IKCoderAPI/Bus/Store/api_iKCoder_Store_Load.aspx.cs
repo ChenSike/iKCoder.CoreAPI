@@ -22,7 +22,7 @@ public partial class Bus_Store_api_iKCoder_Store_Load : class_WebBase_IKCoderAPI
             return;
         }
         string tmpDataSymbol = symbol + "_" + type + "_" + ClientSymbol;
-        string content = Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), tmpDataSymbol).ToString();
+        string content = Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), tmpDataSymbol).ToString();
         AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), content, "");
 
 

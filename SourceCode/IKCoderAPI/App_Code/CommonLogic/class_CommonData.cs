@@ -109,6 +109,8 @@ public class class_CommonData
 
     public class_Data_SqlSPEntry GetActiveSP(string dbServer, string SPName)
     {
+        if (storeProceduresList == null)
+            PrepareDataOperation();
         if (storeProceduresList.ContainsKey(dbServer))
         {
             if (storeProceduresList[dbServer].ContainsKey(SPName))
@@ -164,9 +166,9 @@ public class class_CommonData
     public bool ConnectToDatabase()
     {
         Object_SqlConnectionHelper = new class_Data_SqlConnectionHelper();
-        if (!Object_SqlConnectionHelper.Set_NewConnectionItem(this.dbServer, this.dbServer, dbuid, dbpwd, dbdata, dataBaseType))
-            return false;
-        isExecutedConnectedDB = true;
+        Object_SqlConnectionHelper.Set_NewConnectionItem(this.dbServer, this.dbServer, dbuid, dbpwd, dbdata, dataBaseType);
+        if(Object_SqlConnectionHelper.Get_ActiveConnection(this.dbServer)!=null)
+            isExecutedConnectedDB = true;
         return true;
     }
 

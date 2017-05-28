@@ -83,8 +83,8 @@ public partial class Account_User_api_iKCoder_User_Set_Reg : class_WebBase_IKCod
                 return;
             }
             string codeValueFromServer = "";
-            if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), codeName) != null)
-                codeValueFromServer = (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), codeName)).ToString();
+            if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), codeName) != null)
+                codeValueFromServer = (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), codeName)).ToString();
             if (codeValueFromServer != codeValue)
             {
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Equal_Param_Reg_Code"), "");

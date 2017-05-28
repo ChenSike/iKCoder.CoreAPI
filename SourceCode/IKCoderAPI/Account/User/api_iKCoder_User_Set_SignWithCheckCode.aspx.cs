@@ -58,8 +58,8 @@ public partial class Account_User_api_iKCoder_User_Set_SignWithCheckCode : class
             return;
         }
         string codeValueFromServer = "";
-        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), codeName) != null)
-            codeValueFromServer = (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, Produce_Name, ClientSymbol), codeName)).ToString();
+        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), codeName) != null)
+            codeValueFromServer = (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), codeName)).ToString();
         if (codeValueFromServer != codeValue)
         {
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Equal_Param_Reg_Code"), "");
@@ -100,7 +100,7 @@ public partial class Account_User_api_iKCoder_User_Set_SignWithCheckCode : class
             attrs.Add("logined_marked", "1");
             Object_CommonData.PrepareDataOperation();
             Object_ProfileDocs.VerifyAll(user_name);
-            string value_nickname = Object_ProfileDocs.GetDocNoteValue(user_name, class_CommonDefined.enumProfileDoc.doc_basic, "/usrbasic/usr_nickname");
+            string value_nickname = Object_ProfileDocs.GetDocNoteValue(user_name, class_CommonDefined.enumProfileDoc.doc_basic, "/usrbasic/usr_nickname");            
             Session["logined_user_nickname"] = value_nickname;
             Response.Cookies["logined_user_nickname"].Value = value_nickname;
             attrs.Add("logined_user_nickname", value_nickname); 

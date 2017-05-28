@@ -12,8 +12,8 @@ public partial class Token_api_verifyActiveToken : class_WebBase_NWA
     {
         ISRESPONSEDOC = true;
         string persistanceDomain = "http://localhost";
-        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, "PlatformAPI", ClientID), "RSDOMAIN") != null)
-            persistanceDomain = Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP, "PlatformAPI", ClientID), "RSDOMAIN").ToString();
+        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), "RSDOMAIN") != null)
+            persistanceDomain = Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), "RSDOMAIN").ToString();
         object_CommonLogic.InitServices(APPFOLDERPATH, RSDoamin,persistanceDomain);
         HttpCookie cookieFromRequest = GetRequestCookie("token");
         if (cookieFromRequest == null ? object_TokenLogic.CheckRegistiedToken(Session, REQUESTDOCUMENT, out _fromProduct) : object_TokenLogic.CheckRegistiedToken(Session, cookieFromRequest, out _fromProduct))

@@ -321,7 +321,7 @@ public class class_Bus_ProfileDocs
         List<string> returnList = new List<string>();
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(GetProfileDoc(username, class_CommonDefined.enumProfileDoc.doc_studystatus));
-        XmlNodeList finishItems = doc.SelectNodes("/studystatus/finished/item[@finished='1']");
+        XmlNodeList finishItems = doc.SelectNodes("/studystatus/finished/item[@finish='1']");
         foreach(XmlNode finishItem in finishItems)
         {
             string symbol = class_XmlHelper.GetAttrValue(finishItem, "symbol");
@@ -515,6 +515,14 @@ public class class_Bus_ProfileDocs
         if (isUpdated)
             SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_basic, doc_basic.OuterXml);
     }
+
+    public void SetFlushBasicTitle(string username,string title)
+    {
+        XmlDocument sourceDoc_basic = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_basic);
+        XmlNode node_title = sourceDoc_basic.SelectSingleNode("/usrbasic/usr_title");
+        class_XmlHelper.SetNodeValue(node_title, title);
+        SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_basic, sourceDoc_basic.OuterXml);
+    }
         
     public void VerifyDoc_FinishItemNodes(string username,string symbol,ref XmlDocument refdocStudystatus)
     {
@@ -606,6 +614,70 @@ public class class_Bus_ProfileDocs
         }
     }
 
+    public bool GetDataStoreAccessAllowed(string username)
+    {
+        XmlDocument doc_store = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_datastore);
+        XmlNode node_datastore = doc_store.SelectSingleNode("/datastore");
+        XmlNode node_access = node_datastore.SelectSingleNode("access");
+        string isallowed = class_XmlHelper.GetNodeValue(node_access);
+        return isallowed == "1" ? true : false;
+    }
+
+    public bool GetIsDataItemExisted(string username,string symbol)
+    {
+        XmlDocument doc_store = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_datastore);
+        XmlNode node_datastore = doc_store.SelectSingleNode("/datastore");
+        XmlNode node_access = node_datastore.SelectSingleNode("access");
+        XmlNode node_item = node_datastore.SelectSingleNode("datalist/item[@symbol='" + symbol + "']");
+        if (node_item != null)
+            return true;
+        else
+            return false;
+    }
+
+    public string SetNewStoreItem(string username,string symbol)
+    {
+        XmlDocument doc_store = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_datastore);
+        XmlNode node_datastore = doc_store.SelectSingleNode("/datastore");
+        XmlNode node_access = node_datastore.SelectSingleNode("access");
+        XmlNodeList nodes_items = node_datastore.SelectNodes("datalist/item");
+        XmlNode node_datalist = node_datastore.SelectSingleNode("datalist");
+        if (GetDataStoreAccessAllowed(username))
+        {
+            string strMaxItem = class_XmlHelper.GetAttrValue(node_access, "maxitem");
+            string strMaxFileSize = class_XmlHelper.GetAttrValue(node_access, "maxfilesize");
+            int istrMax = 15;
+            int.TryParse(strMaxItem, out istrMax);
+            int imaxFileSize = 3;
+            int.TryParse(strMaxFileSize, out imaxFileSize);
+            int existedItemCount = 0;
+            if (nodes_items != null)
+                existedItemCount = nodes_items.Count;
+            if (existedItemCount < istrMax)
+            {
+                if (!GetIsDataItemExisted(username, symbol))
+                {
+                    //int length = data.Length / (1024 * 1024);
+                    string id = Guid.NewGuid().ToString();
+                    XmlNode node_item = class_XmlHelper.CreateNode(doc_store, "item", "");
+                    node_datalist.AppendChild(node_item);
+                    class_XmlHelper.SetAttribute(node_item, "id", id);
+                    class_XmlHelper.SetAttribute(node_item, "symbol", symbol);
+                    return id;
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+            else
+                return string.Empty;
+        }
+        else
+            return string.Empty;
+         
+    }
+
     public bool GetMessageIsRMV(string username,string operationID)
     {
         XmlDocument resourceDoc = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_message);
@@ -641,14 +713,26 @@ public class class_Bus_ProfileDocs
 
     public int GetCountOfUnreadMessage(string username)
     {
-        XmlDocument resourceDoc = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_message);
-        XmlNode messagestatusNode = resourceDoc.SelectSingleNode("/message");
-        XmlNode read_sys_Node = messagestatusNode.SelectSingleNode("read_sys");
-        XmlNodeList items = read_sys_Node.SelectNodes("item");
-        if (items != null)
-            return items.Count;
-        else
+        try
+        {
+            XmlDocument resourceDoc = GetProfileDocObject(username, class_CommonDefined.enumProfileDoc.doc_message);
+            XmlNode messagestatusNode = resourceDoc.SelectSingleNode("/message");
+            XmlNode read_sys_Node = messagestatusNode.SelectSingleNode("read_sys");
+            XmlNodeList items = read_sys_Node.SelectNodes("item");
+            int result = items.Count;
+            class_Data_SqlSPEntry activeSPEntry_resourceMesssage = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_RESOURCE_MESSAGE);
+            activeSPEntry_resourceMesssage.ClearAllParamsValues();
+            activeSPEntry_resourceMesssage.ModifyParameterValue("@username", username);
+            activeSPEntry_resourceMesssage.ModifyParameterValue("@isread", "0");
+            DataTable activeDTResourceMessage = Object_CommonData.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry_resourceMesssage, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+            if (activeDTResourceMessage != null && activeDTResourceMessage.Rows.Count > 0)
+                result = result + activeDTResourceMessage.Rows.Count;
+            return result;
+        }
+        catch
+        {
             return 0;
+        }
     }
 
     public void VerifyDoc_Currentsence(string username,string symbol)
@@ -867,6 +951,15 @@ public class class_Bus_ProfileDocs
             node_usrbasic.AppendChild(node_usrnickname);
             isUpdated = true;
         }
+        XmlNode node_usrtitle = node_usrbasic.SelectSingleNode("usr_title");
+        if (node_usrtitle == null)
+        {
+            class_Bus_Title objectTitle = new class_Bus_Title(Object_CommonData);
+            List<string> finisymbols = new List<string>();
+            node_usrtitle = class_XmlHelper.CreateNode(doc_basic, "usr_title", objectTitle.GetTitle(finisymbols));
+            node_usrbasic.AppendChild(node_usrtitle);
+            isUpdated = true;
+        }
         XmlNode node_sex = node_usrbasic.SelectSingleNode("sex");
         if (node_sex == null)
         {
@@ -976,7 +1069,7 @@ public class class_Bus_ProfileDocs
             SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_message, doc_message.OuterXml);
     }   
 
-    public void VerifyDataStore(string username)
+    public void VerifyDoc_DataStore(string username)
     {
         XmlDocument doc_datastore = new XmlDocument();
         bool isUpdated = false;
@@ -989,7 +1082,26 @@ public class class_Bus_ProfileDocs
             isUpdated = true;
             doc_datastore.LoadXml(strDoc);
         }
-        
+        XmlNode node_datastore = doc_datastore.SelectSingleNode("/datastore");
+        XmlNode node_access = node_datastore.SelectSingleNode("access");
+        if(node_access==null)
+        {
+            node_access = class_XmlHelper.CreateNode(doc_datastore, "access", "");
+            class_XmlHelper.SetAttribute(node_access, "isallow", "1");
+            class_XmlHelper.SetAttribute(node_access, "maxitem", "15");
+            class_XmlHelper.SetAttribute(node_access, "maxfilesize", "3");
+            node_datastore.AppendChild(node_access);
+            isUpdated = true;
+        }
+        XmlNode node_datalist = node_datastore.SelectSingleNode("datalist");
+        if(node_datalist==null)
+        {
+            node_datalist = class_XmlHelper.CreateNode(doc_datastore, "datalist", "");
+            node_datastore.AppendChild(node_datalist);
+            isUpdated = true;
+        }
+        if (isUpdated)
+            SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_datastore,doc_datastore.OuterXml);
     }
 
     public void VerifyAll(string username)
@@ -997,7 +1109,8 @@ public class class_Bus_ProfileDocs
         VerifyProfileItem(username);
         VerifyDoc_Basic(username);
         VerifyDoc_Studystatus(username);
-        VerifyDoc_Message(username);        
+        VerifyDoc_Message(username);
+        VerifyDoc_DataStore(username);
     }
 
 }
