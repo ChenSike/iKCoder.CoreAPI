@@ -6,15 +6,14 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using iKCoder_Platform_SDK_Kit;
 
-public partial class Sys_api_iKCoder_Sys_Get_PS : class_WebBase_IKCoderAPI_NUA
+public partial class Sys_api_iKCoder_Sys_Get_PS : class_WebBase_IKCoderAPI_UA 
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        foreach (string clientKey in Object_DomainPersistance.DataBuffer.Keys)
-            foreach (string domainKey in Object_DomainPersistance.DataBuffer[clientKey].Keys)
-            {
-                Response.Write("[PKey:" + clientKey + "][DomainKey:" + domainKey + "].....Value:" + Object_DomainPersistance.DataBuffer[clientKey][domainKey].Data.ToString() + "<br>");
-                Response.Write("[PKey:" + clientKey + "][DomainKey:" + domainKey + "].....Expired:" + Object_DomainPersistance.DataBuffer[clientKey][domainKey].Expeired.ToString() + "<br>");
-            }
+        Response.Write("[Count Of Session:" + Session.Count + "]<br>");
+        Response.Write("[Count Of Application:" + Application.Count + "]<br>");
+        Response.Write("[IKCoder SPS Flush Time:" + Application[Object_CommonData.APPLICATION_SYMBOL_SPSWRTIME].ToString() + "]<br>");
+        foreach (string clientKey in Session.Keys)
+            Response.Write("[PKey:" + clientKey + "].....Value:" + Session[clientKey].ToString() + "<br>");
     }
 }

@@ -10,11 +10,14 @@ public class Class_Bus_Projects
 {
 
     class_CommonData refObjectCommonData;
+    class_Bus_ProfileDocs refObjectProfileDocs;
 
-    Class_Bus_Projects(ref class_CommonData refActiveCommonDataObject)
+    Class_Bus_Projects(ref class_CommonData refActiveCommonDataObject,ref class_Bus_ProfileDocs refActiveProfileDocs)
     {
         refObjectCommonData = refActiveCommonDataObject;
+        refObjectProfileDocs = refActiveProfileDocs;
     }
 
+    
  
 }

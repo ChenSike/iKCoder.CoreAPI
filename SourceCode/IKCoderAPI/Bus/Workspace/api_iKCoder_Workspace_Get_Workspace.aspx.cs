@@ -26,6 +26,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
     protected XmlDocument workspaceDoc = null;
     protected XmlNode workspaceDoc_rootNode = null;
     private string finishstage = "";
+    private class_Bus_ProfileDocs Object_ProfileDocs;
 
     protected void Init_ProfileDoc()
     {
@@ -253,6 +254,11 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
         }
     }
 
+    protected void Set_ReviseRecordTime()
+    {
+        Object_ProfileDocs.SetReviseRecordTime(logined_user_name);
+    }
+
     
     protected override void ExtendedAction()
     {
@@ -264,6 +270,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             workspaceDoc.LoadXml("<root></root>");
             workspaceDoc_rootNode = workspaceDoc.SelectSingleNode("/root");
             Object_CommonData.PrepareDataOperation();
+            Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
             if (!Init_SenceDoc())
                 return;
             Init_ProfileDoc();                
@@ -278,7 +285,9 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Get_Workspace : class_W
             Set_Game();
             Set_Message();
             Set_Knowledge();
-            
+            Set_ReviseRecordTime();
+
+
             if (Init_WordsDoc())
                 Set_Words();
             RESPONSEDOCUMENT.LoadXml(workspaceDoc.OuterXml);            

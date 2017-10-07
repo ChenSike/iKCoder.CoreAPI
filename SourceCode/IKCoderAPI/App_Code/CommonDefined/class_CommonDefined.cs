@@ -34,7 +34,9 @@ public class class_CommonDefined
         select = 3004,
         selectkey = 3005,
         selectcondition = 3006,
-        selectmixed = 3007
+        selectmixed = 3007,
+        deletecondition = 3008,
+        deletemixed = 3009
     }
 
     public enum enumDevices
@@ -72,6 +74,14 @@ public class class_CommonDefined
         doc_datastore = 7005,
         doc_recored = 7006,
         doc_message = 7007
+    }
+
+    public enum enumLoginedMark
+    {
+       mark_educenter = 1,
+       mark_teacher = 2,
+       mark_student = 3,
+       mark_sales = 4
     }
 
 }

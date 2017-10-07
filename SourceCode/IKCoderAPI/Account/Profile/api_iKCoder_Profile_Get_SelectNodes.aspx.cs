@@ -14,7 +14,8 @@ public partial class Account_Profile_api_iKCoder_Profile_Get_SelectNodes : class
         switchResponseMode(enumResponseMode.text);
         if (REQUESTDOCUMENT != null)
         {
- 
+            Object_CommonData.PrepareDataOperation();
+            class_Bus_ProfileDocs Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
             List<string> lstSelectXpath = new List<string>();
             XmlNodeList selectItems = REQUESTDOCUMENT.SelectNodes("/root/select/items");
             foreach(XmlNode activeItem in selectItems)

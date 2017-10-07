@@ -25,6 +25,5 @@ public partial class Bus_Store_api_iKCoder_Store_Save : class_WebBase_IKCoderAPI
         string tmpDataSymbol = symbol + "_" + type + "_" + ClientSymbol;
         Object_DomainPersistance.Add(Object_DomainPersistance.GetKeyName(REQUESTIP), tmpDataSymbol, iTimeout, ISTEXTREQUEST ? REQUESTCONTENT : REQUESTDOCUMENT.OuterXml);
         AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
-
     }
 }

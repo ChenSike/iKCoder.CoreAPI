@@ -13,29 +13,35 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_CountOfUnreadMessage 
     protected XmlDocument sourceDoc_profile = new XmlDocument();
 
     protected override void ExtendedAction()
-    {  
+    {
         switchResponseMode(enumResponseMode.text);
         Object_CommonData.PrepareDataOperation();
+        class_Bus_ProfileDocs Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
         int countOfmessage = 0;
         string strCountOfMessage = "0";
-        string symbol_strCountOfMeeage = "COUNT_OF_UNREADMESSAGE";        
-        if (Object_DomainPersistance.IsDomainKeyExisted(Object_DomainPersistance.GetKeyName(REQUESTIP), symbol_strCountOfMeeage))
+        DateTime dtSessionWriteCountTime = new DateTime();
+        string symbol_SessionCountOfMessage = "COUNT_OF_UNREADMESSAGE";
+        string symbol_SessionWriteCountTime = "WRITETIME_OF_UNREADMESSAGE";
+        if (GetSessionValue(symbol_SessionCountOfMessage) != null && GetSessionValue(symbol_SessionWriteCountTime) != null)
         {
-            try
+            dtSessionWriteCountTime = DateTime.Parse(GetSessionValue(symbol_SessionWriteCountTime).ToString());
+            if ((DateTime.Now - dtSessionWriteCountTime).Minutes < 2)
             {
-                strCountOfMessage = Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), symbol_strCountOfMeeage).ToString();
+                strCountOfMessage = GetSessionValue(symbol_SessionCountOfMessage).ToString();
                 int.TryParse(strCountOfMessage, out countOfmessage);
             }
-            catch
+            else
             {
                 countOfmessage = Object_ProfileDocs.GetCountOfUnreadMessage(logined_user_name);
-                Object_DomainPersistance.Add(Object_DomainPersistance.GetKeyName(REQUESTIP), symbol_strCountOfMeeage, 2, countOfmessage.ToString());
+                Session[symbol_SessionCountOfMessage] = countOfmessage;
+                Session[symbol_SessionWriteCountTime] = DateTime.Now.ToString();
             }
         }
         else
         {
             countOfmessage = Object_ProfileDocs.GetCountOfUnreadMessage(logined_user_name);
-            Object_DomainPersistance.Add(Object_DomainPersistance.GetKeyName(REQUESTIP), symbol_strCountOfMeeage, 2, countOfmessage.ToString());
+            Session[symbol_SessionCountOfMessage] = countOfmessage;
+            Session[symbol_SessionWriteCountTime] = DateTime.Now.ToString();
         }
         AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), countOfmessage.ToString(), "");
     }

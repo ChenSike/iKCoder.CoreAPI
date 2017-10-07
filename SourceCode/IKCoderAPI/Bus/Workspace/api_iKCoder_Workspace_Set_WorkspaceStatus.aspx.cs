@@ -28,6 +28,7 @@ public partial class Bus_Workspace_api_iKCoder_Data_Set_WorkspaceStatus : class_
                 stage = "1";
             string symbol = class_Bus_WorkspaceStatus.GetWorkspaceStatusSymbol(senceSymbol, stage, logined_user_name);
             Object_CommonData.PrepareDataOperation();
+            class_Bus_ProfileDocs Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
             Object_ProfileDocs.SetCodetimeLineHours(logined_user_name, symbol);
             class_Data_SqlSPEntry activeSPEntry_configSence = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_WORKSPACESTATUS);
             activeSPEntry_configSence.ClearAllParamsValues();

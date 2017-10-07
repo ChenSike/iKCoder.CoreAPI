@@ -17,8 +17,8 @@ public class class_WebBase_NWA:class_Base_WebBaseclass
     protected override void DoAction()
     {
         string persistanceDomain = "http://localhost";
-        if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), "RSDOMAIN") != null)
-            persistanceDomain = Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), "RSDOMAIN").ToString();
+        if(GetSessionValue("RSDOMAIN")!=null)
+            persistanceDomain = GetSessionValue("RSDOMAIN").ToString();
         object_CommonLogic.InitServices(APPFOLDERPATH, RSDoamin, persistanceDomain);
         ExtenedFunction();
         if (object_CommonLogic.isExecutedConnectedDB)

@@ -18,7 +18,8 @@ public partial class Bus_Report_api_iKCoder_Workspace_Get_HtmlReport : class_Web
 
     protected XmlNode node_report_root;
     Dictionary<string, List<string>> typedSymbols = new Dictionary<string, List<string>>();
-
+    List<string> symbolList = new List<string>();
+    class_Bus_ProfileDocs Object_ProfileDocs;
     string strPrimerKey = "primer";
     string strPrimaryKey = "primary";
     string strMiddlekey = "middle";
@@ -29,13 +30,17 @@ public partial class Bus_Report_api_iKCoder_Workspace_Get_HtmlReport : class_Web
     {
         switchResponseMode(enumResponseMode.text);
         Object_CommonData.PrepareDataOperation();
+        Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
         reportDoc.LoadXml("<root></root>");
         node_report_root = reportDoc.SelectSingleNode("/root");
         init_sourceDoc_Sence();
+        init_typedSymbols();
         Set_Report();
         Set_Overview();
         Set_Honor();
-        set_Codetimes();
+        Set_Codetimes();
+        Set_Ability();
+        Set_Level();
         RESPONSEDOCUMENT.LoadXml(reportDoc.OuterXml);
     }
     protected void init_sourceDoc_Sence()
@@ -46,10 +51,38 @@ public partial class Bus_Report_api_iKCoder_Workspace_Get_HtmlReport : class_Web
         {
             string symbol = string.Empty;
             class_Data_SqlDataHelper.GetColumnData(activeRow, "symbol", out symbol);
+            symbolList.Add(symbol);
             sourceRows_sence.Add(symbol, activeRow);
         }
     }
 
+    protected void init_typedSymbols()
+    {
+        List<string> primerList = new List<string>();
+        List<string> primaryList = new List<string>();
+        List<string> middleList = new List<string>();
+        List<string> seniorList = new List<string>();
+        List<string> advancedList = new List<string>();
+        typedSymbols.Add(strPrimerKey, primerList);
+        typedSymbols.Add(strPrimaryKey, primaryList);
+        typedSymbols.Add(strMiddlekey, middleList);
+        typedSymbols.Add(strSeniorKey, seniorList);
+        typedSymbols.Add(strAdvancedKey, advancedList);
+
+        foreach (string strSymbol in symbolList)
+        {
+            if (strSymbol.StartsWith("a") || strSymbol.StartsWith("A"))
+                primerList.Add(strSymbol);
+            else if (strSymbol.StartsWith("b") || strSymbol.StartsWith("B"))
+                primaryList.Add(strSymbol);
+            else if (strSymbol.StartsWith("c") || strSymbol.StartsWith("C"))
+                middleList.Add(strSymbol);
+            else if (strSymbol.StartsWith("d") || strSymbol.StartsWith("D"))
+                seniorList.Add(strSymbol);
+            else
+                advancedList.Add(strSymbol);
+        }
+    }
 
     protected void Set_Report()
     {
@@ -66,7 +99,7 @@ public partial class Bus_Report_api_iKCoder_Workspace_Get_HtmlReport : class_Web
         XmlDocument sourceDoc_studystatus = Object_ProfileDocs.GetProfileDocObject(logined_user_name, class_CommonDefined.enumProfileDoc.doc_studystatus);
         finishSymbol = Object_ProfileDocs.GetFinishedSymbols(logined_user_name);
         class_XmlHelper.SetAttribute(overviewNode, "finish", finishSymbol.Count.ToString());
-        class_Bus_Exp objectExp = new class_Bus_Exp(Object_CommonData, finishSymbol);
+        class_Bus_Exp objectExp = new class_Bus_Exp(Object_CommonData, finishSymbol,Object_ProfileDocs,logined_user_name);
         double loginedUserTotalExp = 0;
         double.TryParse(Object_ProfileDocs.GetTotalExp(logined_user_name), out loginedUserTotalExp);
         class_XmlHelper.SetAttribute(overviewNode, "exprate", ((int)((loginedUserTotalExp / objectExp.Get_TotalExp())*100)).ToString());
@@ -87,7 +120,7 @@ public partial class Bus_Report_api_iKCoder_Workspace_Get_HtmlReport : class_Web
             else
                 break;
         }
-        class_XmlHelper.SetAttribute(overviewNode, "overrate", ((int)((position / usersInProfilePool.Count)*100)).ToString());
+        class_XmlHelper.SetAttribute(overviewNode, "overrate", ((int)((position / usersInProfilePool.Count) * 100) == 100 ? 99 : (int)((position / usersInProfilePool.Count) * 100)).ToString());
         class_XmlHelper.SetAttribute(overviewNode, "usr_nickname", Session["logined_user_nickname"].ToString());
         class_Bus_Title objectTitle = new class_Bus_Title(Object_CommonData);
         class_XmlHelper.SetAttribute(overviewNode, "usr_title", objectTitle.GetTitle(finishSymbol));
@@ -111,7 +144,7 @@ public partial class Bus_Report_api_iKCoder_Workspace_Get_HtmlReport : class_Web
         }
     }
 
-    protected void set_Level()
+    protected void Set_Level()
     {
         double total_exvalue_primer = 0;
         double total_exvalue_primary = 0;
@@ -219,26 +252,61 @@ public partial class Bus_Report_api_iKCoder_Workspace_Get_HtmlReport : class_Web
         }
     }
 
-    protected void set_Codetimes()
+
+    protected void Set_Ability()
+    {
+        XmlNode node_ablity = class_XmlHelper.CreateNode(reportDoc, "ability", "");
+        node_report_root.AppendChild(node_ablity);
+        class_XmlHelper.SetAttribute(node_ablity, "des",Object_LabelController.GetString("lables", "report_ability_des"));
+        XmlNode node_finishedcourse = class_XmlHelper.CreateNode(reportDoc, "finishedcourse", "");
+        node_ablity.AppendChild(node_finishedcourse);
+        foreach (string activeSymbol in finishSymbol)
+        {
+            XmlNode node_item = class_XmlHelper.CreateNode(reportDoc, "item", "");
+            node_finishedcourse.AppendChild(node_item);
+            class_XmlHelper.SetAttribute(node_item, "symbol", activeSymbol);
+            class_XmlHelper.SetAttribute(node_item, "title", class_Bus_SenceDoc.GetSenceValue(Object_CommonData, activeSymbol, "/sence", "name"));
+            class_XmlHelper.SetAttribute(node_item, "unit", class_Bus_SenceDoc.GetSenceValue(Object_CommonData, activeSymbol, "/sence", "unit"));
+        }
+        XmlNode node_stmel = class_XmlHelper.CreateNode(reportDoc, "steml", "");
+        node_ablity.AppendChild(node_stmel);
+        class_XmlHelper.SetAttribute(node_stmel, "s", "0");
+        class_XmlHelper.SetAttribute(node_stmel, "t", "0");
+        class_XmlHelper.SetAttribute(node_stmel, "e", "0");
+        class_XmlHelper.SetAttribute(node_stmel, "m", "0");
+        class_XmlHelper.SetAttribute(node_stmel, "l", "0");
+    }
+
+    protected void Set_Codetimes()
     {
         XmlNode codetimesNode = class_XmlHelper.CreateNode(reportDoc, "codetimes", "");
         node_report_root.AppendChild(codetimesNode);
         XmlDocument sourceDoc_CodeLine = Object_ProfileDocs.GetProfileDocObject(logined_user_name, class_CommonDefined.enumProfileDoc.doc_studystatus);
         List<XmlNode> codetimelineItemNodes = Object_ProfileDocs.GetCodetimeLineItems(logined_user_name, sourceDoc_CodeLine);
+        int userTotalTime = Object_ProfileDocs.GetTotalTime(logined_user_name);
+        class_XmlHelper.SetAttribute(codetimesNode, "totaltime", userTotalTime.ToString("0.00"));
         foreach (XmlNode activeItem in codetimelineItemNodes)
         {
             XmlNode item = class_XmlHelper.CreateNode(reportDoc, "item", "");
             string strDate = class_XmlHelper.GetAttrValue(activeItem, "date");
             string strValue = class_XmlHelper.GetAttrValue(activeItem, "value");
-            if (string.IsNullOrEmpty(strValue))
-                strValue = "0";
-            class_XmlHelper.SetAttribute(item, "date", strDate);
-            double dHours = 0;
-            double dMintues = 0;
-            double.TryParse(strValue, out dMintues);
-            dHours = dMintues / 60;
-            class_XmlHelper.SetAttribute(item, "value", dHours.ToString(".##"));
-            codetimesNode.AppendChild(item);
+            if (!string.IsNullOrEmpty(strDate))
+            {
+                DateTime dtTmp = DateTime.Now;
+                DateTime.TryParse(strDate, out dtTmp);
+                if (dtTmp.Month == DateTime.Now.Month)
+                {
+                    if (string.IsNullOrEmpty(strValue))
+                        strValue = "0";
+                    class_XmlHelper.SetAttribute(item, "date", strDate);
+                    double dHours = 0;
+                    double dMintues = 0;
+                    double.TryParse(strValue, out dMintues);
+                    dHours = dMintues / 60;
+                    class_XmlHelper.SetAttribute(item, "value", dHours.ToString("0.00"));
+                    codetimesNode.AppendChild(item);
+                }
+            }
         }
     }
 

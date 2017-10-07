@@ -24,7 +24,7 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_RemoveSence : class
             class_Data_SqlSPEntry activeSPEntry_configBlockly = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_CONFIG_SENCE);
             activeSPEntry_configBlockly.ClearAllParamsValues();
             activeSPEntry_configBlockly.ModifyParameterValue("@symbol", senceSymbol);
-            Object_CommonData.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry_configBlockly, class_CommonDefined.enumDataOperaqtionType.delete.ToString(), this.GetType());
+            Object_CommonData.CommonSPOperation(AddErrMessageToResponseDOC, AddResponseMessageToResponseDOC, ref RESPONSEDOCUMENT, activeSPEntry_configBlockly, class_CommonDefined.enumDataOperaqtionType.deletecondition.ToString(), this.GetType());
         }
         else
         {

@@ -44,7 +44,7 @@ public partial class Data_api_iKCoder_Data_Get_Audio : class_WebBase_IKCoderAPI_
                         dataBuffer = class_CommonUtil.Decoder_Base64ToByte(strDataBuffer);
                     }
                     switchResponseMode(enumResponseMode.bin);
-                    Response.ContentType = "Audio/mpeg";
+                    Response.ContentType = "Audio/mp3";
                     RESPONSEBUFFER = dataBuffer;
                 }
                 else

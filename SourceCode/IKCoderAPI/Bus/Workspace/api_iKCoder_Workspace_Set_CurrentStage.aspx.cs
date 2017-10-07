@@ -16,6 +16,8 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_CurrentStage : clas
         string symbol = GetQuerystringParam("symbol");
         if (!string.IsNullOrEmpty(futurestage))
         {
+            Object_CommonData.PrepareDataOperation();
+            class_Bus_ProfileDocs Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
             Object_ProfileDocs.SetCurrentStage(logined_user_name, symbol, futurestage);
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.UI;
 using iKCoder_Platform_SDK_Kit;
 using System.Xml;
 using System.Data;
@@ -20,11 +21,22 @@ public class class_CommonData
     public delegate void addErrMsgFunction(string header, string message, string link, enum_MessageType activeType);
     public delegate void addMsgFunction(string header, string code, string message, string link);
 
+    public string APPLICATION_SYMBOL_SPSLIST = "IKCODER_SPS_LIST";
+    public string APPLICATION_SYMBOL_SPSWRTIME = "IKCODER_SPS_WRITETIME";
+    public string APPLICATION_SYMBOL_SPSFLUSH = "IKCODER_SPS_FLUSH";
 
     public bool isExecutedConnectedDB
     {
         set;
         get;
+    }
+
+    public string SPS_FlushMark
+    {
+        set
+        {
+            _refApplicationContainer[APPLICATION_SYMBOL_SPSFLUSH] = value;
+        }
     }
 
     public class_Base_Config Object_BaseConfig
@@ -106,23 +118,33 @@ public class class_CommonData
         get;
     }
 
+    protected HttpApplicationState _refApplicationContainer;
+
+    public class_CommonData(HttpApplicationState refApplicationContainer)
+    {
+        _refApplicationContainer = refApplicationContainer;
+    }
 
     public class_Data_SqlSPEntry GetActiveSP(string dbServer, string SPName)
     {
-        if (storeProceduresList == null)
-            PrepareDataOperation();
-        if (storeProceduresList.ContainsKey(dbServer))
+        if (_refApplicationContainer[APPLICATION_SYMBOL_SPSLIST] != null)
+            storeProceduresList = (Dictionary<string, Dictionary<string, class_Data_SqlSPEntry>>)_refApplicationContainer[APPLICATION_SYMBOL_SPSLIST];
+        if (storeProceduresList != null)
         {
-            if (storeProceduresList[dbServer].ContainsKey(SPName))
-                return (class_Data_SqlSPEntry)storeProceduresList[dbServer][SPName].Clone();
+            if (storeProceduresList.ContainsKey(dbServer))
+            {
+                if (storeProceduresList[dbServer].ContainsKey(SPName))
+                    return (class_Data_SqlSPEntry)storeProceduresList[dbServer][SPName].Clone();
+                else
+                    return null;
+            }
             else
+            {
                 return null;
+            }
         }
         else
-        {
             return null;
-        }
-
     }
 
     public bool InitServices(class_Base_Config ref_ActiveObjectConfig, string rootPath)
@@ -144,30 +166,50 @@ public class class_CommonData
         return true;
     }
 
-    public bool LoadStoreProcedureList()
+    public Dictionary<string, Dictionary<string, class_Data_SqlSPEntry>> LoadStoreProcedureList()
     {
-        if (Object_SqlConnectionHelper == null || Object_SqlConnectionHelper.ActiveSqlConnectionCollection.Count == 0)
-            return false;
         this.storeProceduresList = new Dictionary<string, Dictionary<string, class_Data_SqlSPEntry>>();
+        if (Object_SqlConnectionHelper == null || Object_SqlConnectionHelper.ActiveSqlConnectionCollection.Count == 0)
+            return this.storeProceduresList;
         foreach (string activeKeyName in Object_SqlConnectionHelper.ActiveSqlConnectionCollection.Keys)
         {
             Dictionary<string, class_Data_SqlSPEntry> resuleList = this.Object_SqlHelper.ActionAutoLoadingAllSPS(Object_SqlConnectionHelper.Get_ActiveConnection(activeKeyName), "*");
             this.storeProceduresList.Add(activeKeyName, resuleList);
         }
-        return true;
+        return this.storeProceduresList;
     }
-
+       
+    public void LoadStoreProcedureIntoApplicationPool()
+    {       
+        if (_refApplicationContainer[APPLICATION_SYMBOL_SPSLIST] == null)
+        {
+            _refApplicationContainer.Add(APPLICATION_SYMBOL_SPSLIST, LoadStoreProcedureList());
+            _refApplicationContainer.Add(APPLICATION_SYMBOL_SPSWRTIME, DateTime.Now.ToString());
+            _refApplicationContainer.Add(APPLICATION_SYMBOL_SPSFLUSH, "0");
+        }
+        else
+        {
+            DateTime dtWriten = DateTime.Parse(_refApplicationContainer[APPLICATION_SYMBOL_SPSWRTIME].ToString());
+            if((DateTime.Now-dtWriten).Minutes>=120 || _refApplicationContainer[APPLICATION_SYMBOL_SPSFLUSH].ToString()=="1")
+            {
+                _refApplicationContainer[APPLICATION_SYMBOL_SPSLIST] = LoadStoreProcedureList();
+                _refApplicationContainer[APPLICATION_SYMBOL_SPSWRTIME] = DateTime.Now.ToString();
+                _refApplicationContainer[APPLICATION_SYMBOL_SPSFLUSH] = "0";
+            }
+        }
+    }
+    
     public void PrepareDataOperation()
     {
         ConnectToDatabase();
-        LoadStoreProcedureList();
+        LoadStoreProcedureIntoApplicationPool();
     }
 
+    
     public bool ConnectToDatabase()
     {
         Object_SqlConnectionHelper = new class_Data_SqlConnectionHelper();
-        Object_SqlConnectionHelper.Set_NewConnectionItem(this.dbServer, this.dbServer, dbuid, dbpwd, dbdata, dataBaseType);
-        if(Object_SqlConnectionHelper.Get_ActiveConnection(this.dbServer)!=null)
+        if(Object_SqlConnectionHelper.Set_NewConnectionItem(this.dbServer, this.dbServer, dbuid, dbpwd, dbdata, dataBaseType))
             isExecutedConnectedDB = true;
         return true;
     }
@@ -239,6 +281,22 @@ public class class_CommonData
             }
             else
                 refAddErrMsgFunction(class_CommonDefined._Faild_Execute_Api + activeType.FullName, "failed to do action : select condition.", "", enum_MessageType.Exception);
+        }
+        else if (class_CommonDefined.enumDataOperaqtionType.deletecondition.ToString() == operation)
+        {
+            bool result = Object_SqlHelper.ExecuteDeleteConditionSP(activeSPEntry, Object_SqlConnectionHelper, dbServer);
+            if (!result)
+            {
+                refAddErrMsgFunction(class_CommonDefined._Faild_Execute_Api + activeType.FullName, "failed to do action : select condition.", "", enum_MessageType.Exception);
+            }
+        }
+        else if (class_CommonDefined.enumDataOperaqtionType.deletemixed.ToString() == operation)
+        {
+            bool result = Object_SqlHelper.ExecuteDeleteConditionSP(activeSPEntry, Object_SqlConnectionHelper, dbServer);
+            if (!result)
+            {
+                refAddErrMsgFunction(class_CommonDefined._Faild_Execute_Api + activeType.FullName, "failed to do action : select condition.", "", enum_MessageType.Exception);
+            }
         }
     }
 

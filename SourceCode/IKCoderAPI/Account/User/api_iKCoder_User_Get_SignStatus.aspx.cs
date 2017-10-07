@@ -9,7 +9,6 @@ public partial class Account_User_api_iKCoder_User_Get_SignStatus : class_WebBas
 {
     protected override void ExtendedAction()
     {
-        Object_DomainPersistance.ClearBuffer();
-        base.ExtendedAction();
+        
     }
 }

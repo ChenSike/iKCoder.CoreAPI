@@ -12,7 +12,7 @@ public partial class Account_Profile_api_iKCoder_Profile_Get_HeaderImg : class_W
 {
     protected override void ExtendedAction()
     {
-        switchResponseMode(enumResponseMode.bin);
+        switchResponseMode(enumResponseMode.text);
         string symbol = "img_header_" + logined_user_name;
         Object_CommonData.PrepareDataOperation();
         class_Data_SqlSPEntry activeSPEntry_binData = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_RESOURCE_BINARY);

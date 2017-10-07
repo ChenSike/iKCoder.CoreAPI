@@ -16,6 +16,8 @@ public class class_Bus_Exp
     List<string> symbolList = new List<string>();
     List<string> finishedSymbolList = new List<string>();
     class_CommonData Object_CommonData;
+    class_Bus_ProfileDocs Object_RefProfile;
+    string activeUserName = string.Empty;
 
     string strPrimerKey = "primer";
     string strPrimaryKey = "primary";
@@ -34,9 +36,11 @@ public class class_Bus_Exp
     double u_exvalue_senior = 0;
     double u_exvalue_advanced = 0;
 
-    public class_Bus_Exp(class_CommonData refCommonDataObject,List<string> finishedSymbolList)
+    public class_Bus_Exp(class_CommonData refCommonDataObject,List<string> finishedSymbolList,class_Bus_ProfileDocs refActiveObject,string username)
     {
+        activeUserName = username;
         Object_CommonData = refCommonDataObject;
+        Object_RefProfile = refActiveObject;
         init_sourceDoc_Sence();
         init_typedSymbols();
         init_Calc(finishedSymbolList);
@@ -190,5 +194,8 @@ public class class_Bus_Exp
                     u_exvalue_advanced = u_exvalue_advanced + (iBasicScore * (1 + iDiffScore));
             }
         }
+        double u_TotalExp = 0.0;
+        u_TotalExp = u_exvalue_primer + u_exvalue_primary + u_exvalue_middle + u_exvalue_senior + u_exvalue_advanced;
+        Object_RefProfile.SetTotalExp(activeUserName, u_TotalExp);
     }
 }

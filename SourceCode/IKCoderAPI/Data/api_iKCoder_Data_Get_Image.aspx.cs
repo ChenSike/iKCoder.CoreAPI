@@ -23,7 +23,7 @@ public partial class Data_api_iKCoder_Data_Get_Image : class_WebBase_IKCoderAPI_
                 activeSPEntry_binData.ClearAllParamsValues();
                 activeSPEntry_binData.ModifyParameterValue("@symbol", symbol);
                 DataTable binDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry_binData, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
-                if (binDataTable != null && binDataTable.Rows.Count == 0)
+                if (binDataTable != null && binDataTable.Rows.Count > 0)
                 {
                     DataRow activeDataRow = null;
                     class_Data_SqlDataHelper.GetActiveRow(binDataTable, 0, out activeDataRow);
@@ -38,6 +38,7 @@ public partial class Data_api_iKCoder_Data_Get_Image : class_WebBase_IKCoderAPI_
                     }
                     if (headerImageData != null && headerImageData.Length > 0)
                     {
+                        
                         switchResponseMode(enumResponseMode.bin);
                         RESPONSEBUFFER = headerImageData;
                     }

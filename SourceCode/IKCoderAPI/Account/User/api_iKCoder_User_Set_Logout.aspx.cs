@@ -10,13 +10,18 @@ public partial class Account_User_api_iKCoder_User_Set_Logout : class_WebBase_IK
 {
     protected override void ExtendedAction()
     {
-        ISRESPONSEDOC = true;
+        ISRESPONSEDOC = true;                  
+        for(int i=0;i<Request.Cookies.Count;i++)
+        {
+            if (!Request.Cookies[i].Name.Contains("_SessionId"))
+            {
+                Response.Cookies[Request.Cookies[i].Name].Expires = DateTime.Now.AddSeconds(-10);
+            }
+        }
         Session.RemoveAll();
         Request.Cookies.Clear();
-        Response.Cookies.Clear();
         Dictionary<String, String> attrs = new Dictionary<string, string>();
         attrs.Add("logined_marked", "0");
-        Object_DomainPersistance.Remove(Object_DomainPersistance.GetKeyName(REQUESTIP));
         AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
     }
 }

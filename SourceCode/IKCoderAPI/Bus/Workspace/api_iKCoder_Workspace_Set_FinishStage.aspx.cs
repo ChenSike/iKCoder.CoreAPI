@@ -18,6 +18,8 @@ public partial class Bus_Workspace_api_iKCoder_Workspace_Set_FinishStage : class
         string symbol = GetQuerystringParam("symbol");
         if (!string.IsNullOrEmpty(symbol))
         {
+            Object_CommonData.PrepareDataOperation();
+            class_Bus_ProfileDocs Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
             XmlDocument resourceDoc_studyStatus = Object_ProfileDocs.GetProfileDocObject(logined_user_name, class_CommonDefined.enumProfileDoc.doc_studystatus);
             string currentStage = Object_ProfileDocs.GetCurrentStage(logined_user_name, symbol);
             Object_ProfileDocs.SetFinishItemStage(logined_user_name, symbol, currentStage, resourceDoc_studyStatus);

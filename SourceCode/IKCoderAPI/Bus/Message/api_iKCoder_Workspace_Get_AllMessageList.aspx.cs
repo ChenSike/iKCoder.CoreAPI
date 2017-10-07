@@ -15,6 +15,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Get_AllMessageList : clas
     {
         switchResponseMode(enumResponseMode.text);
         Object_CommonData.PrepareDataOperation();
+        class_Bus_ProfileDocs Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
         sourceDoc_profile = Object_ProfileDocs.GetProfileDocObject(logined_user_name, class_CommonDefined.enumProfileDoc.doc_message);        
         class_Data_SqlSPEntry activeSPEntry_resourceMesssage = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_RESOURCE_MESSAGE);
         activeSPEntry_resourceMesssage.ClearAllParamsValues();

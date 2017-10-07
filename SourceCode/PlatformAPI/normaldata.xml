@@ -8,11 +8,11 @@
   <session name="RSDomain">
     <item name="carl" domain="http://carl.morningstar.com">
     </item>
-    <item name="sikehome" domain="http://ikcoder.iok.la:24525">
+    <item name="hotel" domain="http://10.111.0.81">
     </item>
     <item name="server" domain="http://localhost">
     </item>
     <item name="carloffice" domain="http://ikcoder.ikcoder.com">
-    </item>
+    </item>    
   </session>
 </root>

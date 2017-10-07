@@ -13,8 +13,8 @@ public partial class Account_Profile_api_iKCoder_Profile_Set_Nodes : class_WebBa
     {
         switchResponseMode(enumResponseMode.text);
         if (REQUESTDOCUMENT != null)
-        {
-                 
+        {                
+
             string parentXpath = string.Empty;
             XmlNode parentNode = REQUESTDOCUMENT.SelectSingleNode("/root/parent");
             if(parentNode!=null)
@@ -31,6 +31,8 @@ public partial class Account_Profile_api_iKCoder_Profile_Set_Nodes : class_WebBa
                 if (!xpathSet.ContainsKey(xpath))
                     xpathSet.Add(xpath, value);
             }
+            Object_CommonData.PrepareDataOperation();
+            class_Bus_ProfileDocs Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
             Object_ProfileDocs.SetNodesValues(logined_user_name, xpathSet, class_CommonDefined.enumProfileDoc.doc_basic,true); 
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), Object_LabelController.GetString("message", "SC_Param_Changed_Profiles"), "");
 

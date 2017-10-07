@@ -60,7 +60,6 @@ public partial class Account_User_api_iKCoder_User_Set_Reg : class_WebBase_IKCod
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_Checkcode"), "");
                 return;
             }
-
             codeName = class_XmlHelper.GetNodeValue(codeNameNode);
             if (string.IsNullOrEmpty(codeName))
             {
@@ -82,7 +81,7 @@ public partial class Account_User_api_iKCoder_User_Set_Reg : class_WebBase_IKCod
                 AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Reg_NickName"), "");
                 return;
             }
-            string codeValueFromServer = "";
+            string codeValueFromServer = string.Empty;
             if (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), codeName) != null)
                 codeValueFromServer = (Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), codeName)).ToString();
             if (codeValueFromServer != codeValue)
@@ -115,6 +114,8 @@ public partial class Account_User_api_iKCoder_User_Set_Reg : class_WebBase_IKCod
             returnDoc = Object_NetRemote.getRemoteRequestToStringWithCookieHeader(inputDoc.ToString(), URL, 1000 * 60, 1024 * 1024);
             if (!returnDoc.Contains("<err>"))
             {
+                Object_CommonData.PrepareDataOperation();
+                class_Bus_ProfileDocs Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
                 Object_ProfileDocs.VerifyAll(userSymbol);
                 Dictionary<string, string> newValuesMap = new Dictionary<string, string>();
                 newValuesMap.Add("/root/usrbasic/usr_nickname", nickname);

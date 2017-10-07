@@ -15,7 +15,7 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
     Dictionary<class_CommonDefined.enumProfileDoc, XmlDocument> sourceDocs_Profile = new Dictionary<class_CommonDefined.enumProfileDoc, XmlDocument>();
 
     Dictionary<string, DataRow> sourceRows_sence = new Dictionary<string, DataRow>();
-
+    class_Bus_ProfileDocs Object_ProfileDocs;
     List<string> symbolList = new List<string>();
     List<string> finishedSymbolList = new List<string>();
     List<Dictionary<string, string>> honorResult = new List<Dictionary<string, string>>();
@@ -213,9 +213,10 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
                 class_XmlHelper.SetAttribute(lessonNode, "symbol", activeSymbol);
                 class_XmlHelper.SetAttribute(lessonNode, "title", class_Bus_SenceDoc.GetSenceValue(Object_CommonData, activeSymbol, "/sence", "name"));
                 class_XmlHelper.SetAttribute(lessonNode, "finish", finishedSymbolList.Contains(activeSymbol) ? "1" : "0");
-                class_XmlHelper.SetAttribute(lessonNode, "title", class_Bus_SenceDoc.GetSenceValue(Object_CommonData, activeSymbol, "/sence", "name"));
-                class_XmlHelper.SetAttribute(lessonNode, "unit", "");
+                class_XmlHelper.SetAttribute(lessonNode, "enable", class_Bus_SenceDoc.GetSenceValue(Object_CommonData, activeSymbol, "/sence", "enable"));
+                class_XmlHelper.SetAttribute(lessonNode, "unit", class_Bus_SenceDoc.GetSenceValue(Object_CommonData, activeSymbol, "/sence", "unit"));
             }
+            
         }
 
     }
@@ -355,6 +356,9 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
     protected void set_Codetimes()
     {
         XmlNode codetimesNode = class_XmlHelper.CreateNode(centerDocument, "codetimes", "");
+        int userTotalTime = Object_ProfileDocs.GetTotalTime(logined_user_name);
+        class_XmlHelper.SetAttribute(codetimesNode, "over", Object_ProfileDocs.GetTimeOverate(userTotalTime).ToString());
+        class_XmlHelper.SetAttribute(codetimesNode, "totaltime", userTotalTime.ToString("0.00"));
         rootNode.AppendChild(codetimesNode);
         
         XmlDocument sourceDoc_CodeLine = Object_ProfileDocs.GetProfileDocObject(logined_user_name, class_CommonDefined.enumProfileDoc.doc_studystatus);
@@ -364,15 +368,23 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
             XmlNode item = class_XmlHelper.CreateNode(centerDocument, "item", "");
             string strDate = class_XmlHelper.GetAttrValue(activeItem, "date");
             string strValue = class_XmlHelper.GetAttrValue(activeItem, "value");
-            if (string.IsNullOrEmpty(strValue))
-                strValue = "0";
-            class_XmlHelper.SetAttribute(item, "date", strDate);
-            double dHours = 0;
-            double dMintues = 0;
-            double.TryParse(strValue, out dMintues);
-            dHours = dMintues / 60;
-            class_XmlHelper.SetAttribute(item, "value", dHours.ToString(".##"));
-            codetimesNode.AppendChild(item);
+            if (!string.IsNullOrEmpty(strDate))
+            {
+                DateTime dtTmp = DateTime.Now;
+                DateTime.TryParse(strDate, out dtTmp);
+                if (dtTmp.Month == DateTime.Now.Month)
+                {
+                    if (string.IsNullOrEmpty(strValue))
+                        strValue = "0";
+                    class_XmlHelper.SetAttribute(item, "date", strDate);
+                    double dHours = 0;
+                    double dMintues = 0;
+                    double.TryParse(strValue, out dMintues);
+                    dHours = dMintues / 60;
+                    class_XmlHelper.SetAttribute(item, "value", dHours.ToString("0.00"));
+                    codetimesNode.AppendChild(item);
+                }
+            }
         }
     }
 
@@ -380,6 +392,7 @@ public partial class Bus_Center_api_iKCoder_Center_Get_CenterInfo : class_WebBas
     {
         switchResponseMode(enumResponseMode.text);
         Object_CommonData.PrepareDataOperation();
+        Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
         init_sourceDoc_Sence();
         init_finishedSymbols();
         init_typedSymbols();

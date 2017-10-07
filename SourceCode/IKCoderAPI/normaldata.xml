@@ -6,6 +6,8 @@
     </item>
     <item name="sikehome" domain="192.168.199.233">
     </item>
+    <item name="hotel" domain="http://10.111.0.81">
+    </item>
     <item name="carloffice" domain="http://ikcoder.ikcoder.com">
     </item>
     <item name="localhost" domain="http://localhost">

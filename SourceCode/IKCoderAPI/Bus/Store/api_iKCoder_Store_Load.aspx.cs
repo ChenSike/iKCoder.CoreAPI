@@ -13,18 +13,16 @@ public partial class Bus_Store_api_iKCoder_Store_Load : class_WebBase_IKCoderAPI
         switchResponseMode(enumResponseMode.text);
         string symbol = GetQuerystringParam("symbol");
         string type = GetQuerystringParam("type");
-        string timeout = GetQuerystringParam("timeout");
-        int iTimeout = 120;
-        int.TryParse(timeout, out iTimeout);
-        if (string.IsNullOrEmpty(symbol))
-        {
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "symbol->empty", "");
-            return;
-        }
         string tmpDataSymbol = symbol + "_" + type + "_" + ClientSymbol;
         string content = Object_DomainPersistance.Get(Object_DomainPersistance.GetKeyName(REQUESTIP), tmpDataSymbol).ToString();
-        AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), content, "");
-
-
+        try
+        {
+            RESPONSEDOCUMENT.LoadXml(content);
+        }
+        catch
+        {
+            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "response document->empty", "");
+            return;
+        }
     }
 }

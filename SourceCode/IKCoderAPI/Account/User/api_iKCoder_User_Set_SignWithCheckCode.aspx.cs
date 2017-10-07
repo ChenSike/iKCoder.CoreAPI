@@ -18,6 +18,7 @@ public partial class Account_User_api_iKCoder_User_Set_SignWithCheckCode : class
         string codeValue = "";
         symbol = GetQuerystringParam("symbol");
         password = GetQuerystringParam("password");
+        Session.Clear();
         XmlNode codeNameNode = REQUESTDOCUMENT.SelectSingleNode("/root/codename");
         XmlNode codeValueNode = REQUESTDOCUMENT.SelectSingleNode("/root/codevalue");
         if (string.IsNullOrEmpty(symbol))
@@ -99,6 +100,7 @@ public partial class Account_User_api_iKCoder_User_Set_SignWithCheckCode : class
             attrs.Add("logined_user_name", user_name);
             attrs.Add("logined_marked", "1");
             Object_CommonData.PrepareDataOperation();
+            class_Bus_ProfileDocs Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
             Object_ProfileDocs.VerifyAll(user_name);
             string value_nickname = Object_ProfileDocs.GetDocNoteValue(user_name, class_CommonDefined.enumProfileDoc.doc_basic, "/usrbasic/usr_nickname");            
             Session["logined_user_nickname"] = value_nickname;
@@ -106,7 +108,7 @@ public partial class Account_User_api_iKCoder_User_Set_SignWithCheckCode : class
             attrs.Add("logined_user_nickname", value_nickname); 
             List<string> finishedSencesSymbols = Object_ProfileDocs.GetFinishedSymbols(user_name);
             XmlDocument sourceDoc_StudyStatus = Object_ProfileDocs.GetProfileDocObject(user_name, class_CommonDefined.enumProfileDoc.doc_studystatus);
-            class_Bus_Exp ObjectEXP = new class_Bus_Exp(Object_CommonData, finishedSencesSymbols);
+            class_Bus_Exp ObjectEXP = new class_Bus_Exp(Object_CommonData, finishedSencesSymbols, Object_ProfileDocs, user_name);
             double totalExp = ObjectEXP.Get_UserTotalExp();
             Object_ProfileDocs.SetTotalExp(user_name, totalExp);
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);

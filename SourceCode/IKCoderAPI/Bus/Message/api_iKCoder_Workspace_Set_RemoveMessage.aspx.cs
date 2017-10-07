@@ -15,6 +15,7 @@ public partial class Bus_Message_api_iKCoder_Workspace_Set_RemoveMessage : class
         string messageid = GetQuerystringParam("id");
         string operationid = GetQuerystringParam("operationid");
         Object_CommonData.PrepareDataOperation();
+        class_Bus_ProfileDocs Object_ProfileDocs = new class_Bus_ProfileDocs(ref Object_CommonData);
         if (string.IsNullOrEmpty(operationid))
         {
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "false.", "messageid->empty", enum_MessageType.Exception);
