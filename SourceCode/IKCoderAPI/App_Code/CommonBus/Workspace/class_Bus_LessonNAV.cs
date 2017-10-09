@@ -52,6 +52,30 @@ public class class_Bus_LessonNAV : class_BusBase
             return 0;
     }
 
+    public string GetResourceSymbol(string lessonSymbol,string pageIndex)
+    {
+        XmlNode pageNode = LessonNAV_Doc.SelectSingleNode("/root/lesson[@symbol='" + lessonSymbol + "']/page[@index='" + pageIndex + "']");
+        if (pageNode == null)
+            return string.Empty;
+        else
+        {
+            string symbol = class_XmlHelper.GetAttrValue(pageNode, "symbol");
+            return symbol;
+        }
+    }
+
+    public XmlDocument GetLessonCurrentNAVDoc(string lessonSymbol)
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.LoadXml("<root></root>");
+        XmlNode lessonNode = LessonNAV_Doc.SelectSingleNode("/root/lesson[@symbol='" + lessonSymbol + "']");
+        if(lessonNode!=null)
+        {
+            doc.SelectSingleNode("/root").AppendChild(lessonNode.CloneNode(true));
+        }
+        return doc;
+    }
+
 
     public void SetSaveLessonNAVDoc()
     {

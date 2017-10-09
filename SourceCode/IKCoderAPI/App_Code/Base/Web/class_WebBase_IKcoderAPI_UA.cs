@@ -25,11 +25,11 @@ public class class_WebBase_IKCoderAPI_UA:class_WebBase_IKCoderAPI
             {
                 if (Session["logined_user_signedid"].ToString() == logined_user_loginid)
                 {
-                    if (Session["logined_marked"].ToString() == "1")
+                    if (!string.IsNullOrEmpty(Session["logined_marked"].ToString()))
                     {
                         Dictionary<String, String> attrs = new Dictionary<string, string>();
                         attrs.Add("logined_user_name", Session["logined_user_name"].ToString());
-                        attrs.Add("logined_marked", "1");
+                        attrs.Add("logined_marked", Session["logined_marked"].ToString());
                         attrs.Add("type", "1");
                         AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
                         return true;

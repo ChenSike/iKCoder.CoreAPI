@@ -86,4 +86,32 @@ public class class_Bus_Profile_VerifyTeacherDocs : class_Bus_Profile_Base
             SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_basic, doc_basic.OuterXml, profile_type);
     }
 
+    public void VerifyDoc_StudyStatus(string username)
+    {
+        XmlDocument doc_studystatus = new XmlDocument();
+        string strDoc = string.Empty;
+        if (VerifyProfileDocExisted(username, class_CommonDefined.enumProfileDoc.doc_studystatus))
+            strDoc = GetProfileDoc(username, class_CommonDefined.enumProfileDoc.doc_studystatus);
+        else
+            strDoc = "<studystatus></studystatus>";
+        doc_studystatus.LoadXml(strDoc);
+        XmlNode node_studystatus = doc_studystatus.SelectSingleNode("/studystatus");
+        if (node_studystatus == null)
+        {
+            strDoc = "<studystatus></studystatus>";
+            doc_studystatus.LoadXml(strDoc);
+        }
+        XmlNode node_exp = node_studystatus.SelectSingleNode("exp");
+        if (node_exp == null)
+        {
+            node_exp = class_XmlHelper.CreateNode(doc_studystatus, "exp", "");
+            class_XmlHelper.SetAttribute(node_exp, "total", "0");
+            node_studystatus.AppendChild(node_exp);
+        }
+        VerifyDoc_TimeLineInStatus(username, ref doc_studystatus);
+        VerifyDoc_Finished(username, ref doc_studystatus);
+        SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_studystatus, doc_studystatus.OuterXml);
+
+    }
+
 }

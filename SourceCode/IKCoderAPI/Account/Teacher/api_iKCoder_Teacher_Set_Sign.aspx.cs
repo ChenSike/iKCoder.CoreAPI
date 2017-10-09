@@ -71,7 +71,7 @@ public partial class Account_Teacher_api_iKCoder_Teacher_Set_Sign : class_WebBas
             Session["logined_user_signedid"] = user_loginid;
             Session["logined_marked"] = logined_mark;
             Session.Timeout = Session_TimeOutMinutes;
-            Response.Cookies["logined_marked"].Value = "1";
+            Response.Cookies["logined_marked"].Value = logined_mark;
             Response.Cookies["logined_marked"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);
             Response.Cookies["logined_user_name"].Value = user_name;
             Response.Cookies["logined_user_name"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);
@@ -79,6 +79,8 @@ public partial class Account_Teacher_api_iKCoder_Teacher_Set_Sign : class_WebBas
             Response.Cookies["logined_user_id"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);
             Response.Cookies["logined_user_signedid"].Value = user_loginid;
             Response.Cookies["logined_user_signedid"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);
+            Response.Cookies["logined_user_licence"].Value = keyLicence;
+            Response.Cookies["logined_user_licence"].Expires = DateTime.Now.AddHours(Cookie_TimeOutHour);
             Dictionary<string, string> attrs = new Dictionary<string, string>();
             attrs.Add("logined_user_name", user_name);
             attrs.Add("logined_marked", logined_mark);
