@@ -23,13 +23,9 @@ public class class_Bus_EduCenter : class_BusBase
     {
         if (!GetISCenterExisted(symbol))
         {
-            class_Bus_Licences objectLicences = new class_Bus_Licences(Object_CommonData);
-            Dictionary<string, string> result = objectLicences.SetFetchUnusedLicence("0");
-            string c_licenceid = result["id"].ToString();
             activeSPEntry.ClearAllParamsValues();
             activeSPEntry.ModifyParameterValue("@c_symbol", symbol);
             activeSPEntry.ModifyParameterValue("@c_password", password);
-            activeSPEntry.ModifyParameterValue("@c_licenceid", c_licenceid);
             Object_CommonData.Object_SqlHelper.ExecuteInsertSP(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
         }
         else
@@ -60,21 +56,21 @@ public class class_Bus_EduCenter : class_BusBase
         }
     }
 
-    public bool GetCheckedAccountEduCenter(string symbol,string password,string licence)
+    public bool GetCheckedAccountEduCenter(string symbol,string password)
     {
-        if (string.IsNullOrEmpty(symbol) || string.IsNullOrEmpty(licence))
+        if (string.IsNullOrEmpty(symbol))
             return false;
         else
         {
             activeSPEntry.ClearAllParamsValues();
-            activeSPEntry.ModifyParameterValue("@c_symbol", symbol);
-            activeSPEntry.ModifyParameterValue("@c_password", password);
-            DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+            activeSPEntry.ModifyParameterValue("@c_symbol", symbol);            
+            DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
             if (activeDataTable != null && activeDataTable.Rows.Count > 0)
             {
-                class_Bus_Licences objectLicence = new class_Bus_Licences(Object_CommonData);
-                string licenceid = objectLicence.GetLicenceID(licence);
-                if (objectLicence.GetCheckLicence(licenceid, "0", licence))
+                DataRow activeDataRow = activeDataTable.Rows[0];
+                string cpassword = string.Empty;
+                class_Data_SqlDataHelper.GetColumnData(activeDataRow, "c_password", out cpassword);
+                if (cpassword == password)
                     return true;
                 else
                     return false;

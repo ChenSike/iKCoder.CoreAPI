@@ -76,12 +76,21 @@ public class class_CommonDefined
         doc_message = 7007
     }
 
+    public enum enumProfileType
+    {
+        profile_type_educenter = 0,
+        profile_type_teacher = 1,
+        profile_type_advisor = 2,
+        profile_type_student = 3        
+    }
+
     public enum enumLoginedMark
     {
        mark_educenter = 1,
        mark_teacher = 2,
        mark_student = 3,
-       mark_sales = 4
+       mark_advisor = 4,
+       mark_tm = 5
     }
 
 }

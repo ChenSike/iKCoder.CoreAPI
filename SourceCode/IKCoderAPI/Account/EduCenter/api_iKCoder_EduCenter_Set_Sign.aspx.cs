@@ -14,21 +14,17 @@ public partial class Account_EduCenter_api_iKCoder_EduCenter_Set_Sign : class_We
     protected override void ExtendedAction()
     {
         string logined_mark = class_CommonDefined.enumLoginedMark.mark_educenter.ToString();
-        string keyLicence = string.Empty;
         string symbol = "";
         string password = "";        
         symbol = GetQuerystringParam("symbol");
         password = GetQuerystringParam("password");
-        keyLicence = GetQuerystringParam("licence");
         Session.Clear();
         if (string.IsNullOrEmpty(symbol))
         {
             XmlNode symbolNode = REQUESTDOCUMENT.SelectSingleNode("/root/symbol");
             XmlNode passwordNode = REQUESTDOCUMENT.SelectSingleNode("/root/password");
-            XmlNode licenceNode = REQUESTDOCUMENT.SelectSingleNode("/root/licence");
             symbol = class_XmlHelper.GetNodeValue(symbolNode);
             password = class_XmlHelper.GetNodeValue(passwordNode);
-            keyLicence = class_XmlHelper.GetNodeValue(licenceNode);
         }
         if (string.IsNullOrEmpty(symbol))
         {
@@ -39,22 +35,10 @@ public partial class Account_EduCenter_api_iKCoder_EduCenter_Set_Sign : class_We
         {
             AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "Empty_Param_Sign_Password"), "");
             return;
-        }
-        if (string.IsNullOrEmpty(keyLicence))
-        {
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Sign_Licence_Empty"), "");
-            return;
-        }
-        bool isLogined = true;
-        class_Bus_Licences objectLicences = new class_Bus_Licences(Object_CommonData);
-        string licenceid = objectLicences.GetLicenceID(keyLicence);
-        if (string.IsNullOrEmpty(licenceid))
-        {
-            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, Object_LabelController.GetString("message", "ERR_Msg_Sign_Licence_Empty"), "");
-            return;
-        }
+        }      
+        bool isLogined = true;     
         class_Bus_EduCenter objectEduCenter = new class_Bus_EduCenter(Object_CommonData);
-        if(objectEduCenter.GetCheckedAccountEduCenter(symbol, password, keyLicence))
+        if(objectEduCenter.GetCheckedAccountEduCenter(symbol, password))
         {
             isLogined = true;
         }

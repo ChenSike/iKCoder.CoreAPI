@@ -108,9 +108,7 @@ public class class_Bus_Profile_VerifyTeacherDocs : class_Bus_Profile_Base
             class_XmlHelper.SetAttribute(node_exp, "total", "0");
             node_studystatus.AppendChild(node_exp);
         }
-        VerifyDoc_TimeLineInStatus(username, ref doc_studystatus);
-        VerifyDoc_Finished(username, ref doc_studystatus);
-        SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_studystatus, doc_studystatus.OuterXml);
+        SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_studystatus, doc_studystatus.OuterXml, profile_type);
 
     }
 

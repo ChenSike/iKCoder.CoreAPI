@@ -106,13 +106,13 @@ public class class_WebBase_IKCoderAPI : class_Base_WebBaseclass
             activeCookieContainerObject = (CookieContainer)GetSessionValue(CookieContainer_Name);
         Object_NetRemote = new class_Net_RemoteRequest(ref activeCookieContainerObject);
         ISRESPONSEDOC = true;
-        if (regToken())
-        {
+        //if (regToken())
+        //{
             if (BeforeExtenedAction())
             {                
                 ExtendedAction();
             }
-        }
+        //}
         if (Object_CommonData.isExecutedConnectedDB)
             Object_CommonData.CloseDBConnection();
     }
