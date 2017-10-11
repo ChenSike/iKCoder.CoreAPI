@@ -4,19 +4,18 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Xml;
-using iKCoder_Platform_SDK_Kit;
 
-public partial class Account_Teacher_api_iKCoder_Teacher_Set_ChangePassword : class_WebBase_IKCoderAPI_UA_Teacher
+public partial class Account_Advisor_api_iKCoder_Advisor_Set_Reg : class_WebBase_IKCoderAPI_NUA
 {
     protected override void ExtendedAction()
     {
-        string symbol = logined_user_name;
+        string symbol = GetQuerystringParam("symbol");
         string password = GetQuerystringParam("password");
-        class_Bus_Teacher objTeacher = new class_Bus_Teacher(Object_CommonData);
-        if (!objTeacher.GetISTeacherExisted(symbol))
+        string centersymbol = GetQuerystringParam("centersymbol");
+        class_Bus_Advisor objAdvisor = new class_Bus_Advisor(Object_CommonData);
+        if (!objAdvisor.GetISAdvisorExisted(symbol))
         {
-            objTeacher.SetUpdateTeacher(symbol, password, string.Empty);
+            objAdvisor.SetUpdateAdvisor(symbol, password, centersymbol);
             AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), "true", "");
         }
         else

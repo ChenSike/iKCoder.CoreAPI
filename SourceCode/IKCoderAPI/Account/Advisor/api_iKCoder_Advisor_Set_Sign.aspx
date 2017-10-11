@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="api_iKCoder_Advisor_Set_Sign.aspx.cs" Inherits="Account_Advisor_api_iKCoder_Advisor_Set_Sign" %>

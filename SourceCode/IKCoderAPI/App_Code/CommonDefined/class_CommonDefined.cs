@@ -93,4 +93,23 @@ public class class_CommonDefined
        mark_tm = 5
     }
 
+    public static int GetLoginedMarkType(enumLoginedMark loginedMark)
+    {
+        switch(loginedMark)
+        {
+            case enumLoginedMark.mark_educenter:
+                return 1;
+            case enumLoginedMark.mark_teacher:
+                return 2;
+            case enumLoginedMark.mark_student:
+                return 3;
+            case enumLoginedMark.mark_advisor:
+                return 4;
+            case enumLoginedMark.mark_tm:
+                return 5;
+            default:
+                return 3;
+        }
+    }
+
 }

@@ -96,23 +96,7 @@ public class class_Bus_EduCenter : class_BusBase
         else
             return string.Empty;
     }
-
-    public string GetLicence(string symbol)
-    {
-        activeSPEntry.ClearAllParamsValues();
-        activeSPEntry.ModifyParameterValue("@c_symbol", symbol);
-        DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
-        if (activeDataTable != null && activeDataTable.Rows.Count > 0)
-        {
-            DataRow activeDataRow = null;
-            class_Data_SqlDataHelper.GetActiveRow(activeDataTable, 0, out activeDataRow);
-            string id = string.Empty;
-            class_Data_SqlDataHelper.GetColumnData(activeDataRow, "id", out id);
-            return id;
-        }
-        else
-            return string.Empty;
-    }
+ 
     
 
 }

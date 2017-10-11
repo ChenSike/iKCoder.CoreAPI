@@ -12,7 +12,7 @@ using System.Data;
 public class class_Bus_Profile_VerifyStudentDocs : class_Bus_Profile_Base
 {
 
-    string profile_type = "1";
+    class_CommonDefined.enumLoginedMark profile_type = class_CommonDefined.enumLoginedMark.mark_student;
 
     public class_Bus_Profile_VerifyStudentDocs(ref class_CommonData refCommonDataObject) : base(refCommonDataObject)
     {
@@ -104,7 +104,7 @@ public class class_Bus_Profile_VerifyStudentDocs : class_Bus_Profile_Base
             isUpdated = true;
         }
         if (isUpdated)
-            SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_basic, doc_basic.OuterXml, profile_type);
+            SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_basic, doc_basic.OuterXml, class_CommonDefined.GetLoginedMarkType(profile_type).ToString());
     }
     
     public void VerifyDoc_Message(string username)
@@ -136,7 +136,7 @@ public class class_Bus_Profile_VerifyStudentDocs : class_Bus_Profile_Base
             isUpdated = true;
         }
         if (isUpdated)
-            SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_message, doc_message.OuterXml,profile_type);
+            SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_message, doc_message.OuterXml, class_CommonDefined.GetLoginedMarkType(profile_type).ToString());
     }
 
     public void VerifyDoc_DataStore(string username)
@@ -171,7 +171,7 @@ public class class_Bus_Profile_VerifyStudentDocs : class_Bus_Profile_Base
             isUpdated = true;
         }
         if (isUpdated)
-            SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_datastore, doc_datastore.OuterXml,profile_type);
+            SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_datastore, doc_datastore.OuterXml,class_CommonDefined.GetLoginedMarkType(profile_type).ToString());
     }
 
     public void VerifyAll(string username)

@@ -22,4 +22,5 @@ public class class_SPSMap
     public static string SP_OPERATION_POOL_EDUCENTERS = "spa_operation_pool_users_centers";
     public static string SP_OPERATION_POOL_STUDENTS = "spa_operation_pool_users_students";
     public static string SP_OPERATION_POOL_TEACHERS = "spa_operation_pool_users_teachers";
+    public static string SP_OPERATION_POOL_ADVISOR = "spa_operation_pool_users_advisor";
 }

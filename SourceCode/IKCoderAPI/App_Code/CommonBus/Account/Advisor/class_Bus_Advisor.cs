@@ -7,69 +7,84 @@ using System.Xml;
 using System.Data;
 
 /// <summary>
-/// Summary description for class_Bus_Teacher
+/// Summary description for class_Bus_Advisor
 /// </summary>
-public class class_Bus_Teacher : class_BusBase
+public class class_Bus_Advisor:class_BusBase
 {
-
     class_Data_SqlSPEntry activeSPEntry;
 
-    public class_Bus_Teacher(class_CommonData refObjectCommonData) : base(refObjectCommonData)
+    public class_Bus_Advisor(class_CommonData refObjectCommonData) : base(refObjectCommonData)
     {
-        activeSPEntry = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_POOL_TEACHERS);
+        activeSPEntry = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_POOL_ADVISOR);
         Object_CommonData.PrepareDataOperation();
     }
 
-    public void SetUpdateTeacher(string symbol,string password,string centersymbol)
+    public void SetUpdateAdvisor(string symbol, string password,string centersymbol)
     {
-        if (!GetISTeacherExisted(symbol))
+        if (!GetISAdvisorExisted(symbol))
         {
-            class_Bus_Licences objectLicences = new class_Bus_Licences(Object_CommonData);
-            Dictionary<string, string> result = objectLicences.SetFetchUnusedLicence("0");
-            string c_licenceid = result["id"].ToString();
             activeSPEntry.ClearAllParamsValues();
             activeSPEntry.ModifyParameterValue("@symbol", symbol);
             activeSPEntry.ModifyParameterValue("@password", password);
-            activeSPEntry.ModifyParameterValue("@status", "0");
             activeSPEntry.ModifyParameterValue("@centersymbol", centersymbol);
-            activeSPEntry.ModifyParameterValue("@licenceid", c_licenceid);
             Object_CommonData.Object_SqlHelper.ExecuteInsertSP(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
         }
         else
         {
-            string id = GetTeacherID(symbol);
+            string id = GetAdvisorID(symbol);
             activeSPEntry.ClearAllParamsValues();
             activeSPEntry.ModifyParameterValue("@id", id);
             activeSPEntry.ModifyParameterValue("@symbol", symbol);
             activeSPEntry.ModifyParameterValue("@password", password);
             Object_CommonData.Object_SqlHelper.ExecuteUpdateSP(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
         }
-        class_Bus_Profile_VerifyTeacherDocs objectVerifyTeacherDocs = new class_Bus_Profile_VerifyTeacherDocs(ref Object_CommonData);
-        objectVerifyTeacherDocs.VerifyDoc_Basic(symbol);
+        class_Bus_Profile_VerifyAdvisor objectVerifyAdvisor = new class_Bus_Profile_VerifyAdvisor(ref Object_CommonData);
+        objectVerifyAdvisor.VerifyDoc_Basic(symbol);
     }
 
-    public string GetTeacherID(string symbol)
+
+    public string GetAdvisorID(string symbol)
     {
         activeSPEntry.ClearAllParamsValues();
         activeSPEntry.ModifyParameterValue("@symbol", symbol);
         DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
-        string id = string.Empty;
         if (activeDataTable != null && activeDataTable.Rows.Count > 0)
         {
-            class_Data_SqlDataHelper.GetColumnData(activeDataTable.Rows[0], "id", out id);            
+            DataRow activeDataRow = null;
+            class_Data_SqlDataHelper.GetActiveRow(activeDataTable, 0, out activeDataRow);
+            string id = string.Empty;
+            class_Data_SqlDataHelper.GetColumnData(activeDataRow, "id", out id);
+            return id;
         }
-        return id;
+        else
+            return string.Empty;
     }
 
-    public bool GetCheckedAccountTeacher(string symbol,string password,string licence)
+
+    public bool GetISAdvisorExisted(string symbol)
     {
-        if(string.IsNullOrEmpty(symbol) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(licence))
+        activeSPEntry.ClearAllParamsValues();
+        activeSPEntry.ModifyParameterValue("@symbol", symbol);
+        DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+        if (activeDataTable != null && activeDataTable.Rows.Count > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool GetCheckedAccountAdvisor(string symbol, string password)
+    {
+        if (string.IsNullOrEmpty(symbol) || string.IsNullOrEmpty(password))
         {
             return false;
         }
         else
         {
-            if(GetISTeacherExisted(symbol))
+            if (GetISAdvisorExisted(symbol))
             {
                 activeSPEntry.ClearAllParamsValues();
                 activeSPEntry.ModifyParameterValue("@symbol", symbol);
@@ -77,12 +92,7 @@ public class class_Bus_Teacher : class_BusBase
                 DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
                 if (activeDataTable != null && activeDataTable.Rows.Count > 0)
                 {
-                    class_Bus_Licences objectLicence = new class_Bus_Licences(Object_CommonData);
-                    string licenceid = objectLicence.GetLicenceID(licence);
-                    if (objectLicence.GetCheckLicence(licenceid, "1", licence))
-                        return true;
-                    else
-                        return false;
+                    return true;
                 }
                 else
                 {
@@ -93,21 +103,6 @@ public class class_Bus_Teacher : class_BusBase
             {
                 return false;
             }
-        }
-    }
-
-    public bool GetISTeacherExisted(string symbol)
-    {
-        activeSPEntry.ClearAllParamsValues();
-        activeSPEntry.ModifyParameterValue("@symbol", symbol);
-        DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
-        if (activeDataTable != null && activeDataTable.Rows.Count > 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 

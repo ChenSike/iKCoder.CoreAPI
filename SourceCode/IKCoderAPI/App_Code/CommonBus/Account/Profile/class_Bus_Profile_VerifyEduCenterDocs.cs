@@ -11,7 +11,8 @@ using System.Xml;
 /// </summary>
 public class class_Bus_Profile_VerifyEduCenterDocs:class_Bus_Profile_Base
 {
-    string profile_type = "2";
+    class_CommonDefined.enumLoginedMark profile_type = class_CommonDefined.enumLoginedMark.mark_educenter;
+                
 
     public class_Bus_Profile_VerifyEduCenterDocs(ref class_CommonData refCommonDataObject) : base(refCommonDataObject)
     {
@@ -98,7 +99,7 @@ public class class_Bus_Profile_VerifyEduCenterDocs:class_Bus_Profile_Base
             isUpdated = true;
         }
         if (isUpdated)
-            SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_basic, doc_basic.OuterXml, profile_type);
+            SetUpdateProfileItem(username, class_CommonDefined.enumProfileDoc.doc_basic, doc_basic.OuterXml, class_CommonDefined.GetLoginedMarkType(profile_type).ToString());
     }
 
 }
