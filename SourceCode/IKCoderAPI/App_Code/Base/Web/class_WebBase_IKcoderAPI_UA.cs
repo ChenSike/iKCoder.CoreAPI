@@ -9,8 +9,6 @@ using iKCoder_Platform_SDK_Kit;
 /// </summary>
 public class class_WebBase_IKCoderAPI_UA:class_WebBase_IKCoderAPI
 {
-    protected string logined_user_id;
-    protected string logined_user_name;
 
     protected override bool BeforeExtenedAction()
     {

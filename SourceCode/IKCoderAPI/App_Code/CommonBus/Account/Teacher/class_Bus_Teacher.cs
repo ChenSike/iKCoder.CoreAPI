@@ -61,6 +61,8 @@ public class class_Bus_Teacher : class_BusBase
         return id;
     }
 
+
+
     public bool GetCheckedAccountTeacher(string symbol,string password,string licence)
     {
         if(string.IsNullOrEmpty(symbol) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(licence))
@@ -109,6 +111,19 @@ public class class_Bus_Teacher : class_BusBase
         {
             return false;
         }
+    }
+
+    public string GetCenterSymbol(string symbol)
+    {
+        activeSPEntry.ClearAllParamsValues();
+        activeSPEntry.ModifyParameterValue("@symbol", symbol);
+        DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+        string centersymbol = string.Empty;
+        if (activeDataTable != null && activeDataTable.Rows.Count > 0)
+        {
+            class_Data_SqlDataHelper.GetColumnData(activeDataTable.Rows[0], "centersymbol", out centersymbol);
+        }
+        return centersymbol;
     }
 
 }

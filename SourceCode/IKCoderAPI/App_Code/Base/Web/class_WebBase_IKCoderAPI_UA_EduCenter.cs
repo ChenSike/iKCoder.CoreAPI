@@ -10,8 +10,6 @@ using System.Data;
 /// </summary>
 public class class_WebBase_IKCoderAPI_UA_EduCenter: class_WebBase_IKCoderAPI
 {
-    protected string logined_user_id;
-    protected string logined_user_name;
 
     protected override bool BeforeExtenedAction()
     {
@@ -22,6 +20,7 @@ public class class_WebBase_IKCoderAPI_UA_EduCenter: class_WebBase_IKCoderAPI
             string logined_user_loginid = Request.Cookies["logined_user_signedid"].Value;
             logined_user_id = Request.Cookies["logined_user_id"].Value;
             logined_user_name = Session["logined_user_name"].ToString();
+            logined_centersymbol = logined_user_name;
             if (Session["logined_user_id"].ToString() == logined_user_id)
             {
                 if (Session["logined_user_signedid"].ToString() == logined_user_loginid)

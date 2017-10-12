@@ -27,6 +27,10 @@ public class class_WebBase_IKCoderAPI : class_Base_WebBaseclass
     protected int Session_TimeOutMinutes = 180;
     protected int Cookie_TimeOutHour = 3;
 
+    protected string logined_user_id;
+    protected string logined_user_name;
+    protected string logined_centersymbol;
+
     public class_WebBase_IKCoderAPI()
     {
         Object_CommonData = new class_CommonData(Application);
