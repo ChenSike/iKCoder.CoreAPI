@@ -190,12 +190,47 @@ public class class_Bus_Classes : class_BusBase
             class_XmlHelper.SetAttribute(newItem, "start", starttime);
             class_XmlHelper.SetAttribute(newItem, "classroom", classroom);
             class_XmlHelper.SetAttribute(newItem, "lesson", lessonsymbol);
+            class_XmlHelper.SetAttribute(newItem, "status", "0");
+            activeClassItem.doc_schedule.SelectSingleNode("/root").AppendChild(newItem);
             SetOrderScheduleItemsOrder(symbol);
             SetUpdateClass(symbol);
             return true;
         }
         else
             return false;
+    }
+
+    public List<class_Bus_ClassesItem> GetClassesListForTeacher(string teachersymbol)
+    {
+        List<class_Bus_ClassesItem> result = new List<class_Bus_ClassesItem>();
+        foreach(class_Bus_ClassesItem activeItem in classesPool.Values)
+        {
+            if(activeItem.assigned==teachersymbol)
+            {
+                result.Add(activeItem);
+            }
+        }
+        return result;
+    }
+
+    public class_Bus_ClassesItem GetClass(string symbol)
+    {
+        if (classesPool.ContainsKey(symbol))
+        {
+            class_Bus_ClassesItem activeItem = classesPool[symbol];
+            return activeItem;
+        }
+        else
+            return null;
+    }
+
+    public void SetClassScheduleStatus(string symbol,string status)
+    {
+        if (classesPool.ContainsKey(symbol))
+        {
+            class_Bus_ClassesItem activeItem = classesPool[symbol];
+            
+        }
     }
 
     public bool SetRemoveScheduleItem(string symbol,string date,string starttime,string classroom, string lessonsymbol)
@@ -268,6 +303,51 @@ public class class_Bus_Classes : class_BusBase
 
     }
         
+    public void SetUpdateStudent(string symbol,string studentsymbol)
+    {
+        if(!GetVerifyStudentItem(symbol,studentsymbol))
+        {
+            class_Bus_ClassesItem activeClassItem = GetExsitedItem(symbol);
+            XmlNode newItem = class_XmlHelper.CreateNode(activeClassItem.doc_schedule, "item", "");
+            class_XmlHelper.SetAttribute(newItem, "symbol", studentsymbol);
+            activeClassItem.doc_studentdoc.SelectSingleNode("/root").AppendChild(newItem);
+            SetUpdateClass(symbol);
+        }
+    }
+
+    public void SetRemoveStudentItem(string symbol,string studentsymbol)
+    {
+        if(GetVerifyStudentItem(symbol,studentsymbol))
+        {
+            class_Bus_ClassesItem activeClassItem = GetExsitedItem(symbol);
+            XmlNode studentItemNode = GetExistedStudentItem(symbol, studentsymbol);
+            if(studentsymbol!=null)
+            {
+                activeClassItem.doc_studentdoc.SelectSingleNode("/root").RemoveChild(studentItemNode);
+                SetUpdateClass(symbol);
+            }
+        }
+    }
+
+    public bool GetVerifyStudentItem(string symbol,string studentsymbol)
+    {
+        class_Bus_ClassesItem newItem = GetExsitedItem(symbol);
+        XmlNode itemNode = newItem.doc_studentdoc.SelectSingleNode("/root/item[@symbol='" + studentsymbol + "']");
+        if (itemNode != null)
+            return true;
+        else
+            return false;
+    }
+
+    public XmlNode GetExistedStudentItem(string symbol,string studentsymbol)
+    {
+        class_Bus_ClassesItem newItem = GetExsitedItem(symbol);
+        XmlNode itemNode = newItem.doc_studentdoc.SelectSingleNode("/root/item[@symbol='" + studentsymbol + "']");
+        if (itemNode != null)
+            return itemNode;
+        else
+            return null;
+    }
 
     public bool SetRemoveClass(string symbol)
     {
@@ -282,6 +362,22 @@ public class class_Bus_Classes : class_BusBase
         else
         {
             return false;
+        }
+    }
+
+    public void SetUpdateAllClasses(string symbol)
+    {
+        foreach(class_Bus_ClassesItem activeItem in classesPool.Values)
+        {
+            activeSPEntry.ClearAllParamsValues();
+            activeSPEntry.ModifyParameterValue("@id", activeItem.id);
+            activeSPEntry.ModifyParameterValue("@symbol", activeItem.symbol);
+            activeSPEntry.ModifyParameterValue("@centersymbol", activeItem.centersymbol);
+            activeSPEntry.ModifyParameterValue("@scheduledoc", class_CommonUtil.Encoder_Base64(activeItem.doc_schedule.OuterXml));
+            activeSPEntry.ModifyParameterValue("@basicinfodoc", class_CommonUtil.Encoder_Base64(activeItem.doc_basicinfo.OuterXml));
+            activeSPEntry.ModifyParameterValue("@studentlistdoc", class_CommonUtil.Encoder_Base64(activeItem.doc_studentdoc.OuterXml));
+            activeSPEntry.ModifyParameterValue("@assigned", activeItem.assigned);
+            Object_CommonData.Object_SqlHelper.ExecuteUpdateSP(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
         }
     }
 
