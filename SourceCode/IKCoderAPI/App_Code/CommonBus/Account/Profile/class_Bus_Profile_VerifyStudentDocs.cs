@@ -47,6 +47,13 @@ public class class_Bus_Profile_VerifyStudentDocs : class_Bus_Profile_Base
             node_usrbasic.AppendChild(node_usrname);
             isUpdated = true;
         }
+        XmlNode node_id = node_usrbasic.SelectSingleNode("id");
+        if (node_id == null)
+        {
+            node_id = class_XmlHelper.CreateNode(doc_basic, "id", "");
+            node_usrbasic.AppendChild(node_id);
+            isUpdated = true;
+        }
         XmlNode node_country = node_usrbasic.SelectSingleNode("country");
         if (node_country == null)
         {

@@ -126,4 +126,29 @@ public class class_Bus_Teacher : class_BusBase
         return centersymbol;
     }
 
+    public Dictionary<string,string> GetTeachersForCenter(string centersymbol)
+    {
+        Dictionary<string, string> result = new Dictionary<string, string>();
+        activeSPEntry.ClearAllParamsValues();
+        activeSPEntry.ModifyParameterValue("@centersymbol", centersymbol);
+        DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+        if (activeDataTable != null && activeDataTable.Rows.Count > 0)
+        {
+            foreach (DataRow activeRow in activeDataTable.Rows)
+            {
+                string symbol = string.Empty;
+                string id = string.Empty;
+                class_Data_SqlDataHelper.GetColumnData(activeDataTable.Rows[0], "symbol", out symbol);
+                class_Data_SqlDataHelper.GetColumnData(activeDataTable.Rows[0], "id", out id);
+                if(!result.ContainsKey(id))
+                {
+                    result.Add(id, symbol);
+                }
+            }
+        }
+        return result;
+    }
+
+    
+
 }

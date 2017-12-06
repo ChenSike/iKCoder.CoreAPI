@@ -14,7 +14,7 @@ public partial class Bus_Teacher_api_iKCoder_Teacher_GetClassesList : class_WebB
     {
         class_Bus_Classes objectClasses = new class_Bus_Classes(Object_CommonData, logined_centersymbol);
         objectClasses.GetLoadClasses();
-        List<class_Bus_ClassesItem> list = objectClasses.GetClassesListForTeacher(logined_user_name);
+        List<class_Bus_ClassesItem> list = objectClasses.GetClassesItemsListForTeacher(logined_user_name);
         switchResponseMode(enumResponseMode.text);
         RESPONSEDOCUMENT.LoadXml("<root></root>");
         foreach(class_Bus_ClassesItem activeItem in list)

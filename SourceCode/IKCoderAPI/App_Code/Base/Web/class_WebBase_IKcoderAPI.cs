@@ -153,4 +153,16 @@ public class class_WebBase_IKCoderAPI : class_Base_WebBaseclass
     {
 
     }
+
+    protected bool VerifyObjectNull(object activeObject)
+    {
+        if (activeObject == null)
+        {
+            AddErrMessageToResponseDOC(class_CommonDefined._Faild_Execute_Api + this.GetType().FullName, "Null Object->" + activeObject.GetType().FullName, "");
+            return false;
+        }
+        else
+            return true;
+    }
+
 }
