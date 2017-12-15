@@ -61,6 +61,32 @@ public class class_Bus_Teacher : class_BusBase
         return id;
     }
 
+    public string GetTeacherName(string symbol)
+    {
+        activeSPEntry.ClearAllParamsValues();
+        activeSPEntry.ModifyParameterValue("@symbol", symbol);
+        DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+        string result = string.Empty;
+        XmlDocument doc_teacher = new XmlDocument();
+        string teacherName = string.Empty;
+        if (activeDataTable != null && activeDataTable.Rows.Count > 0)
+        {
+            try
+            {
+                class_Data_SqlDataHelper.GetColumnData(activeDataTable.Rows[0], "doc_teacher", out result);
+                doc_teacher.LoadXml(class_CommonUtil.Decoder_Base64(result));
+                XmlNode basicNode = doc_teacher.SelectSingleNode("/root/basic");
+                teacherName = class_XmlHelper.GetAttrValue(basicNode, "name");
+                return teacherName;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+        else
+            return string.Empty;
+    }
 
 
     public bool GetCheckedAccountTeacher(string symbol,string password,string licence)

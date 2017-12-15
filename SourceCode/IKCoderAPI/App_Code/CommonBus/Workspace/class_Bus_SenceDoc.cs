@@ -67,19 +67,19 @@ public class class_Bus_SenceDoc
         return result.Count;
     }
 
-    public static class_CommonDefined.enumSenceType GetSenceType(string symbol)
+    public static class_CommonDefined.enumLessonLevel GetSenceType(string symbol)
     {
         if (symbol.StartsWith("a") || symbol.StartsWith("A"))
-            return class_CommonDefined.enumSenceType.primer;
+            return class_CommonDefined.enumLessonLevel.primer;
         else if (symbol.StartsWith("b") || symbol.StartsWith("B"))
-            return class_CommonDefined.enumSenceType.primary;
+            return class_CommonDefined.enumLessonLevel.primary;
         else if (symbol.StartsWith("c") || symbol.StartsWith("C"))
-            return class_CommonDefined.enumSenceType.middle;
+            return class_CommonDefined.enumLessonLevel.middle;
         else if (symbol.StartsWith("d") || symbol.StartsWith("D"))
-            return class_CommonDefined.enumSenceType.senior;
+            return class_CommonDefined.enumLessonLevel.senior;
         else if (symbol.StartsWith("e") || symbol.StartsWith("E"))
-            return class_CommonDefined.enumSenceType.advanced;
-        return class_CommonDefined.enumSenceType.primer;
+            return class_CommonDefined.enumLessonLevel.advanced;
+        return class_CommonDefined.enumLessonLevel.primer;
     }
 
     public static int GetCountOfStages(class_CommonData Object_CommonData,string symbol)
@@ -95,16 +95,16 @@ public class class_Bus_SenceDoc
     public static string GetSenceTypeString(string symbol)
     {
         if (symbol.StartsWith("a") || symbol.StartsWith("A"))
-            return class_CommonDefined.enumSenceType.primer.ToString();
+            return class_CommonDefined.enumLessonLevel.primer.ToString();
         else if (symbol.StartsWith("b") || symbol.StartsWith("B"))
-            return class_CommonDefined.enumSenceType.primary.ToString();
+            return class_CommonDefined.enumLessonLevel.primary.ToString();
         else if (symbol.StartsWith("c") || symbol.StartsWith("C"))
-            return class_CommonDefined.enumSenceType.middle.ToString();
+            return class_CommonDefined.enumLessonLevel.middle.ToString();
         else if (symbol.StartsWith("d") || symbol.StartsWith("D"))
-            return class_CommonDefined.enumSenceType.senior.ToString();
+            return class_CommonDefined.enumLessonLevel.senior.ToString();
         else if (symbol.StartsWith("e") || symbol.StartsWith("E"))
-            return class_CommonDefined.enumSenceType.advanced.ToString();
-        return class_CommonDefined.enumSenceType.primer.ToString();
+            return class_CommonDefined.enumLessonLevel.advanced.ToString();
+        return class_CommonDefined.enumLessonLevel.primer.ToString();
     }
 
     public static string GetSenceValue(class_CommonData Object_CommonData,string symbol,string xpath,string attrName)

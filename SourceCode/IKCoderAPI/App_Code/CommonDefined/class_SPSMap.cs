@@ -27,4 +27,5 @@ public class class_SPSMap
     public static string SP_OPERATION_CONFIG_CLASSROOM = "spa_operation_config_classeroom";
     public static string SP_OPERATION_CONFIG_HOMEWORK = "spa_operation_config_homework";
     public static string SP_OPERATION_CONFIG_TESTING = "spa_operation_config_testing";
+    public static string SP_OPERATION_CONFIG_LESSONS = "spa_operation_config_lessons";
 }

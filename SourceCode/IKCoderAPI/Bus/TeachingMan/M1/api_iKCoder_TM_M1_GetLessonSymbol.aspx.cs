@@ -19,7 +19,7 @@ public partial class Bus_TeachingMan_M1_api_iKCoder_Teacher_GetLessonSymbol : cl
         }
         else
         {
-            class_CommonDefined.enumSenceType activeSenceType = class_CommonDefined.GetSenceType(typeValue);
+            class_CommonDefined.enumLessonLevel activeSenceType = class_CommonDefined.GetSenceType(typeValue);
             class_Bus_Classes objectClasses = new class_Bus_Classes(Object_CommonData, logined_centersymbol);
             int count = objectClasses.GetCountOfClasses(typeValue);
             string startSymbol = class_CommonDefined.GetSymbolStartChar(typeValue);

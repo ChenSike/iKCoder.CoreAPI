@@ -37,6 +37,9 @@ public class class_CommonDefined
         drop = 8007,
         stoped = 8008,
         normal = 8009,
+        transout = 8010,
+        transin = 8020,
+        droped = 8030
     }
 
     public enum enumDataOperaqtionType
@@ -60,7 +63,7 @@ public class class_CommonDefined
         other = 4004
     }
 
-    public enum enumSenceType
+    public enum enumLessonLevel
     {
         primer = 5001,
         primary = 5002,
@@ -106,19 +109,19 @@ public class class_CommonDefined
        mark_tm = 5
     }
 
-    public static class_CommonDefined.enumSenceType GetSenceType(string typeValue)
+    public static class_CommonDefined.enumLessonLevel GetSenceType(string typeValue)
     {
         if (typeValue=="5001")
-            return class_CommonDefined.enumSenceType.primer;
+            return class_CommonDefined.enumLessonLevel.primer;
         else if (typeValue=="5002")
-            return class_CommonDefined.enumSenceType.primary;
+            return class_CommonDefined.enumLessonLevel.primary;
         else if (typeValue=="5003")
-            return class_CommonDefined.enumSenceType.middle;
+            return class_CommonDefined.enumLessonLevel.middle;
         else if (typeValue=="5004")
-            return class_CommonDefined.enumSenceType.senior;
+            return class_CommonDefined.enumLessonLevel.senior;
         else if (typeValue=="5005")
-            return class_CommonDefined.enumSenceType.advanced;
-        return class_CommonDefined.enumSenceType.primer;
+            return class_CommonDefined.enumLessonLevel.advanced;
+        return class_CommonDefined.enumLessonLevel.primer;
     }
 
     public static string GetSymbolStartChar(string typeValue)

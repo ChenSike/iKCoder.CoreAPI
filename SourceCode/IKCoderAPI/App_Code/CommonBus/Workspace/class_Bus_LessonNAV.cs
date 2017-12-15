@@ -19,8 +19,8 @@ public class class_Bus_LessonNAV : class_BusBase
 
     public class_Bus_LessonNAV(class_CommonData refObjectCommonData) : base(refObjectCommonData)
     {
+        Object_CommonData.PrepareDataOperation();
         activeSPEntry = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_RESOURCE_TEXT);
-        Object_CommonData.PrepareDataOperation();      
     }
 
     public void GetLoadLessonNAVDoc()

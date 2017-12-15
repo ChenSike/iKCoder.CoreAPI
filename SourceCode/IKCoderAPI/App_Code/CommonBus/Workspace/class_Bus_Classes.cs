@@ -289,6 +289,8 @@ public class class_Bus_Classes : class_BusBase
         return resultDoc;
     }
 
+    
+
     public void SetSwicthActiveClassToFinished(string symbol)
     {
         classesPool[symbol].status = "2";
@@ -348,21 +350,16 @@ public class class_Bus_Classes : class_BusBase
         }
     }
 
-    public bool SetRemoveScheduleItem(string symbol,string date,string starttime,string classroom, string lessonsymbol)
+    public bool SetRemoveScheduleItem(string classsymbol,string guid)
     {
-        if (GetVerifyScheduleItem(date, starttime, classroom))
+        XmlNode activeItemNode = GetExistedScheduleIetm(classsymbol, guid);
+        if (activeItemNode != null)
         {
-            class_Bus_ClassesItem activeClassItem = GetExsitedItem(symbol);
-            XmlNode activeItemNode = GetExistedScheduleIetm(symbol, date);
-            if (activeItemNode != null)
-            {
-                activeClassItem.doc_schedule.SelectSingleNode("/root").RemoveChild(activeItemNode);
-                SetOrderScheduleItemsOrder(symbol);
-                SetUpdateClass(symbol);
-                return true;
-            }
-            else
-                return false;
+            class_Bus_ClassesItem activeClassItem = GetExsitedItem(classsymbol);
+            activeClassItem.doc_schedule.SelectSingleNode("/root").RemoveChild(activeItemNode);
+            SetOrderScheduleItemsOrder(classsymbol);
+            SetUpdateClass(classsymbol);
+            return true;
         }
         else
             return false;
@@ -511,7 +508,7 @@ public class class_Bus_Classes : class_BusBase
         }
     }
 
-    public class_Bus_ClassesItem SetNewClass(string symbol)
+    public class_Bus_ClassesItem SetNewClass(string symbol,class_CommonDefined.enumLessonLevel activeLevel)
     {
         class_Bus_ClassesItem newItem = new class_Bus_ClassesItem();
         newItem.symbol = symbol;
@@ -523,6 +520,7 @@ public class class_Bus_Classes : class_BusBase
         newItem.doc_schedule.LoadXml("<root></root>");
         newItem.doc_studentdoc = new XmlDocument();
         newItem.doc_studentdoc.LoadXml("<root></root>");
+        newItem.typevalue = activeLevel.ToString();
         return newItem;
     }
 
@@ -538,25 +536,66 @@ public class class_Bus_Classes : class_BusBase
         return activeItem.doc_studentdoc;
     }
 
+    public XmlDocument GetScheduleWithDateForClassroom(DateTime startdate,DateTime enddate)
+    {
+        XmlDocument result = new XmlDocument();
+        result.LoadXml("<root></root>");
+        TimeSpan ts = enddate - startdate;
+        if (ts.Days > 0 && ts.Days <= 90)
+        {
+            for (int i = 0; i < ts.Days; i++)
+            {
+                string tmpDate = (startdate.AddDays(i)).ToString("yyyy-MM-dd");
+                XmlNode newDateNode = class_XmlHelper.CreateNode(result, "date", "");
+                class_XmlHelper.SetAttribute(newDateNode, "value", tmpDate);
+                class_XmlHelper.SetAttribute(newDateNode, "week", (startdate.AddDays(i)).DayOfWeek.ToString());
+                result.SelectSingleNode("/root").AppendChild(newDateNode);
+                foreach(class_Bus_ClassesItem activeClassItem in classesPool.Values)
+                {
+                    XmlNode existedNode = activeClassItem.doc_schedule.SelectSingleNode("/root/item[@date='" + tmpDate + "']");
+                    if(existedNode!=null)
+                    {
+                        XmlNode newItemNode = class_XmlHelper.CreateNode(result, "item", "");
+                        string classroom = class_XmlHelper.GetAttrValue(existedNode, "classroom");
+                        class_XmlHelper.SetAttribute(newItemNode, "classroom", classroom);
+                        class_XmlHelper.SetAttribute(newItemNode, "class", activeClassItem.symbol);
+                        newDateNode.AppendChild(newItemNode);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     public XmlDocument GetClassScheduleDoc(string symbol)
     {
         class_Bus_ClassesItem activeItem = GetExsitedItem(symbol);
         return activeItem.doc_schedule;
     }
 
-    public void SetUpdateClass(string symbol)
+    public string GetClassLevel(string symbol)
+    {
+        class_Bus_ClassesItem activeItem = GetExsitedItem(symbol);
+        if (activeItem != null)
+            return string.Empty;
+        else
+            return activeItem.typevalue;
+    }
+
+    public void SetUpdateClass(string symbol,class_CommonDefined.enumLessonLevel activeLessonLevel=class_CommonDefined.enumLessonLevel.primer)
     {
         class_Bus_ClassesItem activeItem = GetExsitedItem(symbol);
         activeSPEntry.ClearAllParamsValues();
         if (activeItem == null)
         {
-            activeItem = SetNewClass(symbol);
+            activeItem = SetNewClass(symbol, activeLessonLevel);
             activeSPEntry.ModifyParameterValue("@symbol", activeItem.symbol);
             activeSPEntry.ModifyParameterValue("@centersymbol", activeItem.centersymbol);
             activeSPEntry.ModifyParameterValue("@scheduledoc", class_CommonUtil.Encoder_Base64(activeItem.doc_schedule.OuterXml));
             activeSPEntry.ModifyParameterValue("@basicinfodoc", class_CommonUtil.Encoder_Base64(activeItem.doc_basicinfo.OuterXml));
             activeSPEntry.ModifyParameterValue("@studentlistdoc", class_CommonUtil.Encoder_Base64(activeItem.doc_studentdoc.OuterXml));
             activeSPEntry.ModifyParameterValue("@status", activeItem.status);
+            activeSPEntry.ModifyParameterValue("@typevalue", activeItem.typevalue);
             Object_CommonData.Object_SqlHelper.ExecuteInsertSP(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
         }
         else
@@ -569,6 +608,7 @@ public class class_Bus_Classes : class_BusBase
             activeSPEntry.ModifyParameterValue("@studentlistdoc", class_CommonUtil.Encoder_Base64(activeItem.doc_studentdoc.OuterXml));
             activeSPEntry.ModifyParameterValue("@onguid", activeItem.ongid);
             activeSPEntry.ModifyParameterValue("@status", activeItem.status);
+            activeSPEntry.ModifyParameterValue("@typevalue", activeItem.typevalue);
             Object_CommonData.Object_SqlHelper.ExecuteUpdateSP(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
         }
         GetLoadClasses();
