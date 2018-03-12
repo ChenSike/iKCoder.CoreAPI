@@ -47,19 +47,62 @@ public class class_Bus_Student:class_BusBase
         }
     }
 
+    public XmlDocument GetReadyStudents(string centersymbol)
+    {
+        XmlDocument resultDoc = new XmlDocument();
+        resultDoc.LoadXml("<root></root>");
+        activeSPEntry.ClearAllParamsValues();
+        activeSPEntry.ModifyParameterValue("@centersymbol", centersymbol);
+        activeSPEntry.ModifyParameterValue("@status", class_CommonDefined.enumStudentStatus.ready);
+        DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPConditionForDT(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+        int index = 1;
+        class_Bus_ProfileDocs profileObject = new class_Bus_ProfileDocs(ref Object_CommonData);
+        foreach(DataRow activeDR in activeDataTable.Rows)
+        {
+            string data_symbol = string.Empty;
+            string data_nickname = string.Empty;
+            string data_sex = string.Empty;
+            string data_grade = string.Empty;
+            string data_created = string.Empty;
+            string data_regdate = string.Empty;
+            XmlNode newItemNode = class_XmlHelper.CreateNode(resultDoc, "item", "");
+            class_XmlHelper.SetAttribute(newItemNode, "index", index.ToString());
+            class_Data_SqlDataHelper.GetColumnData(activeDR, "symbol", out data_symbol);
+            class_Data_SqlDataHelper.GetColumnData(activeDR, "regdate", out data_regdate);
+            class_Data_SqlDataHelper.GetColumnData(activeDR, "grade", out data_grade);
+            class_Data_SqlDataHelper.GetColumnData(activeDR, "created", out data_created);
+            data_nickname = profileObject.GetDocNoteValue(data_symbol, class_CommonDefined.enumProfileDoc.doc_basic, "/usrbasic/usr_nickname");
+            data_sex = profileObject.GetDocNoteValue(data_symbol, class_CommonDefined.enumProfileDoc.doc_basic, "/usrbasic/sex");
+            class_XmlHelper.SetAttribute(newItemNode, "symbol", data_symbol);
+            class_XmlHelper.SetAttribute(newItemNode, "nickname", data_nickname);
+            class_XmlHelper.SetAttribute(newItemNode, "grade", data_grade);
+            class_XmlHelper.SetAttribute(newItemNode, "sex", data_sex);
+            class_XmlHelper.SetAttribute(newItemNode, "created", data_created);
+            class_XmlHelper.SetAttribute(newItemNode, "regdate", data_regdate);
+            resultDoc.SelectSingleNode("/root").AppendChild(newItemNode);
+        }
+        return resultDoc;
+    }
+    
+    public void SwitchStudentStatus(string symbol,string centersymbol, class_CommonDefined.enumStudentStatus activeStudentStatus)
+    {
+
+    }
+
+
+
     public void SetUpdateStudent(string name, string password, string centersymbol)
     {
         if (!GetISStudentExisted(name))
         {
             class_Bus_Licences objectLicences = new class_Bus_Licences(Object_CommonData);
-            Dictionary<string, string> result = objectLicences.SetFetchUnusedLicence("0");
-            string c_licenceid = result["id"].ToString();
+            string reg_date = DateTime.Now.ToString("yyyy-MM-dd");
             activeSPEntry.ClearAllParamsValues();
             activeSPEntry.ModifyParameterValue("@name", name);
             activeSPEntry.ModifyParameterValue("@password", password);
             activeSPEntry.ModifyParameterValue("@status", "0");
             activeSPEntry.ModifyParameterValue("@centersymbol", centersymbol);
-            activeSPEntry.ModifyParameterValue("@regdate", c_licenceid);
+            activeSPEntry.ModifyParameterValue("@regdate", reg_date);
             Object_CommonData.Object_SqlHelper.ExecuteInsertSP(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
         }
         else

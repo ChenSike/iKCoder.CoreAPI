@@ -19,28 +19,25 @@ public class class_Bus_LessonNAV : class_BusBase
 
     public class_Bus_LessonNAV(class_CommonData refObjectCommonData) : base(refObjectCommonData)
     {
+        Object_CommonData.PrepareDataOperation();
         activeSPEntry = Object_CommonData.GetActiveSP(Object_CommonData.dbServer, class_SPSMap.SP_OPERATION_RESOURCE_TEXT);
-        Object_CommonData.PrepareDataOperation();      
     }
 
-    public bool GetLoadLessonNAVDoc()
+    public void GetLoadLessonNAVDoc()
     {
         activeSPEntry.ClearAllParamsValues();
         activeSPEntry.ModifyParameterValue("@symbol", LessonNAV_Symbol);
         DataTable activeDataTable = Object_CommonData.Object_SqlHelper.ExecuteSelectSPMixedConditionsForDT(activeSPEntry, Object_CommonData.Object_SqlConnectionHelper, Object_CommonData.dbServer);
+        string dataContent = string.Empty;
         if (activeDataTable != null && activeDataTable.Rows.Count > 0)
         {
             DataRow activeDataRow = activeDataTable.Rows[0];
-            string dataContent = string.Empty;
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "data", out dataContent);
             string dataID = string.Empty;
             class_Data_SqlDataHelper.GetColumnData(activeDataRow, "id", out dataID);
             LessonNAV_DatalistID = dataID;
             LessonNAV_Doc.LoadXml(class_CommonUtil.Decoder_Base64(dataContent));
-            return true;
         }
-        else
-            return false;
     }
 
     public int GetCountOfPages()
@@ -61,6 +58,28 @@ public class class_Bus_LessonNAV : class_BusBase
         {
             string symbol = class_XmlHelper.GetAttrValue(pageNode, "symbol");
             return symbol;
+        }
+    }
+
+    public Dictionary<string,string> GetResourceSymbolsList(string lessonSymbol)
+    {
+        XmlNode lessonNode = LessonNAV_Doc.SelectSingleNode("/root/lesson[@symbol='" + lessonSymbol + "']");
+        Dictionary<string, string> result = new Dictionary<string, string>();
+        if (lessonNode == null)
+            return result;
+        else
+        {
+            XmlNodeList pages = lessonNode.SelectNodes("page");
+            foreach(XmlNode page in pages)
+            {
+                string index = class_XmlHelper.GetAttrValue(page, "index");
+                string symbol = class_XmlHelper.GetAttrValue(page, "symbol");
+                if(!result.ContainsKey(index))
+                {
+                    result.Add(index, symbol);
+                }
+            }
+            return result;
         }
     }
 

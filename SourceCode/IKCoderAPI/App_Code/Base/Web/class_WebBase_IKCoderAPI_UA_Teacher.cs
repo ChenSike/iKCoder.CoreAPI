@@ -9,9 +9,6 @@ using iKCoder_Platform_SDK_Kit;
 /// </summary>
 public class class_WebBase_IKCoderAPI_UA_Teacher : class_WebBase_IKCoderAPI
 {
-    protected string logined_user_id;
-    protected string logined_user_name;
-
     protected override bool BeforeExtenedAction()
     {
         switchResponseMode(enumResponseMode.text);
@@ -25,11 +22,11 @@ public class class_WebBase_IKCoderAPI_UA_Teacher : class_WebBase_IKCoderAPI
             {
                 if (Session["logined_user_signedid"].ToString() == logined_user_loginid)
                 {
-                    if (Session["logined_marked"].ToString() == class_CommonDefined.enumLoginedMark.mark_teacher.ToString())
+                    if (Session["logined_marked"].ToString() == class_CommonDefined.enumLoginedMark.mark_tm.ToString())
                     {
                         Dictionary<String, String> attrs = new Dictionary<string, string>();
                         attrs.Add("logined_user_name", Session["logined_user_name"].ToString());
-                        attrs.Add("logined_marked", class_CommonDefined.enumLoginedMark.mark_teacher.ToString());
+                        attrs.Add("logined_marked", class_CommonDefined.enumLoginedMark.mark_tm.ToString());
                         attrs.Add("type", "1");
                         AddResponseMessageToResponseDOC(class_CommonDefined._Executed_Api + this.GetType().FullName, class_CommonDefined.enumExecutedCode.executed.ToString(), attrs);
                         return true;

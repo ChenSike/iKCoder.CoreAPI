@@ -26,6 +26,22 @@ public class class_CommonDefined
         bin = 2002
     }
 
+    public enum enumStudentStatus
+    {
+        prospect = 8001,
+        booked = 8002,
+        sumbited = 8003,
+        applyed = 8004,
+        ready = 8005,
+        allocated = 8006,
+        drop = 8007,
+        stoped = 8008,
+        normal = 8009,
+        transout = 8010,
+        transin = 8020,
+        droped = 8030
+    }
+
     public enum enumDataOperaqtionType
     {
         insert = 3001,
@@ -47,7 +63,7 @@ public class class_CommonDefined
         other = 4004
     }
 
-    public enum enumSenceType
+    public enum enumLessonLevel
     {
         primer = 5001,
         primary = 5002,
@@ -91,6 +107,51 @@ public class class_CommonDefined
        mark_student = 3,
        mark_advisor = 4,
        mark_tm = 5
+    }
+
+    public static class_CommonDefined.enumLessonLevel GetSenceType(string typeValue)
+    {
+        if (typeValue=="5001")
+            return class_CommonDefined.enumLessonLevel.primer;
+        else if (typeValue=="5002")
+            return class_CommonDefined.enumLessonLevel.primary;
+        else if (typeValue=="5003")
+            return class_CommonDefined.enumLessonLevel.middle;
+        else if (typeValue=="5004")
+            return class_CommonDefined.enumLessonLevel.senior;
+        else if (typeValue=="5005")
+            return class_CommonDefined.enumLessonLevel.advanced;
+        return class_CommonDefined.enumLessonLevel.primer;
+    }
+
+    public static string GetSymbolStartChar(string typeValue)
+    {
+        if (typeValue == "5001")
+            return "a";
+        else if (typeValue == "5002")
+            return "b";
+        else if (typeValue == "5003")
+            return "c";
+        else if (typeValue == "5004")
+            return "d";
+        else if (typeValue == "5005")
+            return "e";
+        return "a";
+    }
+
+    public static string GetTypeValue(string symbol)
+    {
+        if (symbol.StartsWith("a") || symbol.StartsWith("A"))
+            return "5001";
+        else if (symbol.StartsWith("b") || symbol.StartsWith("B"))
+            return "5002";
+        else if (symbol.StartsWith("c") || symbol.StartsWith("C"))
+            return "5003";
+        else if (symbol.StartsWith("d") || symbol.StartsWith("D"))
+            return "5004";
+        else if (symbol.StartsWith("e") || symbol.StartsWith("E"))
+            return "5005";
+        return "5001";
     }
 
     public static int GetLoginedMarkType(enumLoginedMark loginedMark)
