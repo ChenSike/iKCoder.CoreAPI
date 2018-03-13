@@ -460,7 +460,7 @@ namespace iKCoderSDK
                 else
                     return result;
             }
-            catch
+            catch (Basic_Exceptions err)
             {
                 return result;
             }
@@ -488,7 +488,7 @@ namespace iKCoderSDK
                 else
                     return result;
             }
-            catch (class_Base_AppExceptions err)
+            catch (Basic_Exceptions err)
             {
                 return result;
             }
@@ -537,7 +537,7 @@ namespace iKCoderSDK
                         return false;
                 }
             }
-            catch (class_Base_AppExceptions err)
+            catch (Basic_Exceptions err)
             {
                 return false;
             }
@@ -606,7 +606,7 @@ namespace iKCoderSDK
                                     if (dbtyps.Length > 0)
                                     {
                                         Data_dbDataHelper.GetColumnData(dbtyps[0], "name", out activeDBType);
-                                        ((class_data_SqlServerSPEntry)newSPEntry).SetNewParameter(activeParamsName, Data_Util.ConventStrTODbtye(activeDBType), ParameterDirection.Input, int.Parse(max_length), null);
+                                        ((class_data_SqlServerSPEntry)newSPEntry).SetNewParameter(activeParamsName, Util_Data.ConventStrTODbtye(activeDBType), ParameterDirection.Input, int.Parse(max_length), null);
                                     }
                                     else
                                         continue;
@@ -655,7 +655,7 @@ namespace iKCoderSDK
                                     }
                                     int activeParameterLength = 0;
                                     int.TryParse(parameterLength, out activeParameterLength);
-                                    ((class_data_MySqlSPEntry)newSPEntry).SetNewParameter(activeParamInfo[0], Data_Util.ConventStrTOMySqlDbtye(parameterType), ParameterDirection.Input, activeParameterLength, null);
+                                    ((class_data_MySqlSPEntry)newSPEntry).SetNewParameter(activeParamInfo[0], Util_Data.ConventStrTOMySqlDbtye(parameterType), ParameterDirection.Input, activeParameterLength, null);
                                 }
                             }
                             result.Add(newSPEntry.KeyName, newSPEntry);
@@ -717,7 +717,7 @@ namespace iKCoderSDK
                                     if (dbtyps.Length > 0)
                                     {
                                         Data_dbDataHelper.GetColumnData(dbtyps[0], "name", out activeDBType);
-                                        ((class_data_SqlServerSPEntry)newSPEntry).SetNewParameter(activeParamsName, Data_Util.ConventStrTODbtye(activeDBType), ParameterDirection.Input, int.Parse(max_length), null);
+                                        ((class_data_SqlServerSPEntry)newSPEntry).SetNewParameter(activeParamsName, Util_Data.ConventStrTODbtye(activeDBType), ParameterDirection.Input, int.Parse(max_length), null);
                                     }
                                     else
                                         continue;
@@ -762,7 +762,7 @@ namespace iKCoderSDK
                                     }
                                     int activeParameterLength = 0;
                                     int.TryParse(parameterLength, out activeParameterLength);
-                                    ((class_data_MySqlSPEntry)newSPEntry).SetNewParameter(activeParamInfo[0], Data_Util.ConventStrTOMySqlDbtye(parameterType), ParameterDirection.Input, activeParameterLength, null);
+                                    ((class_data_MySqlSPEntry)newSPEntry).SetNewParameter(activeParamInfo[0], Util_Data.ConventStrTOMySqlDbtye(parameterType), ParameterDirection.Input, activeParameterLength, null);
                                 }
                             }
                             return newSPEntry;

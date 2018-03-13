@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Xml;
 using System.Collections.Generic;
+using System.Data;
+using MySql;
+using MySql.Data.MySqlClient;
 
 namespace iKCoderSDK
 {
