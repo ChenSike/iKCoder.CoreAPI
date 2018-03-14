@@ -470,17 +470,17 @@ namespace iKCoderSDK
                 int rowIndex = 1;
                 foreach (DataRow dr in activeDataTable.Rows)
                 {
-                    XmlNode newRowNode = Util_xmlOperHelper.CreateNode(resultDoc, "row", "");
-                    Util_xmlOperHelper.SetAttribute(newRowNode, "index", rowIndex.ToString());
+                    XmlNode newRowNode = Util_XmlOperHelper.CreateNode(resultDoc, "row", "");
+                    Util_XmlOperHelper.SetAttribute(newRowNode, "index", rowIndex.ToString());
                     foreach (DataColumn dc in activeDataTable.Columns)
                     {
                         string columnValue = "";
                         GetColumnData(dr, dc.ColumnName, out columnValue);
-                        Util_xmlOperHelper.SetAttribute(newRowNode, dc.ColumnName, columnValue);
+                        Util_XmlOperHelper.SetAttribute(newRowNode, dc.ColumnName, columnValue);
                     }
                     rootNode.AppendChild(newRowNode);
                 }
-                Util_xmlOperHelper.SetAttribute(rootNode, "itemcount", rowIndex.ToString());
+                Util_XmlOperHelper.SetAttribute(rootNode, "itemcount", rowIndex.ToString());
                 return resultDoc.OuterXml;
             }
         }

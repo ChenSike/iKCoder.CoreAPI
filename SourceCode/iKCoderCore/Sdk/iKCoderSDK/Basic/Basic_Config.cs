@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using System.IO;
 
 namespace iKCoderSDK
 {
@@ -10,8 +11,8 @@ namespace iKCoderSDK
         XmlDocument _configDoc = new XmlDocument();
         string _fileName = "";
         bool isloadedDoc = false;
-        interface_Base_iInternalPlugin refInternalPlugin;
-        class_Security_DES _objectDes;
+        Basic_InternalPlugin refInternalPlugin;
+        Basic_DES _objectDes;
         string _desKey = "ASDFGHJK";
         bool isDesMode = false;
 
@@ -23,22 +24,22 @@ namespace iKCoderSDK
             }
         }
 
-        public class_Base_Config(string xmlData)
+        public Basic_Config(string xmlData)
         {
             _configDoc = new XmlDocument();
             _configDoc.LoadXml(xmlData);
             isloadedDoc = true;
         }
 
-        public class_Base_Config(interface_Base_iInternalPlugin refInternalPluginObj)
+        public Basic_Config(Basic_InternalPlugin refInternalPluginObj)
         {
             refInternalPlugin = refInternalPluginObj;
         }
-        public class_Base_Config()
+        public Basic_Config()
         {
         }
 
-        public class_Base_Config(string fileName, interface_Base_iInternalPlugin refInternalPluginObj)
+        public Basic_Config(string fileName, Basic_InternalPlugin refInternalPluginObj)
         {
             try
             {
@@ -47,23 +48,22 @@ namespace iKCoderSDK
                 isloadedDoc = true;
                 refInternalPlugin = refInternalPluginObj;
             }
-            catch (class_Base_AppExceptions err)
+            catch
             {
                 _configDoc.LoadXml("<root></root>");
-                throw err;
             }
         }
 
         public void SwitchToDESModeON(string desKey)
         {
             _desKey = desKey;
-            _objectDes = new class_Security_DES(desKey);
+            _objectDes = new Basic_DES(desKey);
             isDesMode = true;
         }
 
         public void SwitchToDESModeON()
         {
-            _objectDes = new class_Security_DES(_desKey);
+            _objectDes = new Basic_DES(_desKey);
             isDesMode = true;
         }
 
@@ -176,8 +176,8 @@ namespace iKCoderSDK
                     refInternalPlugin.actionSet(paramsDirc);
                     result = paramsDirc["return"].ToString();
                 }
-                XmlNode newSessionNode = class_XmlHelper.CreateNode(_configDoc, "session", result);
-                class_XmlHelper.SetAttribute(newSessionNode, "name", SessionName);
+                XmlNode newSessionNode = Util_XmlOperHelper.CreateNode(_configDoc, "session", result);
+                Util_XmlOperHelper.SetAttribute(newSessionNode, "name", SessionName);
                 _configDoc.SelectSingleNode("/root").AppendChild(newSessionNode);
                 return newSessionNode;
             }
@@ -194,8 +194,8 @@ namespace iKCoderSDK
                     _objectDes.DESCoding(SessionValue, out sessionValueResult);
                 else
                     sessionValueResult = SessionValue;
-                XmlNode newSessionNode = class_XmlHelper.CreateNode(_configDoc, "session", sessionValueResult);
-                class_XmlHelper.SetAttribute(newSessionNode, "name", SessionName);
+                XmlNode newSessionNode = Util_XmlOperHelper.CreateNode(_configDoc, "session", sessionValueResult);
+                Util_XmlOperHelper.SetAttribute(newSessionNode, "name", SessionName);
                 _configDoc.SelectSingleNode("/root").AppendChild(newSessionNode);
                 return newSessionNode;
             }
@@ -217,8 +217,8 @@ namespace iKCoderSDK
             }
             try
             {
-                XmlNode newItemNode = class_XmlHelper.CreateNode(_configDoc, "item", result);
-                class_XmlHelper.SetAttribute(newItemNode, "name", ItemName);
+                XmlNode newItemNode = Util_XmlOperHelper.CreateNode(_configDoc, "item", result);
+                Util_XmlOperHelper.SetAttribute(newItemNode, "name", ItemName);
                 activeParentNode.AppendChild(newItemNode);
                 return newItemNode;
             }
@@ -237,8 +237,8 @@ namespace iKCoderSDK
             {
                 if (isDesMode)
                     _objectDes.DESCoding(ItemValue, out result);
-                XmlNode newItemNode = class_XmlHelper.CreateNode(_configDoc, "item", result);
-                class_XmlHelper.SetAttribute(newItemNode, "name", ItemName);
+                XmlNode newItemNode = Util_XmlOperHelper.CreateNode(_configDoc, "item", result);
+                Util_XmlOperHelper.SetAttribute(newItemNode, "name", ItemName);
                 activeParentNode.AppendChild(newItemNode);
                 return newItemNode;
             }
@@ -299,7 +299,7 @@ namespace iKCoderSDK
         {
             if (activeNode != null)
             {
-                string sourceData = class_XmlHelper.GetNodeValue("", activeNode);
+                string sourceData = Util_XmlOperHelper.GetNodeValue("", activeNode);
                 string resultData = "";
                 if (IsInternalPluginUsed && refInternalPlugin != null)
                 {
@@ -324,7 +324,7 @@ namespace iKCoderSDK
         {
             if (activeNode != null)
             {
-                string sourceData = class_XmlHelper.GetNodeValue("", activeNode);
+                string sourceData = Util_XmlOperHelper.GetNodeValue("", activeNode);
                 string resultData = "";
                 resultData = sourceData;
                 if (isDesMode)
@@ -394,7 +394,7 @@ namespace iKCoderSDK
             XmlNode activeSessionNode = GetSessionNode(SessionName);
             if (activeSessionNode != null)
             {
-                class_XmlHelper.SetAttribute(activeSessionNode, AttrName, result);
+                Util_XmlOperHelper.SetAttribute(activeSessionNode, AttrName, result);
                 return true;
             }
             else
@@ -412,7 +412,7 @@ namespace iKCoderSDK
             {
                 if (isDesMode)
                     _objectDes.DESCoding(AttrValue, out result);
-                class_XmlHelper.SetAttribute(activeSessionNode, AttrName, result);
+                Util_XmlOperHelper.SetAttribute(activeSessionNode, AttrName, result);
                 return true;
             }
             else
@@ -488,7 +488,7 @@ namespace iKCoderSDK
                     result = paramsDirc["return"].ToString();
 
                 }
-                class_XmlHelper.SetAttribute(Item, AttrName, result);
+                Util_XmlOperHelper.SetAttribute(Item, AttrName, result);
                 return true;
             }
         }
@@ -502,7 +502,7 @@ namespace iKCoderSDK
                 string result = AttrValue;
                 if (isDesMode)
                     _objectDes.DESCoding(AttrValue, out result);
-                class_XmlHelper.SetAttribute(Item, AttrName, result);
+                Util_XmlOperHelper.SetAttribute(Item, AttrName, result);
                 return true;
             }
         }
@@ -528,7 +528,7 @@ namespace iKCoderSDK
                         refInternalPlugin.actionSet(paramsDirc);
                         result = paramsDirc["return"].ToString();
                     }
-                    class_XmlHelper.SetAttribute(rootNode, tagName, IsInternalPluginUsed ? result : tagValue);
+                    Util_XmlOperHelper.SetAttribute(rootNode, tagName, IsInternalPluginUsed ? result : tagValue);
                     return true;
                 }
             }
@@ -546,7 +546,7 @@ namespace iKCoderSDK
                 else
                 {
                     if (!IsInternalPluginUsed || refInternalPlugin == null)
-                        return class_XmlHelper.GetNodeValue(tagName, rootNode) == tagValue ? true : false;
+                        return Util_XmlOperHelper.GetNodeValue(tagName, rootNode) == tagValue ? true : false;
                     else
                     {
                         string result = "";
@@ -556,7 +556,7 @@ namespace iKCoderSDK
                         paramsDirc.Add("return", "");
                         refInternalPlugin.actionSet(paramsDirc);
                         result = paramsDirc["return"].ToString();
-                        return class_XmlHelper.GetNodeValue(tagName, rootNode) == result ? true : false;
+                        return Util_XmlOperHelper.GetNodeValue(tagName, rootNode) == result ? true : false;
                     }
                 }
 
@@ -582,7 +582,7 @@ namespace iKCoderSDK
                 string result = "";
                 if (activeSessionNode != null)
                 {
-                    string value = class_XmlHelper.GetNodeValue("", activeSessionNode);
+                    string value = Util_XmlOperHelper.GetNodeValue("", activeSessionNode);
                     result = value;
                     if (IsInternalPluginUsed && refInternalPlugin != null)
                     {
@@ -619,7 +619,7 @@ namespace iKCoderSDK
                 return "";
             else
             {
-                string attrResult = class_XmlHelper.GetAttrValue(ActiveNode, AttrName);
+                string attrResult = Util_XmlOperHelper.GetAttrValue(ActiveNode, AttrName);
                 string result = attrResult;
                 if (IsInternalPluginUsed && refInternalPlugin != null)
                 {
@@ -640,7 +640,7 @@ namespace iKCoderSDK
                 return "";
             else
             {
-                string attrResult = class_XmlHelper.GetAttrValue(ActiveNode, AttrName);
+                string attrResult = Util_XmlOperHelper.GetAttrValue(ActiveNode, AttrName);
                 string result = attrResult;
                 if (isDesMode)
                     _objectDes.DESDecoding(attrResult, out result);
@@ -655,7 +655,7 @@ namespace iKCoderSDK
             else
             {
                 XmlNode activeItemNode = GetItemNode(SessionName, ItemName);
-                string attrResult = class_XmlHelper.GetNodeValue("", activeItemNode);
+                string attrResult = Util_XmlOperHelper.GetNodeValue("", activeItemNode);
                 string Result = attrResult;
                 if (IsInternalPluginUsed && refInternalPlugin != null)
                 {
@@ -677,7 +677,7 @@ namespace iKCoderSDK
             else
             {
                 XmlNode activeItemNode = GetItemNode(SessionName, ItemName);
-                string attrResult = class_XmlHelper.GetNodeValue("", activeItemNode);
+                string attrResult = Util_XmlOperHelper.GetNodeValue("", activeItemNode);
                 string Result = attrResult;
                 if (isDesMode)
                     _objectDes.DESDecoding(attrResult, out Result);
@@ -691,7 +691,7 @@ namespace iKCoderSDK
                 return "";
             else
             {
-                string attrResult = class_XmlHelper.GetNodeValue("", parentNode);
+                string attrResult = Util_XmlOperHelper.GetNodeValue("", parentNode);
                 string Result = attrResult;
                 if (IsInternalPluginUsed && refInternalPlugin != null)
                 {
@@ -712,7 +712,7 @@ namespace iKCoderSDK
                 return "";
             else
             {
-                string attrResult = class_XmlHelper.GetNodeValue("", parentNode);
+                string attrResult = Util_XmlOperHelper.GetNodeValue("", parentNode);
                 string Result = attrResult;
                 if (isDesMode)
                     _objectDes.DESDecoding(attrResult, out Result);

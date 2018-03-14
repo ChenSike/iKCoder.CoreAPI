@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 
 namespace iKCoderSDK
 {
-    public class Util_xmlOperHelper
+    public class Util_XmlOperHelper
     {
         public const string closeTagL = "</";
         public const string closeTagR = ">";

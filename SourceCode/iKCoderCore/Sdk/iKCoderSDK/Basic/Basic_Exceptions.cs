@@ -47,10 +47,10 @@ namespace iKCoderSDK
                 XmlDocument exceptionLogDoc = new XmlDocument();
                 exceptionLogDoc.Load(exceptionLogFile);
                 XmlNode rootNode = exceptionLogDoc.SelectSingleNode("/root");
-                XmlNode newItem = Util_xmlOperHelper.CreateNode(exceptionLogDoc, "item","");
-                Util_xmlOperHelper.SetAttribute(newItem, "message", Message);
-                Util_xmlOperHelper.SetAttribute(newItem, "time", DateTime.Now.ToString());
-                Util_xmlOperHelper.SetAttribute(newItem, "stake", StackTrace.ToString());
+                XmlNode newItem = Util_XmlOperHelper.CreateNode(exceptionLogDoc, "item","");
+                Util_XmlOperHelper.SetAttribute(newItem, "message", Message);
+                Util_XmlOperHelper.SetAttribute(newItem, "time", DateTime.Now.ToString());
+                Util_XmlOperHelper.SetAttribute(newItem, "stake", StackTrace.ToString());
                 rootNode.AppendChild(newItem);
                 try
                 {
