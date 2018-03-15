@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace iKCoderSDK.Basic
+namespace iKCoderSDK
 {
     class Basic_CheckCode
     {

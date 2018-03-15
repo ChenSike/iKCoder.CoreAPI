@@ -54,6 +54,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Sdk\iKCoderSDK\iKCoderSDK.csproj">
+      <Project>{c4016923-223d-4989-b5ba-784735f3d9d7}</Project>
+      <Name>iKCoderSDK</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
