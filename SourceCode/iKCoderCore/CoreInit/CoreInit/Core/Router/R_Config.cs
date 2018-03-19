@@ -8,20 +8,38 @@ namespace CoreInit
     {
         M_Config _object_M_Config = new M_Config();
 
-        public override void Process(string commnad)
+        public override void Process(string command)
         {
-            switch(commnad)
+            string[] paramsResult = splitCommand(command);
+            if (paramsResult.Length > 0)
             {
-                case "input":
-                    _object_M_Config.Input();
-                    break;
-                case "init":
-                    _object_M_Config.init();
-                    break;
-                case "save":
-                    _object_M_Config.Save();
-                    break;
+                switch (paramsResult[0])
+                {
+                    case "save":
+                        _object_M_Config.Save();
+                        break;
+                    case "init":
+                        _object_M_Config.init();
+                        break;
+                    case "session":
+                        switch(paramsResult[1])
+                        {
+                            case "new":
+                                    _object_M_Config.NewSession(paramsResult[2], paramsResult[3]);
+                                break;
+                            case "newattr":
+                                _object_M_Config.SetSessionAttr(paramsResult[2], paramsResult[3], paramsResult[4]);
+                                break;
+                            case "getvalue":
+                                displayResult(_object_M_Config.GetSessionValue(paramsResult[2]));
+                                break;
+                                   
+
+                        }
+                        break;
+                }
             }
+           
         }
     }
 }

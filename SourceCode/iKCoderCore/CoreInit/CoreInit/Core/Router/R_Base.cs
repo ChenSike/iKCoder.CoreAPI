@@ -20,6 +20,17 @@ namespace CoreInit
             Console.WriteLine("I:@Invalidated Command.");
         }
 
+        public string[] splitCommand(string command)
+        {
+            string[] result = command.Split("$");
+            return result;
+        }
+
+        public void displayResult(string result)
+        {
+            Console.WriteLine("R:@" + result);
+        }
+
         public abstract void Process(string commnad);
         
     }
