@@ -191,7 +191,7 @@ namespace iKCoderSDK
             {
                 string sessionValueResult = "";
                 if (isDesMode)
-                    _objectDes.DESCoding(SessionValue, out sessionValueResult);
+                    sessionValueResult = _objectDes.DesDecrypt(SessionValue);
                 else
                     sessionValueResult = SessionValue;
                 XmlNode newSessionNode = Util_XmlOperHelper.CreateNode(_configDoc, "session", sessionValueResult);
@@ -236,7 +236,7 @@ namespace iKCoderSDK
             try
             {
                 if (isDesMode)
-                    _objectDes.DESCoding(ItemValue, out result);
+                    result = _objectDes.DesEncrypt(ItemValue);
                 XmlNode newItemNode = Util_XmlOperHelper.CreateNode(_configDoc, "item", result);
                 Util_XmlOperHelper.SetAttribute(newItemNode, "name", ItemName);
                 activeParentNode.AppendChild(newItemNode);
@@ -328,7 +328,7 @@ namespace iKCoderSDK
                 string resultData = "";
                 resultData = sourceData;
                 if (isDesMode)
-                    _objectDes.DESDecoding(sourceData, out resultData);
+                    resultData = _objectDes.DesDecrypt(sourceData);
                 return resultData;
             }
             else
@@ -411,7 +411,7 @@ namespace iKCoderSDK
             if (activeSessionNode != null)
             {
                 if (isDesMode)
-                    _objectDes.DESCoding(AttrValue, out result);
+                    result=_objectDes.DesEncrypt(AttrValue);
                 Util_XmlOperHelper.SetAttribute(activeSessionNode, AttrName, result);
                 return true;
             }
@@ -461,7 +461,7 @@ namespace iKCoderSDK
                     string SessionValueResult = "";
                     SessionValueResult = SessionValue;
                     if (isDesMode)
-                        _objectDes.DESCoding(SessionValue, out SessionValueResult);
+                        SessionValueResult=_objectDes.DesEncrypt(SessionValue);
                     activeSessionNode.InnerText = SessionValueResult;
                     return true;
                 }
@@ -501,7 +501,7 @@ namespace iKCoderSDK
             {
                 string result = AttrValue;
                 if (isDesMode)
-                    _objectDes.DESCoding(AttrValue, out result);
+                    result=_objectDes.DesEncrypt(AttrValue);
                 Util_XmlOperHelper.SetAttribute(Item, AttrName, result);
                 return true;
             }
@@ -608,7 +608,7 @@ namespace iKCoderSDK
                 XmlNode activeSessionNode = GetSessionNode(SessionName);
                 string result = activeSessionNode.InnerText;
                 if (isDesMode)
-                    _objectDes.DESDecoding(activeSessionNode.InnerText, out result);
+                    result = _objectDes.DesEncrypt(activeSessionNode.InnerText);
                 return result;
             }
         }
@@ -643,7 +643,7 @@ namespace iKCoderSDK
                 string attrResult = Util_XmlOperHelper.GetAttrValue(ActiveNode, AttrName);
                 string result = attrResult;
                 if (isDesMode)
-                    _objectDes.DESDecoding(attrResult, out result);
+                    result = _objectDes.DesDecrypt(attrResult);
                 return result;
             }
         }
@@ -680,7 +680,7 @@ namespace iKCoderSDK
                 string attrResult = Util_XmlOperHelper.GetNodeValue("", activeItemNode);
                 string Result = attrResult;
                 if (isDesMode)
-                    _objectDes.DESDecoding(attrResult, out Result);
+                    _objectDes.DesDecrypt(attrResult, out Result);
                 return Result;
             }
         }
@@ -715,7 +715,7 @@ namespace iKCoderSDK
                 string attrResult = Util_XmlOperHelper.GetNodeValue("", parentNode);
                 string Result = attrResult;
                 if (isDesMode)
-                    _objectDes.DESDecoding(attrResult, out Result);
+                    Result = _objectDes.DesDecrypt(attrResult);
                 return Result;
             }
         }

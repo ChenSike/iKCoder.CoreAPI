@@ -15,6 +15,11 @@ namespace CoreInit
                 Console.WriteLine("R:@False");
         }
 
+        public void executedResult()
+        {
+            Console.WriteLine("R:@Executed");
+        }
+
         public void invalidateCommand()
         {
             Console.WriteLine("I:@Invalidated Command.");

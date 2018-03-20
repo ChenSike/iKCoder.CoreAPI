@@ -24,6 +24,8 @@ namespace CoreInit
                     R_Base rounterRef = null;
                     if (command == "M_DB")
                         rounterRef = new R_DB();
+                    else if (command == "M_Config")
+                        rounterRef = new R_Config();
                     if (rounterRef != null)
                     {
                         string subCommand = string.Empty;

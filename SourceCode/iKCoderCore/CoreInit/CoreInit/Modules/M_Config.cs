@@ -25,13 +25,13 @@ namespace CoreInit
         public override void Input()
         {
             Console.Write("M_Config@application configdoc file:");
-            this.AppConfigFile = Console.ReadLine();
+            this.AppConfigFile = Console.ReadLine();            
             Console.Write("M_Config@application DES Key(Enter for default):");
             this.DESKey = Console.ReadLine();
         }
 
         public bool init()
-        {
+        {            
             return configDoc.DoOpen(this.AppConfigFile);
         }
 
@@ -52,21 +52,26 @@ namespace CoreInit
             configDoc.SwitchToDESModeOFF();
         }
 
-        public void Save()
+        public bool Save()
         {
-            configDoc.DoSave();
+            return configDoc.DoSave();
         }
 
-        public void NewSession(string sessionname,string sessionvalue)
+        public bool NewDocument()
+        {
+            return configDoc.CreateNewConfigDocument(this.AppConfigFile);
+        }
+
+        public bool NewSession(string sessionname,string sessionvalue)
         {
             configDoc.CreateNewSession(sessionname, sessionvalue);
-            configDoc.DoSave();
+            return configDoc.DoSave();
         }
 
-        public void RemoveSession(string sessionname)
+        public bool RemoveSession(string sessionname)
         {
             configDoc.RemoveSession(sessionname);
-            configDoc.DoSave();
+            return configDoc.DoSave();
         }
 
         public string GetSessionValue(string sessionname)
@@ -74,10 +79,10 @@ namespace CoreInit
             return configDoc.GetSessionValue(sessionname);
         }
 
-        public void SetSessionAttr(string sessionname,string attrname,string attrvalue)
+        public bool SetSessionAttr(string sessionname,string attrname,string attrvalue)
         {
             configDoc.SetSessionAttr(sessionname, attrname, attrvalue);
-            configDoc.DoSave();
+            return configDoc.DoSave();
         }
 
         public string GetSessionAttrValue(string sessionname,string attrname)
@@ -86,11 +91,11 @@ namespace CoreInit
             return configDoc.GetAttrValue(sessionNode, attrname);
         }
 
-        public void NewSessionSubItem(string sessionname,string itemname,string itemvalue)
+        public bool NewSessionSubItem(string sessionname,string itemname,string itemvalue)
         {
             XmlNode sessionNode = configDoc.GetSessionNode(sessionname);
             configDoc.CreateItem(sessionNode, itemname, itemvalue);
-            configDoc.DoSave();
+            return configDoc.DoSave();
         }
 
         public string GetSessionItemValue(string sessionname,string itemname)
