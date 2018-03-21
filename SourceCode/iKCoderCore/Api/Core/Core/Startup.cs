@@ -33,6 +33,7 @@ namespace Core
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseStaticFiles();
             app.UseMvc();
         }
     }

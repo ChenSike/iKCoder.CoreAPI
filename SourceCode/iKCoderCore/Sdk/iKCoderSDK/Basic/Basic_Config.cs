@@ -12,7 +12,7 @@ namespace iKCoderSDK
         string _fileName = "";
         bool isloadedDoc = false;
         Basic_InternalPlugin refInternalPlugin;
-        Basic_DES _objectDes;
+        Basic_AES _objectDes = new Basic_AES();
         string _desKey = "ASDFGHJK";
         bool isDesMode = false;
 
@@ -54,20 +54,19 @@ namespace iKCoderSDK
             }
         }
 
-        public void SwitchToDESModeON(string desKey)
+        public void SwitchToAESModeON(string desKey)
         {
             _desKey = desKey;
-            _objectDes = new Basic_DES(desKey);
+            _objectDes.optionalKey = desKey;
             isDesMode = true;
         }
 
-        public void SwitchToDESModeON()
-        {
-            _objectDes = new Basic_DES(_desKey);
+        public void SwitchToAESModeON()
+        {            
             isDesMode = true;
         }
 
-        public void SwitchToDESModeOFF()
+        public void SwitchToAESModeOFF()
         {
             isDesMode = false;
         }
@@ -191,7 +190,7 @@ namespace iKCoderSDK
             {
                 string sessionValueResult = "";
                 if (isDesMode)
-                    sessionValueResult = _objectDes.DesDecrypt(SessionValue);
+                    sessionValueResult = _objectDes.AesEncrypt(SessionValue);
                 else
                     sessionValueResult = SessionValue;
                 XmlNode newSessionNode = Util_XmlOperHelper.CreateNode(_configDoc, "session", sessionValueResult);
@@ -236,7 +235,7 @@ namespace iKCoderSDK
             try
             {
                 if (isDesMode)
-                    result = _objectDes.DesEncrypt(ItemValue);
+                    result = _objectDes.AesEncrypt(ItemValue);
                 XmlNode newItemNode = Util_XmlOperHelper.CreateNode(_configDoc, "item", result);
                 Util_XmlOperHelper.SetAttribute(newItemNode, "name", ItemName);
                 activeParentNode.AppendChild(newItemNode);
@@ -328,7 +327,7 @@ namespace iKCoderSDK
                 string resultData = "";
                 resultData = sourceData;
                 if (isDesMode)
-                    resultData = _objectDes.DesDecrypt(sourceData);
+                    resultData = _objectDes.AesDecrypt(sourceData);
                 return resultData;
             }
             else
@@ -411,7 +410,7 @@ namespace iKCoderSDK
             if (activeSessionNode != null)
             {
                 if (isDesMode)
-                    result=_objectDes.DesEncrypt(AttrValue);
+                    result=_objectDes.AesEncrypt(AttrValue);
                 Util_XmlOperHelper.SetAttribute(activeSessionNode, AttrName, result);
                 return true;
             }
@@ -461,7 +460,7 @@ namespace iKCoderSDK
                     string SessionValueResult = "";
                     SessionValueResult = SessionValue;
                     if (isDesMode)
-                        SessionValueResult=_objectDes.DesEncrypt(SessionValue);
+                        SessionValueResult=_objectDes.AesEncrypt(SessionValue);
                     activeSessionNode.InnerText = SessionValueResult;
                     return true;
                 }
@@ -501,7 +500,7 @@ namespace iKCoderSDK
             {
                 string result = AttrValue;
                 if (isDesMode)
-                    result=_objectDes.DesEncrypt(AttrValue);
+                    result=_objectDes.AesEncrypt(AttrValue);
                 Util_XmlOperHelper.SetAttribute(Item, AttrName, result);
                 return true;
             }
@@ -608,7 +607,7 @@ namespace iKCoderSDK
                 XmlNode activeSessionNode = GetSessionNode(SessionName);
                 string result = activeSessionNode.InnerText;
                 if (isDesMode)
-                    result = _objectDes.DesEncrypt(activeSessionNode.InnerText);
+                    result = _objectDes.AesEncrypt(activeSessionNode.InnerText);
                 return result;
             }
         }
@@ -643,7 +642,7 @@ namespace iKCoderSDK
                 string attrResult = Util_XmlOperHelper.GetAttrValue(ActiveNode, AttrName);
                 string result = attrResult;
                 if (isDesMode)
-                    result = _objectDes.DesDecrypt(attrResult);
+                    result = _objectDes.AesDecrypt(attrResult);
                 return result;
             }
         }
@@ -680,7 +679,7 @@ namespace iKCoderSDK
                 string attrResult = Util_XmlOperHelper.GetNodeValue("", activeItemNode);
                 string Result = attrResult;
                 if (isDesMode)
-                    _objectDes.DesDecrypt(attrResult, out Result);
+                    Result=_objectDes.AesDecrypt(attrResult);
                 return Result;
             }
         }
@@ -715,7 +714,7 @@ namespace iKCoderSDK
                 string attrResult = Util_XmlOperHelper.GetNodeValue("", parentNode);
                 string Result = attrResult;
                 if (isDesMode)
-                    Result = _objectDes.DesDecrypt(attrResult);
+                    Result = _objectDes.AesDecrypt(attrResult);
                 return Result;
             }
         }

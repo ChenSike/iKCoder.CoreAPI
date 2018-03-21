@@ -16,7 +16,7 @@ namespace CoreInit
             get;
         }
 
-        public string DESKey
+        public string AESKey
         {
             set;
             get;
@@ -27,7 +27,7 @@ namespace CoreInit
             Console.Write("M_Config@application configdoc file:");
             this.AppConfigFile = Console.ReadLine();            
             Console.Write("M_Config@application DES Key(Enter for default):");
-            this.DESKey = Console.ReadLine();
+            this.AESKey = Console.ReadLine();
         }
 
         public bool init()
@@ -35,21 +35,21 @@ namespace CoreInit
             return configDoc.DoOpen(this.AppConfigFile);
         }
 
-        public void DESMode()
+        public void AESMode()
         {
-            if (!string.IsNullOrEmpty(this.DESKey))
+            if (!string.IsNullOrEmpty(this.AESKey))
             {
-                configDoc.SwitchToDESModeON(this.DESKey);
+                configDoc.SwitchToAESModeON(this.AESKey);
             }
             else
             {
-                configDoc.SwitchToDESModeON();
+                configDoc.SwitchToAESModeON();
             }
         }
 
         public void NormalMode()
         {
-            configDoc.SwitchToDESModeOFF();
+            configDoc.SwitchToAESModeOFF();
         }
 
         public bool Save()

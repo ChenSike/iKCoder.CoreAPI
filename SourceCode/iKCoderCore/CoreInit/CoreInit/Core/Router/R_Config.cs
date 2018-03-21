@@ -27,29 +27,32 @@ namespace CoreInit
                     case "init":
                         assetResult(_object_M_Config.init());
                         break;
-                    case "DESon":
-                        _object_M_Config.DESMode();
+                    case "AESon":
+                        _object_M_Config.AESMode();
                         executedResult();
                         break;
-                    case "DESoff":
+                    case "AESoff":
                         _object_M_Config.NormalMode();
                         executedResult();
                         break;
                     case "session":
-                        switch(paramsResult[1])
+                        if (paramsResult.Length > 1)
                         {
-                            case "new":
-                                assetResult(_object_M_Config.NewSession(paramsResult[2], paramsResult[3]));
-                                break;
-                            case "newattr":
-                                assetResult(_object_M_Config.SetSessionAttr(paramsResult[2], paramsResult[3], paramsResult[4]));
-                                break;
-                            case "getvalue":
-                                displayResult(_object_M_Config.GetSessionValue(paramsResult[2]));
-                                break;
-                            case "getattr":
-                                displayResult(_object_M_Config.GetSessionAttrValue(paramsResult[2], paramsResult[3]));
-                                break;
+                            switch (paramsResult[1])
+                            {
+                                case "new":
+                                    assetResult(_object_M_Config.NewSession(paramsResult[2], paramsResult[3]));
+                                    break;
+                                case "newattr":
+                                    assetResult(_object_M_Config.SetSessionAttr(paramsResult[2], paramsResult[3], paramsResult[4]));
+                                    break;
+                                case "getvalue":
+                                    displayResult(_object_M_Config.GetSessionValue(paramsResult[2]));
+                                    break;
+                                case "getattr":
+                                    displayResult(_object_M_Config.GetSessionAttrValue(paramsResult[2], paramsResult[3]));
+                                    break;
+                            }
                         }
                         break;
                 }

@@ -13,7 +13,7 @@ namespace Core.Controllers.iKCoder.Account
         [HttpGet]
         public void Get(string name,string pwd,string level)
         {
-
+            InitApiConfigs();
         }
 
     }
