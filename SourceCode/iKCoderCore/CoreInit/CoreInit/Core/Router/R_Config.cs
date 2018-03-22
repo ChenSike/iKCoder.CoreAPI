@@ -46,6 +46,9 @@ namespace CoreInit
                                 case "newattr":
                                     assetResult(_object_M_Config.SetSessionAttr(paramsResult[2], paramsResult[3], paramsResult[4]));
                                     break;
+                                case "updateattr":
+                                    assetResult(_object_M_Config.SetSessionAttr(paramsResult[2], paramsResult[3], paramsResult[4]));
+                                    break;
                                 case "getvalue":
                                     displayResult(_object_M_Config.GetSessionValue(paramsResult[2]));
                                     break;

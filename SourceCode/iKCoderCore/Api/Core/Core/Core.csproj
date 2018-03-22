@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\iKCoder\Account\Student\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
