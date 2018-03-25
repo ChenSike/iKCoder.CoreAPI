@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using iKCoderSDK;
+using System.Data;
 
 namespace Core.Controllers.iKCoder.Account.Teacher
 {
@@ -12,8 +13,6 @@ namespace Core.Controllers.iKCoder.Account.Teacher
     [Route("ikcoder/account/teacher/create")]
     public class CreateController : BaseController.BaseController
     {
-
-
         [HttpGet]
         public string Get(string name, string pwd,int regFrom)
         {
@@ -26,6 +25,14 @@ namespace Core.Controllers.iKCoder.Account.Teacher
                 ConnectDB();
                 LoadSPS();
                 Dictionary<string, string> dParams = new Dictionary<string, string>();
+                dParams.Add("name", name);
+                dParams.Add("pwd", pwd);
+                DataTable dtResult = ExecuteSelectWithMixedConditions(key_db_basic, SPSControler.sp_pool_teacher, dParams);
+                string strResult = string.Empty;
+                if (dtResult != null && dtResult.Rows.Count > 0)
+                {
+                    return ExecuteFalse();
+                }
                 dParams.Add("name", name);
                 dParams.Add("pwd", pwd);
                 dParams.Add("regfrom", regFrom.ToString());

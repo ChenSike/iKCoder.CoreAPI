@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using iKCoderSDK;
 using System.Xml;
+using System.Data;
+using MySql.Data;
 
 namespace Core.Controllers.BaseController
 {
@@ -60,6 +62,24 @@ namespace Core.Controllers.BaseController
             else
             {
                 return false;
+            }
+        }
+
+        public DataTable ExecuteSelectWithMixedConditions(string connectionkey, string spname, Dictionary<string, string> mapparams)
+        {
+            if (Map_SPS.ContainsKey(spname))
+            {
+                class_data_MySqlSPEntry objSPEntry = (class_data_MySqlSPEntry)Map_SPS[spname];
+                objSPEntry.ClearAllParamsValues();
+                foreach (string columnname in mapparams.Keys)
+                {
+                    objSPEntry.ModifyParameterValue(columnname, mapparams[columnname]);
+                }
+                return db_objectSqlHelper.ExecuteSelectSPMixedConditionsForDT(objSPEntry, db_objectConnectionHelper, connectionkey);
+            }
+            else
+            {
+                return null;
             }
         }
 

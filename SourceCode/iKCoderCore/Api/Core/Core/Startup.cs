@@ -24,6 +24,10 @@ namespace Core
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,6 +37,7 @@ namespace Core
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseSession();
             app.UseStaticFiles();
             app.UseMvc();
         }

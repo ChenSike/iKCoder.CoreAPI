@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace Core.Controllers.iKCoder.Account.Teacher
 {
@@ -12,7 +13,7 @@ namespace Core.Controllers.iKCoder.Account.Teacher
     public class LoginController : BaseController.BaseController
     {
         [HttpGet]
-        public void Get(string name,string pwd)
+        public string Get(string name,string pwd)
         {
             List<string> lParams = new List<string>();
             lParams.Add(name);
@@ -25,11 +26,20 @@ namespace Core.Controllers.iKCoder.Account.Teacher
                 Dictionary<string, string> dParams = new Dictionary<string, string>();
                 dParams.Add("name", name);
                 dParams.Add("pwd", pwd);
-                dParams.Add("regfrom", regFrom.ToString());
-                dParams.Add("status", "0");
-                string result = AssetExecute(ExecuteInsert(key_db_basic, SPSControler.sp_pool_teacher, dParams));
+                DataTable dtResult = ExecuteSelectWithMixedConditions(key_db_basic, SPSControler.sp_pool_teacher, dParams);
+                string strResult = string.Empty;
+                if(dtResult!=null && dtResult.Rows.Count>0)
+                {
+                    string id = Guid.NewGuid().ToString();
+                    HttpContext.Session.SetString("id", id);
+                    strResult = ExecuteSucessful();
+                }
+                else
+                {
+                    strResult = ExecuteFalse();
+                }
                 CloseDB();
-                return result;
+                return strResult;
             }
             else
             {
