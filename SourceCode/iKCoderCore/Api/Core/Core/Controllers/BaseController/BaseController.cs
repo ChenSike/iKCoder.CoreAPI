@@ -37,17 +37,36 @@ namespace Core.Controllers.BaseController
                 objApiConfig.SwitchToAESModeON();
                 foreach(XmlAttribute activeAttr in sessionAttrs)
                 {
-                    mapAttrs.Add(activeAttr.Name, objApiConfig.GetAttrValue(activeSessionNode, activeAttr.Name));
+                    if(activeAttr.Name!="name")
+                        mapAttrs.Add(activeAttr.Name, objApiConfig.GetAttrValue(activeSessionNode, activeAttr.Name));
                 }
                 Map_ApiConfigs.Add(name, mapAttrs);
             }
         }
 
-        
+
+        public bool ExecuteInsert(string connectionkey,string spname, Dictionary<string, string> mapparams)
+        {
+            if (Map_SPS.ContainsKey(spname))
+            {
+                class_data_MySqlSPEntry objSPEntry = (class_data_MySqlSPEntry)Map_SPS[spname];
+                objSPEntry.ClearAllParamsValues();
+                foreach(string columnname in mapparams.Keys)
+                {
+                    objSPEntry.ModifyParameterValue(columnname, mapparams[columnname]);
+                }
+                return db_objectSqlHelper.ExecuteInsertSP(objSPEntry, db_objectConnectionHelper, connectionkey);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public void ConnectDB()
         {
             string server = Map_ApiConfigs["db"]["server"];
-            string uid= Map_ApiConfigs["db"]["server"];
+            string uid= Map_ApiConfigs["db"]["uid"];
             string pwd = Map_ApiConfigs["db"]["pwd"];
             string db= Map_ApiConfigs["db"]["db"];
             db_objectConnectionHelper.Set_NewConnectionItem(key_db_basic, server, uid, pwd, db, enum_DatabaseType.MySql);
@@ -65,7 +84,17 @@ namespace Core.Controllers.BaseController
 
         public string ExecuteSucessful()
         {
-            return "Executed";
+            return "{" + "\"executed:\"" + "," + "\"true\"" + "}";
+        }
+
+        public string ExecuteFalse()
+        {
+            return @"{'execute':'false'}";
+        }
+
+        public string AssetExecute(bool result)
+        {
+            return "{" + "\"executed:\"" + "," + (result ? "\"true\"" : "\"false\"") + "}";
         }
 
         public bool VerifyNotEmpty(List<string> list)

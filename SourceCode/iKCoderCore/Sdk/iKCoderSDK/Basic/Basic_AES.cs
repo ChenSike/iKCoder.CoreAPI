@@ -39,14 +39,13 @@ namespace iKCoderSDK
 
             ICryptoTransform cTransform = des.CreateEncryptor();
             byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-
-            return Convert.ToBase64String(resultArray);
+            return UTF8Encoding.UTF8.GetString(resultArray);
         }
 
         public string AesDecrypt(string content)
         {
             string key_base64 = Util_Common.Encoder_Base64(key);
-            byte[] keyArray = Convert.FromBase64String(key);
+            byte[] keyArray = Convert.FromBase64String(key_base64);
             byte[] toEncryptArray = Convert.FromBase64String(content);
 
             SymmetricAlgorithm des = Aes.Create();
@@ -57,7 +56,7 @@ namespace iKCoderSDK
             ICryptoTransform cTransform = des.CreateDecryptor();
             byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
 
-            return Convert.ToBase64String(resultArray);
+            return UTF8Encoding.UTF8.GetString(resultArray);
         }
 
     }

@@ -4,18 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using iKCoderSDK;
 
 namespace Core.Controllers.iKCoder.Account.Teacher
 {
     [Produces("application/json")]
-    [Route("ikcoder/account/teacher/create")]
-    public class CreateController : BaseController.BaseController
+    [Route("ikcoder/account/teacher/login")]
+    public class LoginController : BaseController.BaseController
     {
-
-
         [HttpGet]
-        public string Get(string name, string pwd,int regFrom)
+        public void Get(string name,string pwd)
         {
             List<string> lParams = new List<string>();
             lParams.Add(name);
