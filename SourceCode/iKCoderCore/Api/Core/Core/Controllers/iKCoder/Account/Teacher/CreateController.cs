@@ -31,19 +31,20 @@ namespace Core.Controllers.iKCoder.Account.Teacher
                 string strResult = string.Empty;
                 if (dtResult != null && dtResult.Rows.Count > 0)
                 {
-                    return ExecuteFalse();
+                    return MessageHelper.MessageHelper.ExecuteFalse(MessageHelper.MsgCode.MsgCode_Teacher.MSGCODE_ACCOUNT_TEACHER_EXISTED, MessageHelper.MsgCode.MsgCode_Teacher.MSG_ACCOUNT_TEACHER_EXISTED);
                 }
+                dParams.Clear();
                 dParams.Add("name", name);
                 dParams.Add("pwd", pwd);
                 dParams.Add("regfrom", regFrom.ToString());
                 dParams.Add("status", "0");
-                string result = AssetExecute(ExecuteInsert(key_db_basic, SPSControler.sp_pool_teacher, dParams));
+                string result = MessageHelper.MessageHelper.AssetExecute(ExecuteInsert(key_db_basic, SPSControler.sp_pool_teacher, dParams));
                 CloseDB();
                 return result;
             }
             else
             {
-                return ExecuteFalse();
+                return MessageHelper.MessageHelper.ExecuteFalse();
             }
         }
     }

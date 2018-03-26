@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `ikcoder_basic` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `ikcoder_basic`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: localhost    Database: ikcoder_basic
@@ -56,7 +58,7 @@ CREATE TABLE `pool_teachers` (
   `regfrom` int(11) DEFAULT NULL,
   `status` varchar(2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,8 +67,13 @@ CREATE TABLE `pool_teachers` (
 
 LOCK TABLES `pool_teachers` WRITE;
 /*!40000 ALTER TABLE `pool_teachers` DISABLE KEYS */;
+INSERT INTO `pool_teachers` VALUES (2,'sike.chen','12345678',0,'0');
 /*!40000 ALTER TABLE `pool_teachers` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'ikcoder_basic'
+--
 
 --
 -- Dumping routines for database 'ikcoder_basic'
@@ -171,4 +178,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-25 23:37:16
+-- Dump completed on 2018-03-27  0:23:44

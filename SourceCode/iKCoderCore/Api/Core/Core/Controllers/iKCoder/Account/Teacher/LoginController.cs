@@ -32,18 +32,18 @@ namespace Core.Controllers.iKCoder.Account.Teacher
                 {
                     string id = Guid.NewGuid().ToString();
                     HttpContext.Session.SetString("id", id);
-                    strResult = ExecuteSucessful();
+                    strResult = MessageHelper.MessageHelper.ExecuteSucessful();
                 }
                 else
                 {
-                    strResult = ExecuteFalse();
+                    strResult = MessageHelper.MessageHelper.ExecuteFalse();
                 }
                 CloseDB();
                 return strResult;
             }
             else
             {
-                return ExecuteFalse();
+                return MessageHelper.MessageHelper.ExecuteFalse();
             }
         }
     }

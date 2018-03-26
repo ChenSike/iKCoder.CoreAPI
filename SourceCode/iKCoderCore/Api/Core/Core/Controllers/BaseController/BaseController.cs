@@ -8,9 +8,11 @@ using iKCoderSDK;
 using System.Xml;
 using System.Data;
 using MySql.Data;
+using Microsoft.AspNetCore.Cors;
 
 namespace Core.Controllers.BaseController
 {
+    [EnableCors("*")]
     public class BaseController : Controller
     {
 
@@ -102,21 +104,7 @@ namespace Core.Controllers.BaseController
             db_objectConnectionHelper.Action_CloseAllActionConnection();
         }
 
-        public string ExecuteSucessful()
-        {
-            return "{" + "\"executed:\"" + "," + "\"true\"" + "}";
-        }
-
-        public string ExecuteFalse()
-        {
-            return @"{'execute':'false'}";
-        }
-
-        public string AssetExecute(bool result)
-        {
-            return "{" + "\"executed:\"" + "," + (result ? "\"true\"" : "\"false\"") + "}";
-        }
-
+       
         public bool VerifyNotEmpty(List<string> list)
         {
             foreach(string item in list)
