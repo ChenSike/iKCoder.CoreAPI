@@ -26,12 +26,12 @@ namespace Core.Controllers.iKCoder.Account.Teacher
                 Dictionary<string, string> dParams = new Dictionary<string, string>();
                 dParams.Add("name", name);
                 dParams.Add("pwd", pwd);
-                DataTable dtResult = ExecuteSelectWithMixedConditions(key_db_basic, SPSControler.sp_pool_teacher, dParams);
+                DataTable dtResult = ExecuteSelectWithMixedConditions(key_db_basic, SPSController.sp_pool_teacher, dParams);
                 string strResult = string.Empty;
                 if(dtResult!=null && dtResult.Rows.Count>0)
                 {
                     string id = Guid.NewGuid().ToString();
-                    HttpContext.Session.SetString("id", id);
+                    HttpContext.Session.SetString("tlid", id);
                     strResult = MessageHelper.MessageHelper.ExecuteSucessful();
                 }
                 else

@@ -26,11 +26,11 @@ namespace Core.Controllers.iKCoder.Account.Teacher
                 LoadSPS();
                 Dictionary<string, string> dParams = new Dictionary<string, string>();
                 dParams.Add("name", name);
-                dParams.Add("pwd", pwd);
-                DataTable dtResult = ExecuteSelectWithMixedConditions(key_db_basic, SPSControler.sp_pool_teacher, dParams);
+                DataTable dtResult = ExecuteSelectWithMixedConditions(key_db_basic, SPSController.sp_pool_teacher, dParams);
                 string strResult = string.Empty;
                 if (dtResult != null && dtResult.Rows.Count > 0)
                 {
+                    CloseDB();
                     return MessageHelper.MessageHelper.ExecuteFalse(MessageHelper.MsgCode.MsgCode_Teacher.MSGCODE_ACCOUNT_TEACHER_EXISTED, MessageHelper.MsgCode.MsgCode_Teacher.MSG_ACCOUNT_TEACHER_EXISTED);
                 }
                 dParams.Clear();
@@ -38,7 +38,7 @@ namespace Core.Controllers.iKCoder.Account.Teacher
                 dParams.Add("pwd", pwd);
                 dParams.Add("regfrom", regFrom.ToString());
                 dParams.Add("status", "0");
-                string result = MessageHelper.MessageHelper.AssetExecute(ExecuteInsert(key_db_basic, SPSControler.sp_pool_teacher, dParams));
+                string result = MessageHelper.MessageHelper.AssetExecute(ExecuteInsert(key_db_basic, SPSController.sp_pool_teacher, dParams));
                 CloseDB();
                 return result;
             }

@@ -24,5 +24,12 @@ namespace iKCoderSDK
                 }
             }
         }
+
+        public static long GuidToLongID()
+        {
+            byte[] buffer = Guid.NewGuid().ToByteArray();
+            return BitConverter.ToInt64(buffer, 0);
+        }
+
     }
 }
