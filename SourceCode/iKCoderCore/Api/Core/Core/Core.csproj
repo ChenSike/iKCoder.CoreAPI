@@ -8,7 +8,8 @@
     <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Controllers\iKCoder\新文件夹\" />
+    <Folder Include="Controllers\iKCoder\Core\LessonNAV\" />
+    <Folder Include="Controllers\iKCoder\Core\LessonSence\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
