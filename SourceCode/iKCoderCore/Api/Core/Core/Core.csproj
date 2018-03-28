@@ -10,6 +10,7 @@
   <ItemGroup>
     <Folder Include="Controllers\iKCoder\Core\LessonNAV\" />
     <Folder Include="Controllers\iKCoder\Core\LessonSence\" />
+    <Folder Include="Controllers\iKCoder\Core\Data\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>

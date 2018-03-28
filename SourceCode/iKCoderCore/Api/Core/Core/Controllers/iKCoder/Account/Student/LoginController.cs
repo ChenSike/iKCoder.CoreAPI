@@ -11,6 +11,20 @@ namespace Core.Controllers.iKCoder.Account.Student
     [Route("ikcoder/account/student/login")]
     public class LoginController : BaseController.BaseController
     {
+        [HttpGet]
+        public string Get(string name,string pwd)
+        {
+            List<string> lParams = new List<string>();
+            lParams.Add(name);
+            lParams.Add(pwd);
+            if(VerifyNotEmpty(lParams))
+            {
 
+            }
+            else
+            {
+                MessageHelper.MessageHelper.ExecuteFalse();
+            }
+        }
     }
 }

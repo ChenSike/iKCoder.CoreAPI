@@ -33,6 +33,7 @@ namespace Core.Controllers.iKCoder.Account.Advisor
                 {
                     string id = Guid.NewGuid().ToString();
                     HttpContext.Session.SetString("alid", id);
+                    Response.Cookies.Append("alid", id);
                     strResult = MessageHelper.MessageHelper.ExecuteSucessful();
                 }
                 else
