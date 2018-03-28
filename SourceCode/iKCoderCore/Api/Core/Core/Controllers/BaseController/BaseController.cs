@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Cors;
 
 namespace Core.Controllers.BaseController
 {
-    [EnableCors("*")]
+    [EnableCors("AllowSameDomain")]
     public class BaseController : Controller
     {
 
@@ -29,6 +29,7 @@ namespace Core.Controllers.BaseController
         
         public void InitApiConfigs()
         {
+         
             Path_Api = AppContext.BaseDirectory;
             Basic_Config objApiConfig = new Basic_Config();
             objApiConfig.DoOpen(Path_Api + "\\config\\ikcoder.basic.xml");

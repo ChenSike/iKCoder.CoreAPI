@@ -16,6 +16,7 @@ namespace Core
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            
         }
 
         public IConfiguration Configuration { get; }
@@ -29,11 +30,14 @@ namespace Core
             {
                 options.IdleTimeout = TimeSpan.FromSeconds(10);
             });
-        }
+            services.AddCors(options =>
+            options.AddPolicy("AllowSameDomain", builder => builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin().AllowCredentials()));
+         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {            
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

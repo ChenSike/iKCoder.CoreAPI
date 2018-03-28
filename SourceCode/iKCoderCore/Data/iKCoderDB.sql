@@ -1,3 +1,40 @@
+CREATE DATABASE  IF NOT EXISTS `ikcoder_store` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `ikcoder_store`;
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
+--
+-- Host: localhost    Database: ikcoder_store
+-- ------------------------------------------------------
+-- Server version	5.7.17-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Dumping events for database 'ikcoder_store'
+--
+
+--
+-- Dumping routines for database 'ikcoder_store'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-03-28 17:45:01
 CREATE DATABASE  IF NOT EXISTS `ikcoder_basic` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `ikcoder_basic`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
@@ -18,6 +55,32 @@ USE `ikcoder_basic`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `pool_advisor`
+--
+
+DROP TABLE IF EXISTS `pool_advisor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pool_advisor` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(40) DEFAULT NULL,
+  `pwd` varchar(20) DEFAULT NULL,
+  `cid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pool_advisor`
+--
+
+LOCK TABLES `pool_advisor` WRITE;
+/*!40000 ALTER TABLE `pool_advisor` DISABLE KEYS */;
+INSERT INTO `pool_advisor` VALUES (1,'advisor01','123789',1);
+/*!40000 ALTER TABLE `pool_advisor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `pool_centers`
 --
 
@@ -32,7 +95,7 @@ CREATE TABLE `pool_centers` (
   `tel` varchar(100) DEFAULT NULL,
   `level` varchar(2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +104,7 @@ CREATE TABLE `pool_centers` (
 
 LOCK TABLES `pool_centers` WRITE;
 /*!40000 ALTER TABLE `pool_centers` DISABLE KEYS */;
+INSERT INTO `pool_centers` VALUES (1,'sz01','0','ShenZhen Bay',NULL,'1');
 /*!40000 ALTER TABLE `pool_centers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,6 +177,48 @@ UNLOCK TABLES;
 --
 -- Dumping routines for database 'ikcoder_basic'
 --
+/*!50003 DROP PROCEDURE IF EXISTS `spa_operation_pool_advisor` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spa_operation_pool_advisor`(_operation varchar(40),_id int(11),_name varchar(40),_pwd varchar(20),_cid int(11))
+BEGIN
+DECLARE tmpsql VARCHAR(800);
+if _operation='select' then
+select * from pool_advisor;
+elseif _operation='insert' then
+insert into ikcoder_basic.pool_advisor(name,pwd,cid) values(_name,_pwd,_cid);
+elseif _operation='update' and _name IS NOT NULL then
+update pool_advisor set name = _name where id = _id;
+elseif _operation='update' and _pwd IS NOT NULL then
+update pool_advisor set pwd = _pwd where id = _id;
+elseif _operation='update' and _cid IS NOT NULL then
+update pool_advisor set cid = _cid where id = _id;
+elseif _operation='selectmixed'then
+select * from pool_advisor where id = IFNULL(_id,id) and name = IFNULL(_name,name) and pwd = IFNULL(_pwd,pwd) and cid = IFNULL(_cid,cid);
+elseif _operation='delete' then
+delete from pool_advisor where id = _id;
+elseif _operation='deletecondition' then
+delete from pool_advisor where id = _id or name = _name or pwd = _pwd or cid = _cid;
+elseif _operation='deletemixed'then
+select * from pool_advisor where id = IFNULL(_id,id) and name = IFNULL(_name,name) and pwd = IFNULL(_pwd,pwd) and cid = IFNULL(_cid,cid);
+elseif _operation='selectkey' then
+select * from pool_advisor where id = _id;
+elseif _operation='selectcondition' then
+select * from pool_advisor where id = _id or name = _name or pwd = _pwd or cid = _cid;
+END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `spa_operation_pool_centers` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -169,13 +275,13 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spa_operation_pool_students`(_operation varchar(40),_id int(11),_sid varchar(40),_uid varchar(40),_pwd varchar(20),_nickname varchar(40),_realname varchar(40),_sex varchar(1),_birthdate varchar(20),_school varchar(40),_tel varchar(40),_extended longblob,_cid int(11))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spa_operation_pool_students`(_operation varchar(40),_id int(11),_sid varchar(40),_uid varchar(40),_pwd varchar(20),_nickname varchar(40),_realname varchar(40),_sex varchar(1),_birthdate varchar(20),_school varchar(40),_tel varchar(40),_extended longblob,_cid int(11),_pid varchar(45),_status varchar(2))
 BEGIN
 DECLARE tmpsql VARCHAR(800);
 if _operation='select' then
 select * from pool_students;
 elseif _operation='insert' then
-insert into ikcoder_basic.pool_students(sid,uid,pwd,nickname,realname,sex,birthdate,school,tel,extended,cid) values(_sid,_uid,_pwd,_nickname,_realname,_sex,_birthdate,_school,_tel,_extended,_cid);
+insert into ikcoder_basic.pool_students(sid,uid,pwd,nickname,realname,sex,birthdate,school,tel,extended,cid,pid,status) values(_sid,_uid,_pwd,_nickname,_realname,_sex,_birthdate,_school,_tel,_extended,_cid,_pid,_status);
 elseif _operation='update' and _sid IS NOT NULL then
 update pool_students set sid = _sid where id = _id;
 elseif _operation='update' and _uid IS NOT NULL then
@@ -198,18 +304,22 @@ elseif _operation='update' and _extended IS NOT NULL then
 update pool_students set extended = _extended where id = _id;
 elseif _operation='update' and _cid IS NOT NULL then
 update pool_students set cid = _cid where id = _id;
+elseif _operation='update' and _pid IS NOT NULL then
+update pool_students set pid = _pid where id = _id;
+elseif _operation='update' and _status IS NOT NULL then
+update pool_students set status = _status where id = _id;
 elseif _operation='selectmixed'then
-select * from pool_students where id = IFNULL(_id,id) and sid = IFNULL(_sid,sid) and uid = IFNULL(_uid,uid) and pwd = IFNULL(_pwd,pwd) and nickname = IFNULL(_nickname,nickname) and realname = IFNULL(_realname,realname) and sex = IFNULL(_sex,sex) and birthdate = IFNULL(_birthdate,birthdate) and school = IFNULL(_school,school) and tel = IFNULL(_tel,tel) and extended = IFNULL(_extended,extended) and cid = IFNULL(_cid,cid);
+select * from pool_students where id = IFNULL(_id,id) and sid = IFNULL(_sid,sid) and uid = IFNULL(_uid,uid) and pwd = IFNULL(_pwd,pwd) and nickname = IFNULL(_nickname,nickname) and realname = IFNULL(_realname,realname) and sex = IFNULL(_sex,sex) and birthdate = IFNULL(_birthdate,birthdate) and school = IFNULL(_school,school) and tel = IFNULL(_tel,tel) and extended = IFNULL(_extended,extended) and cid = IFNULL(_cid,cid) and pid = IFNULL(_pid,pid) and status = IFNULL(_status,status);
 elseif _operation='delete' then
 delete from pool_students where id = _id;
 elseif _operation='deletecondition' then
-delete from pool_students where id = _id or sid = _sid or uid = _uid or pwd = _pwd or nickname = _nickname or realname = _realname or sex = _sex or birthdate = _birthdate or school = _school or tel = _tel or extended = _extended or cid = _cid;
+delete from pool_students where id = _id or sid = _sid or uid = _uid or pwd = _pwd or nickname = _nickname or realname = _realname or sex = _sex or birthdate = _birthdate or school = _school or tel = _tel or extended = _extended or cid = _cid or pid = _pid or status = _status;
 elseif _operation='deletemixed'then
-select * from pool_students where id = IFNULL(_id,id) and sid = IFNULL(_sid,sid) and uid = IFNULL(_uid,uid) and pwd = IFNULL(_pwd,pwd) and nickname = IFNULL(_nickname,nickname) and realname = IFNULL(_realname,realname) and sex = IFNULL(_sex,sex) and birthdate = IFNULL(_birthdate,birthdate) and school = IFNULL(_school,school) and tel = IFNULL(_tel,tel) and extended = IFNULL(_extended,extended) and cid = IFNULL(_cid,cid);
+select * from pool_students where id = IFNULL(_id,id) and sid = IFNULL(_sid,sid) and uid = IFNULL(_uid,uid) and pwd = IFNULL(_pwd,pwd) and nickname = IFNULL(_nickname,nickname) and realname = IFNULL(_realname,realname) and sex = IFNULL(_sex,sex) and birthdate = IFNULL(_birthdate,birthdate) and school = IFNULL(_school,school) and tel = IFNULL(_tel,tel) and extended = IFNULL(_extended,extended) and cid = IFNULL(_cid,cid) and pid = IFNULL(_pid,pid) and status = IFNULL(_status,status);
 elseif _operation='selectkey' then
 select * from pool_students where id = _id;
 elseif _operation='selectcondition' then
-select * from pool_students where id = _id or sid = _sid or uid = _uid or pwd = _pwd or nickname = _nickname or realname = _realname or sex = _sex or birthdate = _birthdate or school = _school or tel = _tel or extended = _extended or cid = _cid;
+select * from pool_students where id = _id or sid = _sid or uid = _uid or pwd = _pwd or nickname = _nickname or realname = _realname or sex = _sex or birthdate = _birthdate or school = _school or tel = _tel or extended = _extended or cid = _cid or pid = _pid or status = _status;
 END IF;
 END ;;
 DELIMITER ;
@@ -271,7 +381,7 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-27 22:55:21
+-- Dump completed on 2018-03-28 17:45:02
 CREATE DATABASE  IF NOT EXISTS `ikcoder_core` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `ikcoder_core`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
@@ -601,4 +711,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-27 22:55:22
+-- Dump completed on 2018-03-28 17:45:02
