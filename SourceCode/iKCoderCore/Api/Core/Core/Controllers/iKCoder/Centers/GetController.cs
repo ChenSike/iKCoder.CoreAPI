@@ -20,7 +20,7 @@ namespace Core.Controllers.iKCoder.Centers
             if(VerifyNotEmpty(lParams))
             {
                 InitApiConfigs();
-                ConnectDB();
+                ConnectDB(key_db_basic);
                 LoadSPS();
                 Dictionary<string, string> dParams = new Dictionary<string, string>();
                 dParams.Add("name", name);

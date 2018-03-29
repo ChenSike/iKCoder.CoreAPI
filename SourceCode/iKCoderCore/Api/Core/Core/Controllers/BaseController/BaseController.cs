@@ -17,6 +17,8 @@ namespace Core.Controllers.BaseController
     {
 
         protected const string key_db_basic = "ikcoder_basic";
+        protected const string key_db_core = "ikcoder_core";
+        protected const string key_db_store = "ikcoder_store";
 
         protected Dictionary<string, Dictionary<string, string>> Map_ApiConfigs = new Dictionary<string, Dictionary<string, string>>();
         protected Dictionary<String, class_Data_SqlSPEntry> Map_SPS = new Dictionary<string, class_Data_SqlSPEntry>();
@@ -86,13 +88,13 @@ namespace Core.Controllers.BaseController
             }
         }
 
-        public void ConnectDB()
+        public void ConnectDB(string key)
         {
-            string server = Map_ApiConfigs["db"]["server"];
-            string uid= Map_ApiConfigs["db"]["uid"];
-            string pwd = Map_ApiConfigs["db"]["pwd"];
-            string db= Map_ApiConfigs["db"]["db"];
-            db_objectConnectionHelper.Set_NewConnectionItem(key_db_basic, server, uid, pwd, db, enum_DatabaseType.MySql);
+            string server = Map_ApiConfigs[key]["server"];
+            string uid= Map_ApiConfigs[key]["uid"];
+            string pwd = Map_ApiConfigs[key]["pwd"];
+            string db= Map_ApiConfigs[key]["db"];
+            db_objectConnectionHelper.Set_NewConnectionItem(key, server, uid, pwd, db, enum_DatabaseType.MySql);
         }
 
         public void LoadSPS()

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 
-namespace CoreRun
+namespace CoreM
 {
-
     public class ConsoleMessageItem
     {
         public string Message
@@ -48,9 +45,9 @@ namespace CoreRun
 
         private void process()
         {
-            while(true)
+            while (true)
             {
-                if(pool_messages.Count>0)
+                if (pool_messages.Count > 0)
                 {
                     ConsoleMessageItem activeItem = pool_messages.Dequeue();
                     Console.WriteLine("[Message:" + activeItem.Message + " ]");
