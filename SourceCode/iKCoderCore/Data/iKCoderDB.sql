@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `ikcoder_store` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `ikcoder_store`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: localhost    Database: ikcoder_store
@@ -16,14 +18,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `ikcoder_store`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `ikcoder_store` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `ikcoder_store`;
-
---
 -- Table structure for table `db_reg`
 --
 
@@ -37,15 +31,13 @@ CREATE TABLE `db_reg` (
   `dbuid` varchar(20) DEFAULT NULL,
   `dbpwd` varchar(20) DEFAULT NULL,
   `dbdatabase` varchar(200) DEFAULT NULL,
-  `index` int(11) DEFAULT NULL,
+  `tindex` varchar(2) DEFAULT NULL,
   `storetable` varchar(200) DEFAULT NULL,
   `limitedrows` int(11) DEFAULT NULL,
   `rows` int(11) DEFAULT NULL,
-  `flushtype` varchar(2) DEFAULT NULL,
-  `flushpoint` int(11) DEFAULT NULL,
   `online` varchar(2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -54,7 +46,7 @@ CREATE TABLE `db_reg` (
 
 LOCK TABLES `db_reg` WRITE;
 /*!40000 ALTER TABLE `db_reg` DISABLE KEYS */;
-INSERT INTO `db_reg` VALUES (1,'ikcoder_store_d1','127.0.0.1','root','iKCoder2017DB','ikcoder_store_d1',1,'Store',50000000,0,'h',1,'0');
+INSERT INTO `db_reg` VALUES (2,'ikcoder_store_d1','127.0.0.1','root','iKCoder2017DB','ikcoder_store_d1','1','store',10000000,0,'1');
 /*!40000 ALTER TABLE `db_reg` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -68,7 +60,7 @@ DROP TABLE IF EXISTS `router_t1`;
 CREATE TABLE `router_t1` (
   `id` int(11) NOT NULL,
   `uid` int(11) DEFAULT NULL,
-  `index` int(11) DEFAULT NULL,
+  `tindex` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -92,7 +84,7 @@ DROP TABLE IF EXISTS `router_t2`;
 CREATE TABLE `router_t2` (
   `id` int(11) NOT NULL,
   `uid` int(11) DEFAULT NULL,
-  `index` int(11) DEFAULT NULL,
+  `tindex` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -116,7 +108,7 @@ DROP TABLE IF EXISTS `router_t3`;
 CREATE TABLE `router_t3` (
   `id` int(11) NOT NULL,
   `uid` int(11) DEFAULT NULL,
-  `index` int(11) DEFAULT NULL,
+  `tindex` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -140,7 +132,7 @@ DROP TABLE IF EXISTS `router_t4`;
 CREATE TABLE `router_t4` (
   `id` int(11) NOT NULL,
   `uid` int(11) DEFAULT NULL,
-  `index` int(11) DEFAULT NULL,
+  `tindex` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -161,14 +153,251 @@ UNLOCK TABLES;
 --
 -- Dumping routines for database 'ikcoder_store'
 --
+/*!50003 DROP PROCEDURE IF EXISTS `spa_operation_db_reg` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spa_operation_db_reg`(_operation varchar(40),_id int(11),_dbkey varchar(200),_dbserver varchar(40),_dbuid varchar(20),_dbpwd varchar(20),_dbdatabase varchar(200),_tindex varchar(2),_storetable varchar(200),_limitedrows int(11),_rows int(11),_online varchar(2))
+BEGIN
+DECLARE tmpsql VARCHAR(800);
+if _operation='select' then
+select * from db_reg;
+elseif _operation='insert' then
+insert into ikcoder_store.db_reg(dbkey,dbserver,dbuid,dbpwd,dbdatabase,tindex,storetable,limitedrows,rows,online) values(_dbkey,_dbserver,_dbuid,_dbpwd,_dbdatabase,_tindex,_storetable,_limitedrows,_rows,_online);
+elseif _operation='update' and _dbkey IS NOT NULL then
+update db_reg set dbkey = _dbkey where id = _id;
+elseif _operation='update' and _dbserver IS NOT NULL then
+update db_reg set dbserver = _dbserver where id = _id;
+elseif _operation='update' and _dbuid IS NOT NULL then
+update db_reg set dbuid = _dbuid where id = _id;
+elseif _operation='update' and _dbpwd IS NOT NULL then
+update db_reg set dbpwd = _dbpwd where id = _id;
+elseif _operation='update' and _dbdatabase IS NOT NULL then
+update db_reg set dbdatabase = _dbdatabase where id = _id;
+elseif _operation='update' and _tindex IS NOT NULL then
+update db_reg set tindex = _tindex where id = _id;
+elseif _operation='update' and _storetable IS NOT NULL then
+update db_reg set storetable = _storetable where id = _id;
+elseif _operation='update' and _limitedrows IS NOT NULL then
+update db_reg set limitedrows = _limitedrows where id = _id;
+elseif _operation='update' and _rows IS NOT NULL then
+update db_reg set rows = _rows where id = _id;
+elseif _operation='update' and _online IS NOT NULL then
+update db_reg set online = _online where id = _id;
+elseif _operation='selectmixed'then
+select * from db_reg where id = IFNULL(_id,id) and dbkey = IFNULL(_dbkey,dbkey) and dbserver = IFNULL(_dbserver,dbserver) and dbuid = IFNULL(_dbuid,dbuid) and dbpwd = IFNULL(_dbpwd,dbpwd) and dbdatabase = IFNULL(_dbdatabase,dbdatabase) and tindex = IFNULL(_tindex,tindex) and storetable = IFNULL(_storetable,storetable) and limitedrows = IFNULL(_limitedrows,limitedrows) and rows = IFNULL(_rows,rows) and online = IFNULL(_online,online);
+elseif _operation='delete' then
+delete from db_reg where id = _id;
+elseif _operation='deletecondition' then
+delete from db_reg where id = _id or dbkey = _dbkey or dbserver = _dbserver or dbuid = _dbuid or dbpwd = _dbpwd or dbdatabase = _dbdatabase or tindex = _tindex or storetable = _storetable or limitedrows = _limitedrows or rows = _rows or online = _online;
+elseif _operation='deletemixed'then
+select * from db_reg where id = IFNULL(_id,id) and dbkey = IFNULL(_dbkey,dbkey) and dbserver = IFNULL(_dbserver,dbserver) and dbuid = IFNULL(_dbuid,dbuid) and dbpwd = IFNULL(_dbpwd,dbpwd) and dbdatabase = IFNULL(_dbdatabase,dbdatabase) and tindex = IFNULL(_tindex,tindex) and storetable = IFNULL(_storetable,storetable) and limitedrows = IFNULL(_limitedrows,limitedrows) and rows = IFNULL(_rows,rows) and online = IFNULL(_online,online);
+elseif _operation='selectkey' then
+select * from db_reg where id = _id;
+elseif _operation='selectcondition' then
+select * from db_reg where id = _id or dbkey = _dbkey or dbserver = _dbserver or dbuid = _dbuid or dbpwd = _dbpwd or dbdatabase = _dbdatabase or tindex = _tindex or storetable = _storetable or limitedrows = _limitedrows or rows = _rows or online = _online;
+END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `spa_operation_router_t1` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spa_operation_router_t1`(_operation varchar(40),_id int(11),_uid int(11),_tindex int(11))
+BEGIN
+DECLARE tmpsql VARCHAR(800);
+if _operation='select' then
+select * from router_t1;
+elseif _operation='insert' then
+insert into ikcoder_store.router_t1(id,uid,tindex) values(_id,_uid,_tindex);
+elseif _operation='update' and _uid IS NOT NULL then
+update router_t1 set uid = _uid where id = _id;
+elseif _operation='update' and _tindex IS NOT NULL then
+update router_t1 set tindex = _tindex where id = _id;
+elseif _operation='selectmixed'then
+select * from router_t1 where id = IFNULL(_id,id) and uid = IFNULL(_uid,uid) and tindex = IFNULL(_tindex,tindex);
+elseif _operation='delete' then
+delete from router_t1 where id = _id;
+elseif _operation='deletecondition' then
+delete from router_t1 where id = _id or uid = _uid or tindex = _tindex;
+elseif _operation='deletemixed'then
+select * from router_t1 where id = IFNULL(_id,id) and uid = IFNULL(_uid,uid) and tindex = IFNULL(_tindex,tindex);
+elseif _operation='selectkey' then
+select * from router_t1 where id = _id;
+elseif _operation='selectcondition' then
+select * from router_t1 where id = _id or uid = _uid or tindex = _tindex;
+END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `spa_operation_router_t2` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spa_operation_router_t2`(_operation varchar(40),_id int(11),_uid int(11),_tindex int(11))
+BEGIN
+DECLARE tmpsql VARCHAR(800);
+if _operation='select' then
+select * from router_t2;
+elseif _operation='insert' then
+insert into ikcoder_store.router_t2(id,uid,tindex) values(_id,_uid,_tindex);
+elseif _operation='update' and _uid IS NOT NULL then
+update router_t2 set uid = _uid where id = _id;
+elseif _operation='update' and _tindex IS NOT NULL then
+update router_t2 set tindex = _tindex where id = _id;
+elseif _operation='selectmixed'then
+select * from router_t2 where id = IFNULL(_id,id) and uid = IFNULL(_uid,uid) and tindex = IFNULL(_tindex,tindex);
+elseif _operation='delete' then
+delete from router_t2 where id = _id;
+elseif _operation='deletecondition' then
+delete from router_t2 where id = _id or uid = _uid or tindex = _tindex;
+elseif _operation='deletemixed'then
+select * from router_t2 where id = IFNULL(_id,id) and uid = IFNULL(_uid,uid) and tindex = IFNULL(_tindex,tindex);
+elseif _operation='selectkey' then
+select * from router_t2 where id = _id;
+elseif _operation='selectcondition' then
+select * from router_t2 where id = _id or uid = _uid or tindex = _tindex;
+END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `spa_operation_router_t3` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spa_operation_router_t3`(_operation varchar(40),_id int(11),_uid int(11),_tindex int(11))
+BEGIN
+DECLARE tmpsql VARCHAR(800);
+if _operation='select' then
+select * from router_t3;
+elseif _operation='insert' then
+insert into ikcoder_store.router_t3(id,uid,tindex) values(_id,_uid,_tindex);
+elseif _operation='update' and _uid IS NOT NULL then
+update router_t3 set uid = _uid where id = _id;
+elseif _operation='update' and _tindex IS NOT NULL then
+update router_t3 set tindex = _tindex where id = _id;
+elseif _operation='selectmixed'then
+select * from router_t3 where id = IFNULL(_id,id) and uid = IFNULL(_uid,uid) and tindex = IFNULL(_tindex,tindex);
+elseif _operation='delete' then
+delete from router_t3 where id = _id;
+elseif _operation='deletecondition' then
+delete from router_t3 where id = _id or uid = _uid or tindex = _tindex;
+elseif _operation='deletemixed'then
+select * from router_t3 where id = IFNULL(_id,id) and uid = IFNULL(_uid,uid) and tindex = IFNULL(_tindex,tindex);
+elseif _operation='selectkey' then
+select * from router_t3 where id = _id;
+elseif _operation='selectcondition' then
+select * from router_t3 where id = _id or uid = _uid or tindex = _tindex;
+END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `spa_operation_router_t4` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spa_operation_router_t4`(_operation varchar(40),_id int(11),_uid int(11),_tindex int(11))
+BEGIN
+DECLARE tmpsql VARCHAR(800);
+if _operation='select' then
+select * from router_t4;
+elseif _operation='insert' then
+insert into ikcoder_store.router_t4(id,uid,tindex) values(_id,_uid,_tindex);
+elseif _operation='update' and _uid IS NOT NULL then
+update router_t4 set uid = _uid where id = _id;
+elseif _operation='update' and _tindex IS NOT NULL then
+update router_t4 set tindex = _tindex where id = _id;
+elseif _operation='selectmixed'then
+select * from router_t4 where id = IFNULL(_id,id) and uid = IFNULL(_uid,uid) and tindex = IFNULL(_tindex,tindex);
+elseif _operation='delete' then
+delete from router_t4 where id = _id;
+elseif _operation='deletecondition' then
+delete from router_t4 where id = _id or uid = _uid or tindex = _tindex;
+elseif _operation='deletemixed'then
+select * from router_t4 where id = IFNULL(_id,id) and uid = IFNULL(_uid,uid) and tindex = IFNULL(_tindex,tindex);
+elseif _operation='selectkey' then
+select * from router_t4 where id = _id;
+elseif _operation='selectcondition' then
+select * from router_t4 where id = _id or uid = _uid or tindex = _tindex;
+END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Current Database: `ikcoder_core`
---
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `ikcoder_core` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
+-- Dump completed on 2018-04-02  0:30:46
+CREATE DATABASE  IF NOT EXISTS `ikcoder_core` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `ikcoder_core`;
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
+--
+-- Host: localhost    Database: ikcoder_core
+-- ------------------------------------------------------
+-- Server version	5.7.17-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `map_course`
@@ -470,14 +699,35 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Current Database: `ikcoder_basic`
---
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `ikcoder_basic` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
+-- Dump completed on 2018-04-02  0:30:46
+CREATE DATABASE  IF NOT EXISTS `ikcoder_basic` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `ikcoder_basic`;
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
+--
+-- Host: localhost    Database: ikcoder_basic
+-- ------------------------------------------------------
+-- Server version	5.7.17-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `pool_advisor`
@@ -796,14 +1046,35 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Current Database: `ikcoder_store_d1`
---
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `ikcoder_store_d1` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
+-- Dump completed on 2018-04-02  0:30:47
+CREATE DATABASE  IF NOT EXISTS `ikcoder_store_d1` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `ikcoder_store_d1`;
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
+--
+-- Host: localhost    Database: ikcoder_store_d1
+-- ------------------------------------------------------
+-- Server version	5.7.17-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `store`
@@ -847,4 +1118,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-29 15:43:44
+-- Dump completed on 2018-04-02  0:30:47

@@ -34,12 +34,56 @@ namespace CoreM.Modules
             
         }
 
-        public void Start()
+        public void Processor_CheckStatus()
         {
-            class_Data_SqlSPEntry = Map_SPS[""];
+            class_Data_SqlSPEntry activeSP = Map_SPS["spa_operation_db_reg"];
             while(true)
             {
-                
+                DataTable regTable = db_objectSqlHelper.ExecuteSelectSPForDT(activeSP, db_objectConnectionHelper, Program.key_db_ikcoder_store);
+                foreach(DataRow activeDR in regTable.Rows)
+                {
+                    string id = string.Empty;
+                    string dbkey = string.Empty;
+                    string dbserver = string.Empty;
+                    string dbuid = string.Empty;
+                    string dbpwd = string.Empty;
+                    string dbdatabase = string.Empty;
+                    string tindex = string.Empty;
+                    string storetable = string.Empty;
+                    string limitedrows = string.Empty;
+                    string rows = string.Empty;
+                    string online = string.Empty;
+                    Data_dbDataHelper.GetColumnData(activeDR, "id", out id);
+                    Data_dbDataHelper.GetColumnData(activeDR, "dbkey", out dbkey);
+                    Data_dbDataHelper.GetColumnData(activeDR, "dbserver", out dbserver);
+                    Data_dbDataHelper.GetColumnData(activeDR, "dbuid", out dbuid);
+                    Data_dbDataHelper.GetColumnData(activeDR, "dbpwd", out dbpwd);
+                    Data_dbDataHelper.GetColumnData(activeDR, "dbdatabase", out dbdatabase);
+                    Data_dbDataHelper.GetColumnData(activeDR, "storetable", out storetable);
+                    Data_dbDataHelper.GetColumnData(activeDR, "limitedrows", out limitedrows);
+                    Data_dbDataHelper.GetColumnData(activeDR, "rows", out rows);
+                    Data_dbDataHelper.GetColumnData(activeDR, "online", out online);
+                    if (db_objectConnectionHelper.Get_ExistedConnection(dbkey))
+                        db_objectConnectionHelper.Set_RemoveExistedConnection(dbkey);
+                    ConsoleMessageItem CMI = new ConsoleMessageItem();
+                    CMI.Message = "Try:@->Connect to server:" + dbserver;
+                    Program.obj_message.set_newMessage(CMI);
+                    if (db_objectConnectionHelper.Set_NewConnectionItem(dbkey, dbserver, dbuid, dbpwd, dbdatabase, enum_DatabaseType.MySql))
+                    {
+                        CMI.Message = "Result:@->Faild to connect to;" + dbserver;
+                        Program.obj_message.set_newMessage(CMI);
+                        continue;
+                    }
+                    else
+                    {
+                        CMI.Message = "Result:@->Connected to;" + dbserver;
+                        Program.obj_message.set_newMessage(CMI);
+                    }
+                    online = "1";
+                    string tmpSql = "select count(*) as rows from " + storetable;
+                    DataTable 
+                    Data_dbDataHelper.ActionExecuteSQLForDT()
+                }
             }
         }
 

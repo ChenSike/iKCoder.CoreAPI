@@ -184,5 +184,28 @@ namespace iKCoderSDK
                 return false;
         }
 
+        public bool Get_ExistedConnection(string Key)
+        {
+            if (ActiveSqlConnectionCollection.ContainsKey(Key))
+                return true;
+            else
+                return false;
+        }
+
+        public bool Set_RemoveExistedConnection(string Key)
+        {
+            if (ActiveSqlConnectionCollection.ContainsKey(Key))
+            {
+                if (ActiveSqlConnectionCollection[Key].ActiveConnectionType == enum_DatabaseType.MySql)
+                    ((class_data_MySqlConnectionItem)ActiveSqlConnectionCollection[Key].ActiveConnection).ActiveConnection.Close();
+                if (ActiveSqlConnectionCollection[Key].ActiveConnectionType == enum_DatabaseType.SqlServer)
+                    ((class_data_SqlServerConnectionItem)ActiveSqlConnectionCollection[Key].ActiveConnection).ActiveConnection.Close();
+                ActiveSqlConnectionCollection.Remove(Key);
+                return true;
+            }
+            else
+                return false;
+        }
+
     }
 }
