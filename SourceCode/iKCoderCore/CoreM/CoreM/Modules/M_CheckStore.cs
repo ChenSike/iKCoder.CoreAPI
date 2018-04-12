@@ -34,7 +34,19 @@ namespace CoreM.Modules
             
         }
 
-        public void Processor_CheckStatus()
+
+        public void Start()
+        {
+            currentThread = new Thread(new ParameterizedThreadStart(Processor_CheckStatus));
+            currentThread.Start();
+        }
+
+        public void Stop()
+        {
+            currentThread.Suspend();
+        }
+
+        public void Processor_CheckStatus(Object param)
         {
             class_Data_SqlSPEntry activeSP = Map_SPS["spa_operation_db_reg"];
             while(true)
@@ -72,18 +84,36 @@ namespace CoreM.Modules
                     {
                         CMI.Message = "Result:@->Faild to connect to;" + dbserver;
                         Program.obj_message.set_newMessage(CMI);
-                        continue;
+                        online = "0";
+
                     }
                     else
                     {
-                        CMI.Message = "Result:@->Connected to;" + dbserver;
+                        CMI.Message = "Result:@->Connected to:" + dbserver;
+                        Program.obj_message.set_newMessage(CMI);
+                        online = "1";
+
+                        string tmpSql = "select count(*) as rows from " + storetable;
+                        DataTable dtCount = null;
+                        Data_dbDataHelper.ActionExecuteSQLForDT(db_objectConnectionHelper.Get_ActiveConnection(dbkey), tmpSql, out dtCount);
+                        if (dtCount != null && dtCount.Rows.Count > 0)
+                        {
+                            string tmpRows = string.Empty;
+                            Data_dbDataHelper.GetColumnData(dtCount.Rows[0], "rows", out tmpRows);
+                            if (tmpRows != rows)
+                            {
+                                rows = tmpRows;
+                            }
+                        }                        
+                        activeSP.ModifyParameterValue("id", id);
+                        activeSP.ModifyParameterValue("rows", rows);
+                        activeSP.ModifyParameterValue("online", online);
+                        db_objectSqlHelper.ExecuteUpdateSP(activeSP, db_objectConnectionHelper, dbkey);
+                        CMI.Message = "Result:@->Update reg information:" + dbserver;
                         Program.obj_message.set_newMessage(CMI);
                     }
-                    online = "1";
-                    string tmpSql = "select count(*) as rows from " + storetable;
-                    DataTable 
-                    Data_dbDataHelper.ActionExecuteSQLForDT()
                 }
+                Thread.Sleep(1000 * 30);
             }
         }
 
