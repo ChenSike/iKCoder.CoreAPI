@@ -92,7 +92,6 @@ namespace CoreM.Modules
                         CMI.Message = "Result:@->Connected to:" + dbserver;
                         Program.obj_message.set_newMessage(CMI);
                         online = "1";
-
                         string tmpSql = "select count(*) as rows from " + storetable;
                         DataTable dtCount = null;
                         Data_dbDataHelper.ActionExecuteSQLForDT(db_objectConnectionHelper.Get_ActiveConnection(dbkey), tmpSql, out dtCount);

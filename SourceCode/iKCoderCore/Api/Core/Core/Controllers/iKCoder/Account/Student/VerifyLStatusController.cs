@@ -17,7 +17,7 @@ namespace Core.Controllers.iKCoder.Account.Student
             if (Request.Cookies.ContainsKey("slid"))
             {
                 string slid_fromcookie = Request.Cookies["slid"].ToString();
-                if (HttpContext.Session.Keys.Contains("alid"))
+                if (HttpContext.Session.Keys.Contains("slid"))
                 {
                     string slid_fromsession = HttpContext.Session.GetString("slid");
                     if (slid_fromcookie == slid_fromsession)

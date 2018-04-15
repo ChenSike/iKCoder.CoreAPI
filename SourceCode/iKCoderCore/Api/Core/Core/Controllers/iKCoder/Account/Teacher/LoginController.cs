@@ -32,6 +32,7 @@ namespace Core.Controllers.iKCoder.Account.Teacher
                 {
                     string id = Guid.NewGuid().ToString();
                     HttpContext.Session.SetString("tlid", id);
+                    Response.Cookies.Append("tlid", id);
                     strResult = MessageHelper.MessageHelper.ExecuteSucessful();
                 }
                 else
