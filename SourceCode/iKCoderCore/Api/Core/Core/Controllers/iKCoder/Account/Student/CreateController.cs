@@ -13,9 +13,12 @@ namespace Core.Controllers.iKCoder.Account.Student
     [Route("ikcoder/account/student/create")]
     public class CreateController :BaseController.BaseController
     {
+        
+
         [HttpGet]
         public string Get(string uid,string pwd,string nickname,string realname,string sex,string birthdate,string school,string tel,string cid,string pid)
         {
+            
             List<string> lParams = new List<string>();
             lParams.Add(uid);
             lParams.Add(pwd);

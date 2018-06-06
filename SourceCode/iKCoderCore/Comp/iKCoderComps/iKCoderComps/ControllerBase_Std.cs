@@ -15,10 +15,7 @@ namespace iKCoderComps
     [EnableCors("AllowSameDomain")]
     public class ControllerBase_Std:Controller
     {
-        protected const string key_db_basic = "ikcoder_basic";
-        protected const string key_db_core = "ikcoder_core";
-        protected const string key_db_store = "ikcoder_store";
-
+        
         protected Dictionary<string, Dictionary<string, string>> Map_ApiConfigs = new Dictionary<string, Dictionary<string, string>>();
         protected Dictionary<String, class_Data_SqlSPEntry> Map_SPS = new Dictionary<string, class_Data_SqlSPEntry>();
 
@@ -33,11 +30,11 @@ namespace iKCoderComps
 
             Path_Api = AppContext.BaseDirectory;
             Basic_Config objApiConfig = new Basic_Config();
-            objApiConfig.DoOpen(Path_Api + "\\config\\ikcoder.basic.xml");
+            objApiConfig.DoOpen(Path_Api + "\\config\\ikcoder.configs.xml");
             XmlNodeList sessionNodes = objApiConfig.GetSessionNodes();
             foreach (XmlNode activeSessionNode in sessionNodes)
             {
-                string name = objApiConfig.GetAttrValue(activeSessionNode, "name");
+                string name = objApiConfig.GetAttrValue(activeSessionNode, "name");                                
                 Dictionary<string, string> mapAttrs = new Dictionary<string, string>();
                 List<XmlAttribute> sessionAttrs = objApiConfig.GetSessionAttrs(name);
                 objApiConfig.SwitchToAESModeON();
@@ -87,18 +84,36 @@ namespace iKCoderComps
             }
         }
 
-        public void ConnectDB(string key)
+        public class_data_PlatformDBDataReader ExecuteSelectWithMixedConditions(string connectionkey, string spname, Dictionary<string, string> mapparams)
         {
-            string server = Map_ApiConfigs[key]["server"];
-            string uid = Map_ApiConfigs[key]["uid"];
-            string pwd = Map_ApiConfigs[key]["pwd"];
-            string db = Map_ApiConfigs[key]["db"];
-            db_objectConnectionHelper.Set_NewConnectionItem(key, server, uid, pwd, db, enum_DatabaseType.MySql);
+            if (Map_SPS.ContainsKey(spname))
+            {
+                class_data_MySqlSPEntry objSPEntry = (class_data_MySqlSPEntry)Map_SPS[spname];
+                objSPEntry.ClearAllParamsValues();
+                foreach (string columnname in mapparams.Keys)
+                {
+                    objSPEntry.ModifyParameterValue(columnname, mapparams[columnname]);
+                }
+                return db_objectSqlHelper.ExecuteSelectSPMixedConditionsForDT(objSPEntry, db_objectConnectionHelper, connectionkey);
+            }
+            else
+            {
+                return null;
+            }
         }
 
-        public void LoadSPS()
+        public void ConnectDB(string keyname)
         {
-            Map_SPS = db_objectSqlHelper.ActionAutoLoadingAllSPS(db_objectConnectionHelper.Get_ActiveConnection(key_db_basic), "");
+            string server = Map_ApiConfigs[keyname]["server"];
+            string uid = Map_ApiConfigs[keyname]["uid"];
+            string pwd = Map_ApiConfigs[keyname]["pwd"];
+            string db = Map_ApiConfigs[keyname]["db"];
+            db_objectConnectionHelper.Set_NewConnectionItem(keyname, server, uid, pwd, db, enum_DatabaseType.MySql);
+        }
+
+        public void LoadSPS(string keyname)
+        {
+            Map_SPS = db_objectSqlHelper.ActionAutoLoadingAllSPS(db_objectConnectionHelper.Get_ActiveConnection(keyname), "");
         }
 
         public void CloseDB()
