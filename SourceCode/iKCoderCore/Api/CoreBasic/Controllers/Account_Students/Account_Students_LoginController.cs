@@ -27,7 +27,11 @@ namespace CoreBasic.Controllers.Account_Students
                 DataTable dtUser = new DataTable();
                 dtUser = ExecuteSelectWithMixedConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams);
                 if (dtUser != null && dtUser.Rows.Count == 1)
+                {
+                    
+                    Response.Cookies
                     return MessageHelper.ExecuteSucessful();
+                }
                 else
                     return MessageHelper.ExecuteFalse();
             }
