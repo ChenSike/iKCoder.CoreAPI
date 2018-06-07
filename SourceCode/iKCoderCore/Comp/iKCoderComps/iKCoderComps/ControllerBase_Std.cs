@@ -24,6 +24,10 @@ namespace iKCoderComps
         protected class_Data_SqlConnectionHelper db_objectConnectionHelper = new class_Data_SqlConnectionHelper();
         protected Data_dbSqlHelper db_objectSqlHelper = new Data_dbSqlHelper();
 
+        public void ValidateSpanOfRequest()
+        {
+            
+        }
 
         public void InitApiConfigs()
         {
@@ -66,7 +70,7 @@ namespace iKCoderComps
             }
         }
 
-        public DataTable ExecuteSelectWithMixedConditions(string connectionkey, string spname, Dictionary<string, string> mapparams)
+        public DataTable ExecuteSelectWithMixedConditionsReturnDT(string connectionkey, string spname, Dictionary<string, string> mapparams)
         {
             if (Map_SPS.ContainsKey(spname))
             {
@@ -84,7 +88,7 @@ namespace iKCoderComps
             }
         }
 
-        public class_data_PlatformDBDataReader ExecuteSelectWithMixedConditions(string connectionkey, string spname, Dictionary<string, string> mapparams)
+        public class_data_PlatformDBDataReader ExecuteSelectWithMixedConditionsReturnDR(string connectionkey, string spname, Dictionary<string, string> mapparams)
         {
             if (Map_SPS.ContainsKey(spname))
             {
@@ -94,7 +98,7 @@ namespace iKCoderComps
                 {
                     objSPEntry.ModifyParameterValue(columnname, mapparams[columnname]);
                 }
-                return db_objectSqlHelper.ExecuteSelectSPMixedConditionsForDT(objSPEntry, db_objectConnectionHelper, connectionkey);
+                return db_objectSqlHelper.ExecuteSelectSPConditionForDR(objSPEntry, db_objectConnectionHelper, connectionkey);
             }
             else
             {
@@ -127,6 +131,16 @@ namespace iKCoderComps
             foreach (string item in list)
             {
                 if (string.IsNullOrEmpty(item))
+                    return false;
+            }
+            return true;
+        }
+
+        public bool VerifyNotEmpty(Dictionary<string,string> list)
+        {
+            foreach(string key in list.Keys)
+            {
+                if (string.IsNullOrEmpty(list[key]))
                     return false;
             }
             return true;

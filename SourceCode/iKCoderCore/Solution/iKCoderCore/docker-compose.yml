@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  corerun:
+    image: corerun
+    build:
+      context: .\..\..\CoreRun\CoreRun
+      dockerfile: Dockerfile
