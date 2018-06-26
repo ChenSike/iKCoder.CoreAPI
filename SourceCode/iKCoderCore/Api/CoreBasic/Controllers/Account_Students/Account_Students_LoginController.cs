@@ -15,10 +15,10 @@ namespace CoreBasic.Controllers.Account_Students
     public class Account_Students_LoginController : ControllerBase_Std
     {
         [HttpGet]
-        public string Action(string uid, string pwd)
+        public string Action(string name, string pwd)
         {
             Dictionary<string, string> activeParams = new Dictionary<string, string>();
-            activeParams.Add("name", uid);
+            activeParams.Add("name", name);
             activeParams.Add("password", pwd);
             if (VerifyNotEmpty(activeParams))
             {
@@ -28,8 +28,11 @@ namespace CoreBasic.Controllers.Account_Students
                 dtUser = ExecuteSelectWithMixedConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams);
                 if (dtUser != null && dtUser.Rows.Count == 1)
                 {
-                    
-                    Response.Cookies
+                    string uid = string.Empty;
+                    Data_dbDataHelper.GetColumnData(dtUser.Rows[0], "id", out uid);
+                    Global.ItemAccountStudents activeAccountItem = Global.PoolsLogined.CreateNewItem(uid, name, pwd, "");
+                    Response.Cookies.Append("token", activeAccountItem.token);
+                    Global.PoolsLogined.push(activeAccountItem);					
                     return MessageHelper.ExecuteSucessful();
                 }
                 else

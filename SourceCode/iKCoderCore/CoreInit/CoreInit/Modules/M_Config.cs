@@ -103,5 +103,24 @@ namespace CoreInit
             return configDoc.GetItemValue(sessionname, itemname);
         }
 
+		public string GetFullSession(string sessionname)
+		{
+			Dictionary<string, string> activeSessionMap = new Dictionary<string, string>();
+			List<XmlAttribute> sessionAttrs = configDoc.GetSessionAttrs(sessionname);
+			XmlNode sessionNode = configDoc.GetSessionNode(sessionname);
+			foreach (XmlAttribute activeAttr in sessionAttrs)
+			{
+				if (activeAttr.Name != "name")
+					activeSessionMap.Add(activeAttr.Name, configDoc.GetAttrValue(sessionNode, activeAttr.Name));
+			}
+			StringBuilder returnStr = new StringBuilder();
+			returnStr.AppendLine("Session Name : " + sessionname);
+			foreach(string tmpAttr in activeSessionMap.Keys)
+			{				
+				returnStr.AppendLine("Attr : " + tmpAttr + " | Value : " + activeSessionMap[tmpAttr]);
+			}
+			return returnStr.ToString();
+		}
+
     }
 }

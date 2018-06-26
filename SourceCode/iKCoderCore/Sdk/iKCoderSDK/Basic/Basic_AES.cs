@@ -6,12 +6,12 @@ using System.Security.Cryptography;
 namespace iKCoderSDK
 {
 
-     
-
-    public class Basic_AES
+	public class Basic_AES
     {
 
-        private string key = "ikcoder-api-keys";
+		
+
+        private string key = "ikcoderA";
 
         public string optionalKey
         {
@@ -25,24 +25,24 @@ namespace iKCoderSDK
             }
         }
 
-        public string AesEncrypt(string content)
-        {
+		public  string AesEncrypt(string input)
+		{
 
-            string key_base64 = Util_Common.Encoder_Base64(key);
-            byte[] keyArray = Convert.FromBase64String(key_base64);
-            byte[] toEncryptArray = Encoding.UTF8.GetBytes(content);
+			//byte[] bytesToBeEncrypted = Encoding.UTF8.GetBytes(input);
+			//byte[] passwordBytes = Encoding.UTF8.GetBytes(key);
 
-            SymmetricAlgorithm des = Aes.Create();
-            des.Key = keyArray;
-            des.Mode = CipherMode.ECB;
-            des.Padding = PaddingMode.PKCS7;
+			//passwordBytes = SHA256.Create().ComputeHash(passwordBytes);
 
-            ICryptoTransform cTransform = des.CreateEncryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-            return UTF8Encoding.UTF8.GetString(resultArray);
-        }
+			//byte[] bytesEncrypted = AESEncryptBytes(bytesToBeEncrypted, passwordBytes);
 
-        public string AesDecrypt(string content)
+			//string result = Convert.ToBase64String(bytesEncrypted);
+
+			//return result;
+			return "";
+
+		}
+
+		public string AesDecrypt(string content)
         {
             string key_base64 = Util_Common.Encoder_Base64(key);
             byte[] keyArray = Convert.FromBase64String(key_base64);
@@ -58,6 +58,7 @@ namespace iKCoderSDK
 
             return UTF8Encoding.UTF8.GetString(resultArray);
         }
+		
 
     }
 }

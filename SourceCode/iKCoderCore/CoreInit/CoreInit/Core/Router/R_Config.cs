@@ -35,6 +35,9 @@ namespace CoreInit
                         _object_M_Config.NormalMode();
                         executedResult();
                         break;
+					case "fullsession":
+						displayResult(_object_M_Config.GetFullSession(paramsResult[1]));
+						break;
                     case "session":
                         if (paramsResult.Length > 1)
                         {

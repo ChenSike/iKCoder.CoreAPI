@@ -24,6 +24,31 @@ namespace CoreBasic.Global
             set;
             get;
         }
+
+        public string password
+        {
+            set;
+            get;
+        }
+
+        public DateTime regedtime
+        {
+            set;
+            get;
+        }
+
+		public Dictionary<string,object> valuesMap
+		{
+			set;
+			get;
+		}
+
+        public object value
+        {
+            set;
+            get;
+        }
+
                 
     }
 }

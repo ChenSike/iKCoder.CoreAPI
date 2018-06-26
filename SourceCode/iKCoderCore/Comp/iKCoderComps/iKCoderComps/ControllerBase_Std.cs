@@ -34,7 +34,7 @@ namespace iKCoderComps
 
             Path_Api = AppContext.BaseDirectory;
             Basic_Config objApiConfig = new Basic_Config();
-            objApiConfig.DoOpen(Path_Api + "\\config\\ikcoder.configs.xml");
+            objApiConfig.DoOpen(Path_Api + "\\config\\ikcoder.basic.xml");
             XmlNodeList sessionNodes = objApiConfig.GetSessionNodes();
             foreach (XmlNode activeSessionNode in sessionNodes)
             {
