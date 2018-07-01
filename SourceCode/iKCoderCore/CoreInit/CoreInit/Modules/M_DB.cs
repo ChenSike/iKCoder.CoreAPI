@@ -22,6 +22,12 @@ namespace CoreInit
             this.db_pwd = Console.ReadLine();
             Console.Write("M_DB@database:");
             this.db_database = Console.ReadLine();
+			Console.Write("M_DB@want to create sps map (yes/no):");
+			if(Console.ReadLine()=="yes")
+			{
+				Console.Write("M_DB@spsmap file path:");
+				this.db_spsmappath = Console.ReadLine();
+			}
         }
 
         public string db_server
@@ -47,6 +53,12 @@ namespace CoreInit
             set;
             get;
         }
+
+		public string db_spsmappath
+		{
+			set;
+			get;
+		}
 
         public bool ConnectTo()
         {
@@ -74,8 +86,11 @@ namespace CoreInit
 
         public bool CreateAutoSPS()
         {
-            return _sqlHelper.ActionAutoCreateSPS(_activeConnection);
-        }
+			if(this.db_spsmappath==string.Empty)		
+				return _sqlHelper.ActionAutoCreateSPS(_activeConnection);
+			else
+				return _sqlHelper.ActionAutoCreateSPS(_activeConnection,this.db_spsmappath);
+		}
 
 
 

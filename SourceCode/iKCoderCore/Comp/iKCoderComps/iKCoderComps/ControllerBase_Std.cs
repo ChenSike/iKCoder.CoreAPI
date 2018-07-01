@@ -106,7 +106,7 @@ namespace iKCoderComps
             }
         }
 
-        public void ConnectDB(string keyname)
+		public void ConnectDB(string keyname)
         {
             string server = Map_ApiConfigs[keyname]["server"];
             string uid = Map_ApiConfigs[keyname]["uid"];
@@ -115,9 +115,11 @@ namespace iKCoderComps
             db_objectConnectionHelper.Set_NewConnectionItem(keyname, server, uid, pwd, db, enum_DatabaseType.MySql);
         }
 
-        public void LoadSPS(string keyname)
+        public void LoadSPS(string spsmapfile)
         {
-            Map_SPS = db_objectSqlHelper.ActionAutoLoadingAllSPS(db_objectConnectionHelper.Get_ActiveConnection(keyname), "");
+			XmlDocument spsmapdoc = new XmlDocument();
+			spsmapdoc.Load(Path_Api + "\\config\\" + spsmapfile);
+			Map_SPS = db_objectSqlHelper.ActionAutoLoadingAllSPSFromMap(spsmapdoc);
         }
 
         public void CloseDB()

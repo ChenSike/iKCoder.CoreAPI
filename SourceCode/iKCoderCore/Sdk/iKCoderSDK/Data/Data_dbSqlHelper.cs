@@ -3,21 +3,49 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
+using System.Xml;
 
 namespace iKCoderSDK
 {
     public class Data_dbSqlHelper
     {
-        public bool ActionAutoCreateSPS(class_data_PlatformDBConnection ActiveConnection)
+		public XmlDocument SPMAPDOC = new XmlDocument();
+
+		public Data_dbSqlHelper()
+		{
+			SPMAPDOC.LoadXml("<root></root>");
+		}
+
+		public bool ActionAutoCreateSPS(class_data_PlatformDBConnection ActiveConnection,string SpsMapPath)
+		{
+			if (ActionAutoCreateSPS(ActiveConnection))
+			{
+				try
+				{
+					SPMAPDOC.Save(SpsMapPath);
+					return true;
+				}
+				catch
+				{
+					return false;
+				}
+			}
+			else
+				return false;
+		}
+
+		public bool ActionAutoCreateSPS(class_data_PlatformDBConnection ActiveConnection)
         {
             try
             {
+				XmlNode rootNode = SPMAPDOC.SelectSingleNode("/root");
                 if (ActiveConnection != null && ActiveConnection.activeDatabaseType == enum_DatabaseType.SqlServer)
                 {
                     string sql_getALLTables = class_Data_SqlStringHelper.SQL_GETALLTABLES_FOR_SQL2008;
                     DataTable TablesInfo = new DataTable();
                     DataTable ColumnInfo = new DataTable();
                     DataTable TypesInfo = new DataTable();
+					Util_XmlOperHelper.SetAttribute(rootNode, "type", enum_DatabaseType.SqlServer.ToString());
                     if (Data_dbDataHelper.ActionExecuteSQLForDT(ActiveConnection, sql_getALLTables, out TablesInfo))
                     {
                         if (TablesInfo.Rows.Count > 0)
@@ -46,17 +74,28 @@ namespace iKCoderSDK
                                             Data_dbDataHelper.ActionExecuteForNonQuery(ActiveConnection, sql_CreateNewSp.ToString());
                                             sql_CreateNewSp.Clear();
                                             sql_CreateNewSp.AppendLine("CREATE PROCEDURE {SPNAME}");
-                                            StringBuilder sql_insertSourceColumns = new StringBuilder();
+											StringBuilder sql_insertSourceColumns = new StringBuilder();
                                             StringBuilder sql_insertValueColumns = new StringBuilder();
                                             sql_CreateNewSp.Replace("{SPNAME}", "spa_operation_" + tableName);
-                                            sql_CreateNewSp.AppendLine("(");
-                                            sql_CreateNewSp.AppendLine("@operation nvarchar(20) = '',");
+											XmlNode spitemNode = Util_XmlOperHelper.CreateNode(SPMAPDOC, "item", "");
+											Util_XmlOperHelper.SetAttribute(spitemNode, "name", "spa_operation_" + tableName);
+											rootNode.AppendChild(spitemNode);
+											sql_CreateNewSp.AppendLine("(");
+                                            sql_CreateNewSp.AppendLine("@operation nvarchar(40) = '',");
+											XmlNode operatorNode = Util_XmlOperHelper.CreateNode(SPMAPDOC, "param", "");
+											Util_XmlOperHelper.SetAttribute(operatorNode, "name", "operation");
+											Util_XmlOperHelper.SetAttribute(operatorNode, "type", "nvarchar");
+											Util_XmlOperHelper.SetAttribute(operatorNode, "length", "40");
+											spitemNode.AppendChild(operatorNode);
                                             foreach (DataRow activeDR_2 in ColumnInfo.Rows)
                                             {
-                                                string sql_getALLTypes = "select * from sys.types";
+												XmlNode paramItemNode = Util_XmlOperHelper.CreateNode(SPMAPDOC, "param", "");												
+												spitemNode.AppendChild(paramItemNode);
+												string sql_getALLTypes = "select * from sys.types";
                                                 string columnname = "";
                                                 Data_dbDataHelper.GetColumnData(activeDR_2, "name", out columnname);
-                                                string typeid = "";
+												Util_XmlOperHelper.SetAttribute(paramItemNode, "name", columnname);
+												string typeid = "";
                                                 string length = "";
                                                 string status = "";
                                                 Data_dbDataHelper.GetColumnData(activeDR_2, "xtype", out typeid);
@@ -66,36 +105,67 @@ namespace iKCoderSDK
                                                 Data_dbDataHelper.ActionExecuteSQLForDT(ActiveConnection, sql_getALLTypes, out TypesInfo);
                                                 string typename = "";
                                                 Data_dbDataHelper.GetColumnData(TypesInfo.Rows[0], "name", out typename);
-                                                if (typename.Contains("nvarchar"))
-                                                {
-                                                    if (Int32.Parse(length) < 0)
-                                                        sql_CreateNewSp.AppendLine("@" + columnname + " nvarchar(max) = null ,");
-                                                    else
-                                                        sql_CreateNewSp.AppendLine("@" + columnname + " nvarchar(" + length + ") = null ,");
-                                                }
-                                                else if (typename.Contains("char"))
-                                                    sql_CreateNewSp.AppendLine("@" + columnname + " char(" + length + ") = null ,");
-                                                else if (typename.Contains("varcahr"))
-                                                    sql_CreateNewSp.AppendLine("@" + columnname + " varchar(" + length + ") = null ,");
-                                                else if (typename.Contains("binary"))
-                                                {
-                                                    sql_CreateNewSp.AppendLine("@" + columnname + " binary(" + length + ") = null ,");
-                                                    filterColumn.Add(columnname);
-                                                }
-                                                else if (typename.Contains("varbinary"))
-                                                {
-                                                    sql_CreateNewSp.AppendLine("@" + columnname + " varbinary(" + length + ") = null ,");
-                                                    filterColumn.Add(columnname);
-                                                }
-                                                else if (typename.Contains("nchar"))
-                                                    sql_CreateNewSp.AppendLine("@" + columnname + " nchar(" + length + ") = null ,");
-                                                else if (typename.Contains("decimal"))
-                                                    sql_CreateNewSp.AppendLine("@" + columnname + " decimal" + " = null ,");
-                                                else
-                                                {
-                                                    sql_CreateNewSp.AppendLine("@" + columnname + " " + typename + " = null ,");
-                                                    filterColumn.Add(columnname);
-                                                }
+												if (typename.Contains("nvarchar"))
+												{
+													if (Int32.Parse(length) < 0)
+													{
+														sql_CreateNewSp.AppendLine("@" + columnname + " nvarchar(max) = null ,");
+														Util_XmlOperHelper.SetAttribute(paramItemNode, "type", "nvarchar");
+														Util_XmlOperHelper.SetAttribute(paramItemNode, "length", "max");
+													}
+													else
+													{
+														sql_CreateNewSp.AppendLine("@" + columnname + " nvarchar(" + length + ") = null ,");
+														Util_XmlOperHelper.SetAttribute(paramItemNode, "type", "nvarchar");
+														Util_XmlOperHelper.SetAttribute(paramItemNode, "length", length);
+
+													}
+												}
+												else if (typename.Contains("char"))
+												{
+													sql_CreateNewSp.AppendLine("@" + columnname + " char(" + length + ") = null ,");
+													Util_XmlOperHelper.SetAttribute(paramItemNode, "type", "char");
+													Util_XmlOperHelper.SetAttribute(paramItemNode, "length", length);
+
+												}
+												else if (typename.Contains("varcahr"))
+												{
+													sql_CreateNewSp.AppendLine("@" + columnname + " varchar(" + length + ") = null ,");
+													Util_XmlOperHelper.SetAttribute(paramItemNode, "type", "varchar");
+													Util_XmlOperHelper.SetAttribute(paramItemNode, "length", length);
+
+												}
+												else if (typename.Contains("binary"))
+												{
+													sql_CreateNewSp.AppendLine("@" + columnname + " binary(" + length + ") = null ,");
+													Util_XmlOperHelper.SetAttribute(paramItemNode, "type", "binary");
+													Util_XmlOperHelper.SetAttribute(paramItemNode, "length", length);
+													filterColumn.Add(columnname);
+												}
+												else if (typename.Contains("varbinary"))
+												{
+													sql_CreateNewSp.AppendLine("@" + columnname + " varbinary(" + length + ") = null ,");
+													Util_XmlOperHelper.SetAttribute(paramItemNode, "type", "varbinary");
+													Util_XmlOperHelper.SetAttribute(paramItemNode, "length", length);
+													filterColumn.Add(columnname);
+												}
+												else if (typename.Contains("nchar"))
+												{
+													sql_CreateNewSp.AppendLine("@" + columnname + " nchar(" + length + ") = null ,");
+													Util_XmlOperHelper.SetAttribute(paramItemNode, "type", "nchar");
+													Util_XmlOperHelper.SetAttribute(paramItemNode, "length", length);
+												}
+												else if (typename.Contains("decimal"))
+												{
+													sql_CreateNewSp.AppendLine("@" + columnname + " decimal" + " = null ,");
+													Util_XmlOperHelper.SetAttribute(paramItemNode, "type", "decimal");
+												}
+												else
+												{
+													sql_CreateNewSp.AppendLine("@" + columnname + " " + typename + " = null ,");
+													Util_XmlOperHelper.SetAttribute(paramItemNode, "type", typename);
+													filterColumn.Add(columnname);
+												}
                                                 if (typename.Contains("ntext"))
                                                     filterTypeList.Add(columnname);
                                                 activeColumn.Add(columnname);
@@ -205,7 +275,8 @@ namespace iKCoderSDK
                     string name_sp = "spa_operation_";
                     DataTable TableInfo = new DataTable();
                     StringBuilder sql_CreateNewSp = new StringBuilder();
-                    if (Data_dbDataHelper.ActionExecuteSQLForDT(ActiveConnection, sql_getALLTables, out TableInfo))
+					Util_XmlOperHelper.SetAttribute(rootNode, "type", enum_DatabaseType.MySql.ToString());
+					if (Data_dbDataHelper.ActionExecuteSQLForDT(ActiveConnection, sql_getALLTables, out TableInfo))
                     {
                         DataTable TableSPInfos = new DataTable();
                         string sql_getALLSPInfos = class_Data_SqlStringHelper.Get_SQL_GETALLSPS_FOR_MYSQL(((class_data_MySqlConnectionItem)ActiveConnection).ActiveConnection.Database);
@@ -237,9 +308,17 @@ namespace iKCoderSDK
                                 if (Data_dbDataHelper.ActionExecuteSQLForDT(ActiveConnection, sql_getALLColumns, out TableColumnsInfo))
                                 {
                                     sql_CreateNewSp.AppendLine("CREATE PROCEDURE " + name_sp + tableName);
-                                    sql_CreateNewSp.Append("(");
+									XmlNode spitemNode = Util_XmlOperHelper.CreateNode(SPMAPDOC, "item", "");
+									Util_XmlOperHelper.SetAttribute(spitemNode, "name", name_sp + tableName);
+									rootNode.AppendChild(spitemNode);
+									sql_CreateNewSp.Append("(");
                                     sql_CreateNewSp.Append("_operation varchar(40),");
-                                    if (TableColumnsInfo.Rows.Count > 0)
+									XmlNode operatorNode = Util_XmlOperHelper.CreateNode(SPMAPDOC, "param", "");
+									Util_XmlOperHelper.SetAttribute(operatorNode, "name", "_operation");
+									Util_XmlOperHelper.SetAttribute(operatorNode, "type", "nvarchar");
+									Util_XmlOperHelper.SetAttribute(operatorNode, "length", "40");
+									spitemNode.AppendChild(operatorNode);
+									if (TableColumnsInfo.Rows.Count > 0)
                                     {
                                         foreach (DataRow activeColumnInfoRow in TableColumnsInfo.Rows)
                                         {
@@ -254,7 +333,17 @@ namespace iKCoderSDK
                                             if (column_key == "PRI")
                                                 tmpSelectedKeyColumnsLst.Add(column_name);
                                             sql_CreateNewSp.Append("_" + column_name + " " + column_type + ",");
-                                            if (!tmpSelectedColumsLst.Contains(column_name))
+											XmlNode paramNode = Util_XmlOperHelper.CreateNode(SPMAPDOC, "param", "");
+											Util_XmlOperHelper.SetAttribute(paramNode, "name", "_"+column_name);
+											string[] typeInfo = column_type.Split('(');
+											if(typeInfo.Length>=2)
+											{
+												typeInfo[1] = typeInfo[1].Replace(")", "");
+											}
+											Util_XmlOperHelper.SetAttribute(paramNode, "type", typeInfo[0]);
+											Util_XmlOperHelper.SetAttribute(paramNode, "length", typeInfo[1]);
+											spitemNode.AppendChild(paramNode);
+											if (!tmpSelectedColumsLst.Contains(column_name))
                                                 tmpSelectedColumsLst.Add(column_name);
                                         }
                                     }
@@ -489,8 +578,41 @@ namespace iKCoderSDK
             }
         }
 
+		public Dictionary<string, class_Data_SqlSPEntry> ActionAutoLoadingAllSPSFromMap(XmlDocument SPSMapDoc)
+		{
+			Dictionary<string, class_Data_SqlSPEntry> result = new Dictionary<string, class_Data_SqlSPEntry>();
+			if (SPSMapDoc == null)
+				return result;
+			else
+			{
+				XmlNode rootNode = SPSMapDoc.SelectSingleNode("/root");
+				string dbType = Util_XmlOperHelper.GetAttrValue(rootNode, "type");
+				if (dbType == "MySql")
+				{
+					XmlNodeList items = rootNode.SelectNodes("item");
+					foreach (XmlNode item in items)
+					{
+						string sp_name = Util_XmlOperHelper.GetAttrValue(item, "name");
+						class_data_MySqlSPEntry newMySqlSPEntry = new class_data_MySqlSPEntry(enum_DatabaseType.MySql);
+						newMySqlSPEntry.SPName = sp_name;
+						XmlNodeList paramNodes = item.SelectNodes("param");
+						foreach (XmlNode paramNode in paramNodes)
+						{
+							string param_name = Util_XmlOperHelper.GetAttrValue(paramNode, "name");
+							string param_type = Util_XmlOperHelper.GetAttrValue(paramNode, "type");
+							string param_length = Util_XmlOperHelper.GetAttrValue(paramNode, "length");
+							newMySqlSPEntry.SetNewParameter(param_name, Util_Data.ConventStrTOMySqlDbtye(param_type), ParameterDirection.Input, int.Parse(param_length), null);
+						}
+						result.Add(sp_name, newMySqlSPEntry);
+					}
+					return result;
+				}
+				else
+					return result;
+			}
+		}
 
-        public Dictionary<string, class_Data_SqlSPEntry> ActionAutoLoadingAllSPS(class_data_PlatformDBConnection activeConnection, string SPType)
+		public Dictionary<string, class_Data_SqlSPEntry> ActionAutoLoadingAllSPS(class_data_PlatformDBConnection activeConnection, string SPType)
         {
             if (activeConnection != null)
             {

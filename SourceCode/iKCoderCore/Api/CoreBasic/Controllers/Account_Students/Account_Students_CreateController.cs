@@ -25,7 +25,7 @@ namespace CoreBasic.Controllers
 				{
 					InitApiConfigs();
 					ConnectDB(Global.GlobalDefines.DB_KEY_IKCODER_BASIC);
-					LoadSPS(Global.GlobalDefines.DB_KEY_IKCODER_BASIC);
+					LoadSPS(Global.GlobalDefines.DB_SPSMAP_FILE);
 					if (ExecuteInsert(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams))
 						return MessageHelper.ExecuteSucessful();
 					else
@@ -38,7 +38,10 @@ namespace CoreBasic.Controllers
 			{
 				return MessageHelper.ExecuteFalse();
 			}
-
+			finally
+			{
+				CloseDB();
+			}
         }
     }
 }

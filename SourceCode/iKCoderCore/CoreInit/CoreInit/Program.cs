@@ -9,18 +9,10 @@ namespace CoreInit
 		
 	class Program
     {
-				
+
 		static void Main(string[] args)
         {
-
-			
-			Basic_Config basic_Config = new Basic_Config();
-			basic_Config.CreateNewConfigDocument("test.xml");
-			basic_Config.CreateNewSession("test","");
-			basic_Config.SwitchToAESModeON();
-			basic_Config.SetSessionAttr("test", "attr", "12345678");
-			basic_Config.DoSave();
-			/*
+								
             ConsoleMessage objectConsoleMessage = new ConsoleMessage();
             string command = string.Empty;
             Console.WriteLine("Corerun 1.0 2018 copyright by iKCoder.LTD.ShenZhen.");
@@ -59,7 +51,7 @@ namespace CoreInit
                     }
                 }
                 
-            }*/
+            }
 
 		}
     }
