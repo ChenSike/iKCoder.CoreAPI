@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Data;
 using iKCoderSDK;
+using System.Text;
 
 namespace iKCoderComps
 {
@@ -20,7 +21,20 @@ namespace iKCoderComps
             return "<root><executed>true</executed><msgcode>" + MSGCODE + "</msgcode><msg>" + MSG + "</msg></root>";
         }
 
-        public static string ExecuteFalse()
+		public static string ExecuteSucessfulDoc(Dictionary<string,string> resultMAP)
+		{
+			StringBuilder returnMsg = new StringBuilder();
+			returnMsg.Append("<root><executed>true</executed><return>");
+			foreach(string resultMapKey in resultMAP.Keys)
+			{
+				returnMsg.Append("<item attr='" + resultMapKey + "' value='" + resultMAP[resultMapKey] + "'></item>");
+			}
+			returnMsg.Append("</return></root>");
+			return returnMsg.ToString();
+		}
+
+
+		public static string ExecuteFalse()
         {
             return "<root><executed>false</executed></root>";
         }
@@ -30,6 +44,7 @@ namespace iKCoderComps
             return "<root><executed>false</executed><msgcode>" + MSGCODE + "</msgcode><msg>" + MSG + "</msg></root>";
         }
 
+		
         public static string AssetExecute(bool result)
         {
             if (result)

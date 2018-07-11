@@ -4,14 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using iKCoderSDK;
 
-namespace CoreBasic.Global
+namespace AppMain.Global
 {
     public class MapStoreProcedures
     {
         public class ikcoder_basic
         {
-            public const string spa_operation_account_students = "spa_operation_account_students";
-			public const string spa_operation_profile_students = "spa_operation_profile_students";
+            public const string spa_operation_course_basic = "spa_operation_course_basic";
+			public const string spa_operation_course_main = "spa_operation_course_main";
 
 		}				
     }

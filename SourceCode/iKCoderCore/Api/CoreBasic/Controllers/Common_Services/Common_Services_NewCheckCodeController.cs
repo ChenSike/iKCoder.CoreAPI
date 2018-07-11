@@ -11,12 +11,13 @@ namespace CoreBasic.Controllers.Common_Services
 {
     [Produces("application/json")]
     [Route("api/Common_Services_NewCheckCode")]
-    public class Common_Services_NewCheckCodeController : Controller
-    {
+    public class Common_Services_NewCheckCodeController : BaseController_CoreBasic
+	{
 		public IActionResult actionResult()
 		{
 			string checkCode = string.Empty;
 			MemoryStream streamMem = Basic_CheckCode.NewCheckCode(out checkCode);
+			HttpContext.Session.SetString("checkcode", checkCode);
 			return File(streamMem.ToArray(), @"image/png");
 		}
     }

@@ -12,6 +12,8 @@ namespace iKCoderSDK
 {
     public class Data_dbDataHelper
     {
+		
+
         public static bool GetColumnData(DataRow activeDR, string activeColumnName, out string result)
         {
             result = "";
@@ -404,15 +406,22 @@ namespace iKCoderSDK
                     }
                     else if (activeconnection != null && activeconnection.activeDatabaseType == enum_DatabaseType.MySql)
                     {
-                        MySqlCommand cmd = new MySqlCommand();
-                        cmd.CommandText = activeSPEntry.SPName;
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        foreach (MySqlParameter activeParameter in ((class_data_MySqlSPEntry)activeSPEntry).GetActiveParametersList())
-                            cmd.Parameters.Add(activeParameter);
-                        cmd.Connection = ((class_data_MySqlConnectionItem)activeconnection).ActiveConnection;
-                        MySqlDataAdapter sda = new MySqlDataAdapter(cmd);
-                        cmd.ExecuteNonQuery();
-                        return true;
+						try
+						{
+							MySqlCommand cmd = new MySqlCommand();
+							cmd.CommandText = activeSPEntry.SPName;
+							cmd.CommandType = CommandType.StoredProcedure;
+							foreach (MySqlParameter activeParameter in ((class_data_MySqlSPEntry)activeSPEntry).GetActiveParametersList())
+								cmd.Parameters.Add(activeParameter);
+							cmd.Connection = ((class_data_MySqlConnectionItem)activeconnection).ActiveConnection;
+							MySqlDataAdapter sda = new MySqlDataAdapter(cmd);
+							cmd.ExecuteNonQuery();
+							return true;
+						}
+						catch(Exception err)
+						{
+							return false;
+						}
                     }
                     else
                         return false;

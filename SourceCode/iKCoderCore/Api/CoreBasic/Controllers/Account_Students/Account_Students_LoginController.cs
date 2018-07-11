@@ -12,8 +12,8 @@ namespace CoreBasic.Controllers.Account_Students
 {
     [Produces("application/json")]
     [Route("api/Account_Students_Login")]
-    public class Account_Students_LoginController : ControllerBase_Std
-    {
+    public class Account_Students_LoginController : BaseController_CoreBasic
+	{
         [HttpGet]
         public string Action(string name, string pwd)
         {
@@ -21,27 +21,36 @@ namespace CoreBasic.Controllers.Account_Students
 			{
 				Dictionary<string, string> activeParams = new Dictionary<string, string>();
 				activeParams.Add("name", name);
-				activeParams.Add("password", pwd);
 				if (VerifyNotEmpty(activeParams))
 				{
-					InitApiConfigs();
+					InitApiConfigs(Global.GlobalDefines.SY_CONFIG_FILE);
+					ConnectDB(Global.GlobalDefines.DB_KEY_IKCODER_BASIC);
 					LoadSPS(Global.GlobalDefines.DB_SPSMAP_FILE);
 					DataTable dtUser = new DataTable();
-					dtUser = ExecuteSelectWithMixedConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams);
+					dtUser = ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams);
 					if (dtUser != null && dtUser.Rows.Count == 1)
 					{
 						string uid = string.Empty;
+						string password = string.Empty;
 						Data_dbDataHelper.GetColumnData(dtUser.Rows[0], "id", out uid);
-						Global.ItemAccountStudents activeAccountItem = Global.PoolsLogined.CreateNewItem(uid, name, pwd, "");
-						Response.Cookies.Append("token", activeAccountItem.token);
-						Global.PoolsLogined.push(activeAccountItem);
-						return MessageHelper.ExecuteSucessful();
+						Data_dbDataHelper.GetColumnData(dtUser.Rows[0], "password", out password);
+						if (password == pwd)
+						{
+							Global.ItemAccountStudents newItem = Global.ItemAccountStudents.CreateNewItem(uid, name, pwd, "");
+							Global.LoginServices.Push(newItem);
+							Response.Cookies.Append("student_token", newItem.token);
+							return MessageHelper.ExecuteSucessful();
+						}
+						else
+						{
+							return MessageHelper.ExecuteFalse();
+						}
 					}
 					else
 						return MessageHelper.ExecuteFalse();
 				}
 				else
-					return MessageHelper.ExecuteSucessful();
+					return MessageHelper.ExecuteFalse();
 			}
 			catch(Basic_Exceptions err)
 			{

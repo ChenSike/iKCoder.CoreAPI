@@ -1,0 +1,26 @@
+<root type="MySql">
+  <item name="spa_operation_course_basic">
+    <param name="_operation" type="nvarchar" length="40">
+    </param>
+    <param name="_course_name" type="varchar" length="20">
+    </param>
+    <param name="_id" type="int" length="11">
+    </param>
+    <param name="_isfree" type="varchar" length="1">
+    </param>
+    <param name="_lesson_code" type="varchar" length="20">
+    </param>
+    <param name="_lesson_title" type="varchar" length="45">
+    </param>
+  </item>
+  <item name="spa_operation_course_main">
+    <param name="_operation" type="nvarchar" length="40">
+    </param>
+    <param name="_id" type="int" length="11">
+    </param>
+    <param name="_name" type="varchar" length="20">
+    </param>
+    <param name="_title" type="varchar" length="45">
+    </param>
+  </item>
+</root>

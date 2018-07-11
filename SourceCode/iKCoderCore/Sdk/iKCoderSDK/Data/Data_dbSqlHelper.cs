@@ -336,12 +336,14 @@ namespace iKCoderSDK
 											XmlNode paramNode = Util_XmlOperHelper.CreateNode(SPMAPDOC, "param", "");
 											Util_XmlOperHelper.SetAttribute(paramNode, "name", "_"+column_name);
 											string[] typeInfo = column_type.Split('(');
-											if(typeInfo.Length>=2)
+											if (typeInfo.Length >= 2)
 											{
 												typeInfo[1] = typeInfo[1].Replace(")", "");
+												Util_XmlOperHelper.SetAttribute(paramNode, "type", typeInfo[0]);
+												Util_XmlOperHelper.SetAttribute(paramNode, "length", typeInfo[1]);
 											}
-											Util_XmlOperHelper.SetAttribute(paramNode, "type", typeInfo[0]);
-											Util_XmlOperHelper.SetAttribute(paramNode, "length", typeInfo[1]);
+											else
+												Util_XmlOperHelper.SetAttribute(paramNode, "type", typeInfo[0]);
 											spitemNode.AppendChild(paramNode);
 											if (!tmpSelectedColumsLst.Contains(column_name))
                                                 tmpSelectedColumsLst.Add(column_name);
@@ -467,7 +469,7 @@ namespace iKCoderSDK
                 else
                     return false;
             }
-            catch
+            catch(Exception err)
             {
                 return false;
             }
@@ -601,7 +603,7 @@ namespace iKCoderSDK
 							string param_name = Util_XmlOperHelper.GetAttrValue(paramNode, "name");
 							string param_type = Util_XmlOperHelper.GetAttrValue(paramNode, "type");
 							string param_length = Util_XmlOperHelper.GetAttrValue(paramNode, "length");
-							newMySqlSPEntry.SetNewParameter(param_name, Util_Data.ConventStrTOMySqlDbtye(param_type), ParameterDirection.Input, int.Parse(param_length), null);
+							newMySqlSPEntry.SetNewParameter(param_name, Util_Data.ConventStrTOMySqlDbtye(param_type), ParameterDirection.Input, int.Parse(string.IsNullOrEmpty(param_length) ? "0" : param_length), null);
 						}
 						result.Add(sp_name, newMySqlSPEntry);
 					}
