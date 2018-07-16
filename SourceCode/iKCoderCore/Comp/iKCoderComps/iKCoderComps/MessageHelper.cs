@@ -6,14 +6,17 @@ using System.Xml;
 using System.Data;
 using iKCoderSDK;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace iKCoderComps
 {
     public class MessageHelper
     {
+
         public static string ExecuteSucessful()
         {
-            return "<root><executed>true</executed></root>";
+			return "<root><executed>" + "true" + "</executed></root>";
         }
 
         public static string ExecuteSucessful(string MSGCODE, string MSG)

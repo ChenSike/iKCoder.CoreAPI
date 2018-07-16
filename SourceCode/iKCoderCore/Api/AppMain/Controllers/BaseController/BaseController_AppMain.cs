@@ -17,6 +17,20 @@ namespace AppMain.Controllers.BaseController
 		public static string ROOT_SERVER = "http://127.0.0.1/corebasic/api/";
 		public static string SYBOL_TOKEN_BASIC = "student_token";
 
+		public string RequestForString(string Url,bool takeToken = false)
+		{
+			if (takeToken)
+			{
+				string token = get_ClientToken(SYBOL_TOKEN_BASIC);
+				Url = Url + "?" + SYBOL_TOKEN_BASIC + "=" + token;
+				Util_NetServices netObj = new Util_NetServices();
+				string result = netObj.RequestWithGet(Url).ToString();
+				return result;
+			}
+			else
+				return string.Empty;
+		}
+
 		public bool VerifyToken()
 		{
 			string token = get_ClientToken(SYBOL_TOKEN_BASIC);

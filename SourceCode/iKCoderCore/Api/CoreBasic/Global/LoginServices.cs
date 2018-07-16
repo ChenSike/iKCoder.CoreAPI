@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
+using iKCoderSDK;
 
 namespace CoreBasic.Global
 {
@@ -69,6 +71,18 @@ namespace CoreBasic.Global
 			get;
 		}
 
+		public XmlDocument createXmlDoc()
+		{
+			XmlDocument source = new XmlDocument();
+			source.LoadXml("<root></root>");
+			XmlNode rootNode = source.SelectSingleNode("/root");
+			Util_XmlOperHelper.SetAttribute(rootNode, "name", name);
+			Util_XmlOperHelper.SetAttribute(rootNode, "regtime", regedtime.ToString());
+			Util_XmlOperHelper.SetAttribute(rootNode, "id", id);
+			Util_XmlOperHelper.SetAttribute(rootNode, "lastvisited", lastVisted.ToString());
+			return source;
+		}
+
 	}
 
 	public class LoginServices
@@ -99,14 +113,14 @@ namespace CoreBasic.Global
 			foreach(string token in Pool_Logined.Keys)
 			{
 				ItemAccountStudents activeItem = Pool_Logined[token];
-				if((activeItem.regedtime - DateTime.Now).Hours > SPAN_REG_HOURS)
+				if((DateTime.Now - activeItem.regedtime).Hours > SPAN_REG_HOURS)
 				{
 					lock(Pool_Logined)
 					{
 						Pool_Logined.Remove(activeItem.token);
 					}
 				}
-				else if((activeItem.lastVisted - DateTime.Now).Minutes>SPAN_EXPIRED_HOURS)
+				else if((DateTime.Now - activeItem.lastVisted).Minutes>SPAN_EXPIRED_HOURS)
 				{
 					lock (Pool_Logined)
 					{

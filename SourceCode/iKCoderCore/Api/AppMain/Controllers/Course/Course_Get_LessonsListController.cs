@@ -8,14 +8,15 @@ using iKCoderComps;
 using iKCoderSDK;
 using System.Data;
 
+
 namespace AppMain.Controllers.Course
 {
-	[Route("api/Course_Get_List")]
-	[ApiController]
-    public class Course_Get_ListController : BaseController.BaseController_AppMain
+    [Route("api/Course_Get_LessonsList")]
+    [ApiController]
+    public class Course_Get_LessonsListController : BaseController.BaseController_AppMain
     {
 		[HttpGet]
-		public ContentResult Action(string course_name)
+		public ContentResult Action()
 		{
 			try
 			{
@@ -23,9 +24,7 @@ namespace AppMain.Controllers.Course
 				{
 					InitApiConfigs(Global.GlobalDefines.SY_CONFIG_FILE);
 					ConnectDB(Global.GlobalDefines.DB_KEY_IKCODER_APPMAIN);
-					Dictionary<string, string> paramsForBasic = new Dictionary<string, string>();
-					paramsForBasic.Add("@course_name", course_name);
-					DataTable dtData = ExecuteSelectWithMixedConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_APPMAIN, Global.MapStoreProcedures.ikcoder_appmain.spa_operation_course_main, paramsForBasic);
+					DataTable dtData = ExecuteSelect(Global.GlobalDefines.DB_KEY_IKCODER_APPMAIN, Global.MapStoreProcedures.ikcoder_appmain.spa_operation_course_basic);
 					return Content(Data_dbDataHelper.ActionConvertDTtoXMLString(dtData));
 				}
 				else

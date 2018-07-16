@@ -10,12 +10,12 @@ using System.Data;
 
 namespace CoreBasic.Controllers.Account_Students
 {
-    [Produces("application/json")]
+    [Produces("application/text")]
     [Route("api/Account_Students_Login")]
     public class Account_Students_LoginController : BaseController_CoreBasic
 	{
         [HttpGet]
-        public string Action(string name, string pwd)
+        public ContentResult Action(string name, string pwd)
         {
 			try
 			{
@@ -39,22 +39,22 @@ namespace CoreBasic.Controllers.Account_Students
 							Global.ItemAccountStudents newItem = Global.ItemAccountStudents.CreateNewItem(uid, name, pwd, "");
 							Global.LoginServices.Push(newItem);
 							Response.Cookies.Append("student_token", newItem.token);
-							return MessageHelper.ExecuteSucessful();
+							return Content(MessageHelper.ExecuteSucessful());
 						}
 						else
 						{
-							return MessageHelper.ExecuteFalse();
+							return Content(MessageHelper.ExecuteFalse());
 						}
 					}
 					else
-						return MessageHelper.ExecuteFalse();
+						return Content(MessageHelper.ExecuteFalse());
 				}
 				else
-					return MessageHelper.ExecuteFalse();
+					return Content(MessageHelper.ExecuteFalse());
 			}
 			catch(Basic_Exceptions err)
 			{
-				return MessageHelper.ExecuteFalse();
+				return Content(MessageHelper.ExecuteFalse());
 			}
 			finally
 			{
