@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions;
+using iKCoderComps;
 
 
 namespace CoreBasic
@@ -29,7 +30,7 @@ namespace CoreBasic
 			{
 				o.IdleTimeout = TimeSpan.FromHours(4);
 			});
-
+			AppLoader.LoadConfiguration_AllowCros(ref services);
 			services.AddDistributedMemoryCache();
 			services.AddMvc();
 		}
