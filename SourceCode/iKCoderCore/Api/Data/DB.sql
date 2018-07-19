@@ -99,10 +99,6 @@ INSERT INTO `profile_students` VALUES (1,'test_1',NULL,NULL,NULL,NULL,NULL,NULL,
 UNLOCK TABLES;
 
 --
--- Dumping events for database 'ikcoder_basic'
---
-
---
 -- Dumping routines for database 'ikcoder_basic'
 --
 /*!50003 DROP PROCEDURE IF EXISTS `spa_operation_account_students` */;
@@ -213,7 +209,7 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-07-16 17:20:50
+-- Dump completed on 2018-07-17 18:35:56
 CREATE DATABASE  IF NOT EXISTS `ikcoder_appmain` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
 USE `ikcoder_appmain`;
 -- MySQL dump 10.13  Distrib 8.0.11, for Win64 (x86_64)
@@ -336,10 +332,6 @@ LOCK TABLES `titles_defined` WRITE;
 INSERT INTO `titles_defined` VALUES (1,'t_01_001','逻辑战士L1',0,'100'),(2,'t_01_002','逻辑战士L2',100,'300');
 /*!40000 ALTER TABLE `titles_defined` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'ikcoder_appmain'
---
 
 --
 -- Dumping routines for database 'ikcoder_appmain'
@@ -524,4 +516,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-07-16 17:20:51
+-- Dump completed on 2018-07-17 18:35:57

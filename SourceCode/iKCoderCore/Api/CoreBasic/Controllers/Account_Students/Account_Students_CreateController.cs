@@ -8,63 +8,63 @@ using iKCoderComps;
 using iKCoderSDK;
 using System.Data;
 
-namespace CoreBasic.Controllers
+namespace CoreBasic.Controllers.Account_Students
 {
-    [Produces("application/json")]
+    [Produces("application/text")]
     [Route("api/Account_Students_Create")]
-    public class Account_Students_CreateController : BaseController_CoreBasic
+    public class Account_Students_CreateController : ControllerBase_Std
 	{
         [HttpGet]
-        public string Action(string uid, string pwd, string status = "0", string level = "0")
+        public ContentResult actionResult(string uid, string pwd, string status = "0", string level = "0")
         {
 			try
 			{
 				Dictionary<string, string> activeParams = new Dictionary<string, string>();
 				activeParams.Add("@name", uid);
-				if (VerifyNotEmpty(activeParams))
+				if (_appLoader.VerifyNotEmpty(activeParams))
 				{
-					InitApiConfigs(Global.GlobalDefines.SY_CONFIG_FILE);
-					ConnectDB(Global.GlobalDefines.DB_KEY_IKCODER_BASIC);
-					LoadSPS(Global.GlobalDefines.DB_SPSMAP_FILE);
-					DataTable activeDataTable = ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams);
-					if (activeDataTable==null)
-						return MessageHelper.ExecuteFalse();
+					_appLoader.InitApiConfigs(Global.GlobalDefines.SY_CONFIG_FILE);
+					_appLoader.ConnectDB(Global.GlobalDefines.DB_KEY_IKCODER_BASIC);
+					_appLoader.LoadSPS(Global.GlobalDefines.DB_SPSMAP_FILE);
+					DataTable activeDataTable = _appLoader.ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams);
+					if (activeDataTable == null)
+						return Content(MessageHelper.ExecuteFalse());
 					else
 					{
-						if(activeDataTable.Rows.Count>0)
+						if (activeDataTable.Rows.Count > 0)
 						{
-							return MessageHelper.ExecuteFalse("400", "Account Existed");
+							return Content(MessageHelper.ExecuteFalse("400", "Account Existed"));
 						}
 					}
 					Dictionary<string, string> paramsMap_for_profle = new Dictionary<string, string>();
 					paramsMap_for_profle.Add("@uid", uid);
 					paramsMap_for_profle.Add("@password", pwd);
-					if (ExecuteInsert(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_profile_students, paramsMap_for_profle))
+					if (_appLoader.ExecuteInsert(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_profile_students, paramsMap_for_profle))
 					{
-						if (ExecuteInsert(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams))
+						if (_appLoader.ExecuteInsert(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams))
 						{
-							return MessageHelper.ExecuteSucessful();
+							return Content(MessageHelper.ExecuteSucessful());
 						}
 						else
 						{
-							return MessageHelper.ExecuteFalse();
+							return Content(MessageHelper.ExecuteFalse());
 						}
 					}
 					else
 					{
-						return MessageHelper.ExecuteFalse();
+						return Content(MessageHelper.ExecuteFalse());
 					}
 				}
 				else
-					return MessageHelper.ExecuteFalse();
+					return Content(MessageHelper.ExecuteFalse());
 			}
 			catch(Basic_Exceptions err)
 			{
-				return MessageHelper.ExecuteFalse();
+				return Content(MessageHelper.ExecuteFalse());
 			}
 			finally
 			{
-				CloseDB();
+				_appLoader.CloseDB();
 			}
         }
     }

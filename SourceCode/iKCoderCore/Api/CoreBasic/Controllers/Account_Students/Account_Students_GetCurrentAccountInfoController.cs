@@ -9,16 +9,16 @@ using iKCoderSDK;
 
 namespace CoreBasic.Controllers.Account_Students
 {
-    [Produces("application/json")]
+    [Produces("application/text")]
     [Route("api/Account_Students_GetCurrentAccountInfo")]
-    public class Account_Students_GetCurrentAccountInfoController : BaseController_CoreBasic
+    public class Account_Students_GetCurrentAccountInfoController : ControllerBase_Std
     {
 		[HttpGet]
-		public ContentResult Action()
+		public ContentResult actionResult()
 		{
-			if (verify_logined_token("student_token"))
+			if (Global.LoginServices.verify_logined_token(_appLoader. get_ClientToken(Request, "student_token")))
 			{
-				string token = get_ClientToken("student_token");
+				string token = _appLoader.get_ClientToken(Request, "student_token");
 				if (!string.IsNullOrEmpty(token))
 				{
 					Global.ItemAccountStudents activeStudentItem = Global.LoginServices.Pull(token);

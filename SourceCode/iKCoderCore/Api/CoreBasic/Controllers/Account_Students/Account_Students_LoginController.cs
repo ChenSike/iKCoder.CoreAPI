@@ -12,22 +12,22 @@ namespace CoreBasic.Controllers.Account_Students
 {
     [Produces("application/text")]
     [Route("api/Account_Students_Login")]
-    public class Account_Students_LoginController : BaseController_CoreBasic
+    public class Account_Students_LoginController : ControllerBase_Std
 	{
         [HttpGet]
-        public ContentResult Action(string name, string pwd)
+        public ContentResult actionResult(string name, string pwd)
         {
 			try
 			{
 				Dictionary<string, string> activeParams = new Dictionary<string, string>();
 				activeParams.Add("name", name);
-				if (VerifyNotEmpty(activeParams))
+				if (_appLoader.VerifyNotEmpty(activeParams))
 				{
-					InitApiConfigs(Global.GlobalDefines.SY_CONFIG_FILE);
-					ConnectDB(Global.GlobalDefines.DB_KEY_IKCODER_BASIC);
-					LoadSPS(Global.GlobalDefines.DB_SPSMAP_FILE);
+					_appLoader.InitApiConfigs(Global.GlobalDefines.SY_CONFIG_FILE);
+					_appLoader.ConnectDB(Global.GlobalDefines.DB_KEY_IKCODER_BASIC);
+					_appLoader.LoadSPS(Global.GlobalDefines.DB_SPSMAP_FILE);
 					DataTable dtUser = new DataTable();
-					dtUser = ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams);
+					dtUser = _appLoader.ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams);
 					if (dtUser != null && dtUser.Rows.Count == 1)
 					{
 						string uid = string.Empty;
@@ -58,7 +58,7 @@ namespace CoreBasic.Controllers.Account_Students
 			}
 			finally
 			{
-				CloseDB();
+				_appLoader.CloseDB();
 			}
         }
     }

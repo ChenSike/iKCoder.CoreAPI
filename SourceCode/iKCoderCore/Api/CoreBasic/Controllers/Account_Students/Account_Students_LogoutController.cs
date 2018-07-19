@@ -9,21 +9,21 @@ using iKCoderSDK;
 
 namespace CoreBasic.Controllers.Account_Students
 {
-	[Produces("application/json")]
+	[Produces("application/text")]
 	[Route("api/Account_Students_Logout")]
-	public class Account_Students_LogoutController : BaseController_CoreBasic
+	public class Account_Students_LogoutController : ControllerBase_Std
 	{
 		[HttpGet]
-		public string Action()
+		public ContentResult actionResult()
 		{
-			if (verify_logined_token("student_token"))
+			if (Global.LoginServices.verify_logined_token(_appLoader. get_ClientToken(Request,"student_token")))
 			{
 				Global.LoginServices.Clear();
-				return MessageHelper.ExecuteSucessful();
+				return Content(MessageHelper.ExecuteSucessful());
 			}
 			else
 			{
-				return MessageHelper.ExecuteFalse();
+				return Content(MessageHelper.ExecuteFalse());
 			}
 		}
 	}

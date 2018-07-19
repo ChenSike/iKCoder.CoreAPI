@@ -42,7 +42,7 @@ namespace AppMain.Controllers.Title
 							int currentExp = 0;
 							int.TryParse(strExp, out currentExp);
 							DataTable dtData = ExecuteSelect(Global.GlobalDefines.DB_KEY_IKCODER_APPMAIN, Global.MapStoreProcedures.ikcoder_appmain.spa_operation_titles_defined);
-							foreach(DataRow )
+							//foreach(DataRow )
 
 
 							return Content(Data_dbDataHelper.ActionConvertDTtoXMLString(dtData));

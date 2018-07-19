@@ -11,30 +11,30 @@ using iKCoderSDK;
 
 namespace CoreBasic.Controllers.Profiles_Students
 {
-    [Produces("application/json")]
+    [Produces("application/text")]
     [Route("api/Profiles_Students_SetHeader")]
-    public class Profiles_Students_SetHeaderController : BaseController_CoreBasic
+    public class Profiles_Students_SetHeaderController : ControllerBase_Std
 	{
 		[HttpPost]
-		public string Action()
+		public ContentResult actionResult()
 		{
 			try
 			{
-				if (verify_logined_token("student_token"))
+				if (Global.LoginServices.verify_logined_token(_appLoader. get_ClientToken(Request, "student_token")))
 				{
 					var files = Request.Form.Files;
 					long fileSize = files.Sum(f => f.Length);
 					List<string> filePathResultList = new List<string>();
 					foreach (var file in files)
 					{
-						Global.ItemAccountStudents activeItem = get_SessionObject("student_item") as Global.ItemAccountStudents;
+						Global.ItemAccountStudents activeItem = _appLoader. get_SessionObject(HttpContext.Session, "student_item") as Global.ItemAccountStudents;
 						string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.ToString().Trim();
 						string filePath = iKCoderComps.FileStore.GetImageStore(activeItem.id);
 						fileName = Guid.NewGuid() + "." + fileName.Split('.')[1];
 						Dictionary<string, string> paramsMap_for_profle = new Dictionary<string, string>();
 						paramsMap_for_profle.Add("@id", activeItem.id);
 						paramsMap_for_profle.Add("@header", fileName);
-						if (ExecuteUpdate(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_profile_students, paramsMap_for_profle))
+						if (_appLoader.ExecuteUpdate(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_profile_students, paramsMap_for_profle))
 						{							
 							string fileFullName = filePath + fileName;
 							using (FileStream fs = System.IO.File.Create(fileFullName))
@@ -45,23 +45,23 @@ namespace CoreBasic.Controllers.Profiles_Students
 						}
 						else
 						{
-							return MessageHelper.ExecuteFalse();
+							return Content(MessageHelper.ExecuteFalse());
 						}
 					}
-					return MessageHelper.ExecuteSucessful();
+					return Content(MessageHelper.ExecuteSucessful());
 				}
 				else
 				{
-					return MessageHelper.ExecuteFalse();
+					return Content(MessageHelper.ExecuteFalse());
 				}
 			}
 			catch(Basic_Exceptions err)
 			{
-				return MessageHelper.ExecuteFalse();
+				return Content(MessageHelper.ExecuteFalse());
 			}
 			finally
 			{
-				CloseDB();
+				_appLoader.CloseDB();
 			}
 		}
     }

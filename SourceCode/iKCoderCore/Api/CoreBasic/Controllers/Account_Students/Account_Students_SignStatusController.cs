@@ -11,12 +11,12 @@ namespace CoreBasic.Controllers.Account_Students
 {
 	[Produces("application/text")]
 	[Route("api/Account_Students_SignStatus")]
-	public class Account_Students_SignStatusController : BaseController_CoreBasic
+	public class Account_Students_SignStatusController : ControllerBase_Std
 	{
 		[HttpGet]
-		public ContentResult Action()
+		public ContentResult actionResult()
 		{
-			if(verify_logined_token("student_token"))
+			if(Global.LoginServices.verify_logined_token(_appLoader. get_ClientToken(Request, "student_token")))
 			{
 
 				return Content(MessageHelper.ExecuteSucessful());

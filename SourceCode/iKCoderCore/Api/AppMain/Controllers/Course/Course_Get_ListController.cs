@@ -21,11 +21,11 @@ namespace AppMain.Controllers.Course
 			{
 				if (VerifyToken())
 				{
-					InitApiConfigs(Global.GlobalDefines.SY_CONFIG_FILE);
-					ConnectDB(Global.GlobalDefines.DB_KEY_IKCODER_APPMAIN);
+					_appLoader.InitApiConfigs(Global.GlobalDefines.SY_CONFIG_FILE);
+					_appLoader.ConnectDB(Global.GlobalDefines.DB_KEY_IKCODER_APPMAIN);
 					Dictionary<string, string> paramsForBasic = new Dictionary<string, string>();
 					paramsForBasic.Add("@course_name", course_name);
-					DataTable dtData = ExecuteSelectWithMixedConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_APPMAIN, Global.MapStoreProcedures.ikcoder_appmain.spa_operation_course_main, paramsForBasic);
+					DataTable dtData = _appLoader.ExecuteSelectWithMixedConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_APPMAIN, Global.MapStoreProcedures.ikcoder_appmain.spa_operation_course_main, paramsForBasic);
 					return Content(Data_dbDataHelper.ActionConvertDTtoXMLString(dtData));
 				}
 				else

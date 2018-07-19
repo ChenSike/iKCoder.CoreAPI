@@ -10,35 +10,35 @@ using System.Data;
 
 namespace CoreBasic.Controllers.Account_Students
 {
-    [Produces("application/json")]
+    [Produces("application/text")]
     [Route("api/Account_Students_ChangePWD")]
-    public class Account_Students_ChangePWDController : BaseController_CoreBasic
+    public class Account_Students_ChangePWDController : ControllerBase_Std
 	{
 		[HttpPost]
-		public string Action(string oldpwd,string newpwd)
+		public ContentResult actionResult(string oldpwd,string newpwd)
 		{
-			if (verify_logined_token("student_token"))
+			if (Global.LoginServices.verify_logined_token(_appLoader.get_ClientToken(Request, "student_token")))
 			{
-				Global.ItemAccountStudents activeItem = get_SessionObject("student_item") as Global.ItemAccountStudents;
+				Global.ItemAccountStudents activeItem = _appLoader.get_SessionObject(HttpContext.Session, "student_item") as Global.ItemAccountStudents;
 				Dictionary<string, string> paramsMap_for_profle = new Dictionary<string, string>();
 				paramsMap_for_profle.Add("@id", activeItem.id);
 				paramsMap_for_profle.Add("@password", oldpwd);
-				DataTable dtData = ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_profile_students, paramsMap_for_profle);
+				DataTable dtData = _appLoader.ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_profile_students, paramsMap_for_profle);
 				if (dtData != null && dtData.Rows.Count > 0)
 				{
 					paramsMap_for_profle["@password"] = newpwd;
-					ExecuteUpdate(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_profile_students, paramsMap_for_profle);
-					return MessageHelper.ExecuteSucessful();
+					_appLoader.ExecuteUpdate(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_profile_students, paramsMap_for_profle);
+					return Content(MessageHelper.ExecuteSucessful());
 				}
 				else
 				{
-					return MessageHelper.ExecuteFalse();
+					return Content(MessageHelper.ExecuteFalse());
 				}
 				
 			}
 			else
 			{
-				return MessageHelper.ExecuteFalse(Global.MsgMap.MsgCodeMap[Global.MsgKeyMap.MsgKey_Login_Needed], Global.MsgMap.MsgContentMap[Global.MsgKeyMap.MsgKey_Login_Needed]);
+				return Content(MessageHelper.ExecuteFalse(Global.MsgMap.MsgCodeMap[Global.MsgKeyMap.MsgKey_Login_Needed], Global.MsgMap.MsgContentMap[Global.MsgKeyMap.MsgKey_Login_Needed]));
 			}
 		}
     }

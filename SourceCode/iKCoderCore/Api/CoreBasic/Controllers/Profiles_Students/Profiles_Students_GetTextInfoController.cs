@@ -4,25 +4,27 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using Microsoft.Net.Http.Headers;
 using iKCoderComps;
 using iKCoderSDK;
 using System.Data;
 
 namespace CoreBasic.Controllers.Profiles_Students
 {
-    [Produces("application/json")]
+    [Produces("application/text")]
     [Route("api/Profiles_Students_GetTextInfo")]
-    public class Profiles_Students_GetTextInfoController : BaseController_CoreBasic
+    public class Profiles_Students_GetTextInfoController : ControllerBase_Std
 	{
 		[HttpGet]
-		public string Action()
+		public ContentResult actionResult()
 		{
-			if(verify_logined_token("student_token"))
+			if(Global.LoginServices.verify_logined_token(_appLoader. get_ClientToken(Request, "student_token")))
 			{
-				Global.ItemAccountStudents activeItem = get_SessionObject("student_item") as Global.ItemAccountStudents;
+				Global.ItemAccountStudents activeItem = _appLoader. get_SessionObject(HttpContext.Session,"student_item") as Global.ItemAccountStudents;
 				Dictionary<string, string> paramsMap_for_profle = new Dictionary<string, string>();
 				paramsMap_for_profle.Add("@id", activeItem.id);
-				DataTable dtData = ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_profile_students, paramsMap_for_profle);
+				DataTable dtData = _appLoader.ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_profile_students, paramsMap_for_profle);
 				if (dtData!=null && dtData.Rows.Count>0)
 				{
 					string nickName = string.Empty;
@@ -46,16 +48,16 @@ namespace CoreBasic.Controllers.Profiles_Students
 						resturnMap.Add("state", state);
 					if (!string.IsNullOrEmpty(city))
 						resturnMap.Add("city", city);
-					return MessageHelper.ExecuteSucessfulDoc(resturnMap);
+					return Content(MessageHelper.ExecuteSucessfulDoc(resturnMap));
 				}
 				else
 				{
-					return MessageHelper.ExecuteFalse();
+					return Content(MessageHelper.ExecuteFalse());
 				}
 			}
 			else
 			{
-				return MessageHelper.ExecuteFalse(Global.MsgMap.MsgCodeMap[Global.MsgKeyMap.MsgKey_Login_Needed], Global.MsgMap.MsgContentMap[Global.MsgKeyMap.MsgKey_Login_Needed]);
+				return Content(MessageHelper.ExecuteFalse(Global.MsgMap.MsgCodeMap[Global.MsgKeyMap.MsgKey_Login_Needed], Global.MsgMap.MsgContentMap[Global.MsgKeyMap.MsgKey_Login_Needed]));
 			}
 		}
     }

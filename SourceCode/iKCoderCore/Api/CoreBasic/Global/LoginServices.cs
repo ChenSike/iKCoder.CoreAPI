@@ -91,6 +91,11 @@ namespace CoreBasic.Global
 		public static int SPAN_EXPIRED_HOURS = 4;
 		public static int SPAN_REG_HOURS = 24;
 
+		public static bool verify_logined_token(string tokenFromClient)
+		{			
+			return Global.LoginServices.Verify(tokenFromClient);
+		}
+
 		public static void Flush(ref ItemAccountStudents ActiveItem)
 		{
 			if(ActiveItem!=null)
