@@ -16,14 +16,13 @@ namespace CoreBasic.Controllers.Account_Students
 	public class Account_Students_CreateWithCheckCodeController : ControllerBase_Std
 	{
 		[HttpGet]
-		public string actionResult(string uid, string pwd, string checkcode, string status = "0", string level = "0")
+		public ContentResult actionResult(string uid, string pwd, string checkcode, string status = "0", string level = "0")
 		{
 			try
 			{
 				Dictionary<string, string> activeParams = new Dictionary<string, string>();
 				activeParams.Add("name", uid);
-				activeParams.Add("password", pwd);
-				
+
 				if (_appLoader.VerifyNotEmpty(activeParams))
 				{
 					_appLoader.InitApiConfigs(Global.GlobalDefines.SY_CONFIG_FILE);
@@ -34,36 +33,38 @@ namespace CoreBasic.Controllers.Account_Students
 					}
 					else
 					{
-						return MessageHelper.ExecuteFalse("400", "null checkcode");
+						return Content(MessageHelper.ExecuteFalse("400", "null checkcode"));
 					}
 					if (checkcodefromsession != checkcode)
 					{
-						return MessageHelper.ExecuteFalse("400", "wrong checkcode");
+						return Content(MessageHelper.ExecuteFalse("400", "wrong checkcode"));
 					}
 					_appLoader.ConnectDB(Global.GlobalDefines.DB_KEY_IKCODER_BASIC);
 					_appLoader.LoadSPS(Global.GlobalDefines.DB_SPSMAP_FILE);
 					DataTable activeDataTable = _appLoader.ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams);
-					_appLoader.CloseDB();
 					if (activeDataTable == null)
-						return MessageHelper.ExecuteFalse();
+						return Content(MessageHelper.ExecuteFalse());
 					else
 					{
 						if (activeDataTable.Rows.Count > 0)
 						{
-							return MessageHelper.ExecuteFalse("400", "Account Existed");
+							return Content(MessageHelper.ExecuteFalse("400", "Account Existed"));
 						}
 					}
+					activeParams.Add("password", pwd);
+					activeParams.Add("status", status);
+					activeParams.Add("type", level);
 					if (_appLoader.ExecuteInsert(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams))
-						return MessageHelper.ExecuteSucessful();
+						return Content(MessageHelper.ExecuteSucessful());
 					else
-						return MessageHelper.ExecuteFalse();
+						return Content(MessageHelper.ExecuteFalse());
 				}
 				else
-					return MessageHelper.ExecuteFalse();
+					return Content(MessageHelper.ExecuteFalse());
 			}
 			catch (Basic_Exceptions err)
 			{
-				return MessageHelper.ExecuteFalse();
+				return Content(MessageHelper.ExecuteFalse());
 			}
 			finally
 			{
