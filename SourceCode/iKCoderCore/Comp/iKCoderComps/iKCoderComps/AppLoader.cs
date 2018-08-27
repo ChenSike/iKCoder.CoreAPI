@@ -15,6 +15,8 @@ using System.Xml;
 using System.Data;
 using MySql.Data;
 using Microsoft.AspNetCore.Cors;
+using System.IO;
+using System.Text;
 
 
 namespace iKCoderComps
@@ -267,6 +269,15 @@ namespace iKCoderComps
 				tokenFromClient = GetQueryParam(httpRequest, tokenname);
 			}
 			return tokenFromClient;
+		}
+
+		public string get_PostData(HttpRequest httpRequest)
+		{
+			Stream stream = httpRequest.Body;
+			byte[] buffer = new byte[httpRequest.ContentLength.Value];
+			stream.Read(buffer, 0, buffer.Length);
+			string result = Encoding.UTF8.GetString(buffer);
+			return result;
 		}
 
 	}

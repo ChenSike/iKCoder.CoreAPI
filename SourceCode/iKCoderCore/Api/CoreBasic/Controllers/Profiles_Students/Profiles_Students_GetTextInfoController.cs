@@ -16,28 +16,34 @@ namespace CoreBasic.Controllers.Profiles_Students
     [Route("api/Profiles_Students_GetTextInfo")]
     public class Profiles_Students_GetTextInfoController : ControllerBase_Std
 	{
+		[ServiceFilter(typeof(Filter.Filter_InitServices))]
+		[ServiceFilter(typeof(Filter.Filter_ConnectDB))]
+		[ServiceFilter(typeof(Filter.Filter_UserAuthrization))]
 		[HttpGet]
 		public ContentResult actionResult()
 		{
-			if(Global.LoginServices.verify_logined_token(_appLoader. get_ClientToken(Request, "student_token")))
+			try
 			{
-				Global.ItemAccountStudents activeItem = _appLoader. get_SessionObject(HttpContext.Session,"student_item") as Global.ItemAccountStudents;
+				string token = _appLoader.get_ClientToken(Request, "student_token");
+				Global.ItemAccountStudents activeItem = Global.LoginServices.Pull(token);
 				Dictionary<string, string> paramsMap_for_profle = new Dictionary<string, string>();
-				paramsMap_for_profle.Add("@id", activeItem.id);
+				paramsMap_for_profle.Add("@uid", activeItem.name);
 				DataTable dtData = _appLoader.ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_profile_students, paramsMap_for_profle);
-				if (dtData!=null && dtData.Rows.Count>0)
+				if (dtData != null && dtData.Rows.Count > 0)
 				{
 					string nickName = string.Empty;
 					string birthday = string.Empty;
 					string country = string.Empty;
 					string state = string.Empty;
 					string city = string.Empty;
+					string realname = string.Empty;
 					Dictionary<string, string> resturnMap = new Dictionary<string, string>();
 					Data_dbDataHelper.GetColumnData(dtData.Rows[0], "nickname", out nickName);
 					Data_dbDataHelper.GetColumnData(dtData.Rows[0], "birthday", out birthday);
 					Data_dbDataHelper.GetColumnData(dtData.Rows[0], "country", out country);
 					Data_dbDataHelper.GetColumnData(dtData.Rows[0], "state", out state);
 					Data_dbDataHelper.GetColumnData(dtData.Rows[0], "city", out city);
+					Data_dbDataHelper.GetColumnData(dtData.Rows[0], "realname", out realname);
 					if (!string.IsNullOrEmpty(nickName))
 						resturnMap.Add("nickname", nickName);
 					if (!string.IsNullOrEmpty(birthday))
@@ -48,6 +54,8 @@ namespace CoreBasic.Controllers.Profiles_Students
 						resturnMap.Add("state", state);
 					if (!string.IsNullOrEmpty(city))
 						resturnMap.Add("city", city);
+					if (!string.IsNullOrEmpty(realname))
+						resturnMap.Add("realname", city);
 					return Content(MessageHelper.ExecuteSucessfulDoc(resturnMap));
 				}
 				else
@@ -55,9 +63,9 @@ namespace CoreBasic.Controllers.Profiles_Students
 					return Content(MessageHelper.ExecuteFalse());
 				}
 			}
-			else
+			catch (Basic_Exceptions err)
 			{
-				return Content(MessageHelper.ExecuteFalse(Global.MsgMap.MsgCodeMap[Global.MsgKeyMap.MsgKey_Login_Needed], Global.MsgMap.MsgContentMap[Global.MsgKeyMap.MsgKey_Login_Needed]));
+				return Content(MessageHelper.ExecuteFalse());
 			}
 		}
     }

@@ -14,6 +14,11 @@ namespace AppMain.Global
 			public const string spa_operation_course_main = "spa_operation_course_main";
 			public const string spa_operation_titles_defined = "spa_operation_titles_defined";
 			public const string spa_operation_students_exp = "spa_operation_students_exp";
+			public const string spa_operation_students_checkon = "spa_operation_students_checkon";
+			public const string spa_operation_students_coursepackage = "spa_operation_students_coursepackage";
+			public const string spa_operation_students_mood = "spa_operation_students_mood";
+			public const string spa_operation_course_exp = "spa_operation_course_exp";
+			public const string spa_operation_students_lessonstatus = "spa_operation_students_lessonstatus";
 		}				
     }
 }

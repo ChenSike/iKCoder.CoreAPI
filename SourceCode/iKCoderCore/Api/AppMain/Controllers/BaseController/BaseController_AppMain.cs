@@ -21,7 +21,7 @@ namespace AppMain.Controllers.BaseController
 		{
 			if (takeToken)
 			{
-				string token = get_ClientToken(SYBOL_TOKEN_BASIC);
+				string token = _appLoader.get_ClientToken(Request,SYBOL_TOKEN_BASIC);
 				Url = Url + "?" + SYBOL_TOKEN_BASIC + "=" + token;
 				Util_NetServices netObj = new Util_NetServices();
 				string result = netObj.RequestWithGet(Url).ToString();
@@ -31,9 +31,35 @@ namespace AppMain.Controllers.BaseController
 				return string.Empty;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns>
+		/// 1.name
+		/// 2.regtime
+		/// 3.id
+		/// 4.lastvisited
+		/// </returns>
+		public string GetAccountInfoFromBasicController(string attrname)
+		{
+			if (string.IsNullOrEmpty(attrname))
+				return string.Empty;
+			else
+			{
+
+				string Url = ROOT_SERVER + "Account_Students_GetCurrentAccountInfo";
+				string result = RequestForString(Url, true);
+				XmlDocument resultDoc = new XmlDocument();
+				resultDoc.LoadXml(result);
+				XmlNode rootNode = resultDoc.SelectSingleNode("/root");
+				string returnResult = Util_XmlOperHelper.GetAttrValue(rootNode, attrname);
+				return returnResult;
+			}
+		}
+
 		public bool VerifyToken()
 		{
-			string token = get_ClientToken(SYBOL_TOKEN_BASIC);
+			string token = _appLoader.get_ClientToken(Request,SYBOL_TOKEN_BASIC);
 			if(token==string.Empty)
 			{
 				return false;

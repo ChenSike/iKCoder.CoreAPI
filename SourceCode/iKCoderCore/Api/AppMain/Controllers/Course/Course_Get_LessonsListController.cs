@@ -11,34 +11,27 @@ using System.Data;
 
 namespace AppMain.Controllers.Course
 {
-    [Route("api/Course_Get_LessonsList")]
+    [Route("api/course_get_lessonslist")]
     [ApiController]
     public class Course_Get_LessonsListController : BaseController.BaseController_AppMain
     {
+		[ServiceFilter(typeof(AppMain.Filter.Filter_InitServices))]
+		[ServiceFilter(typeof(AppMain.Filter.Filter_ConnectDB))]
+		[ServiceFilter(typeof(AppMain.Filter.Filter_TokenVerify))]
 		[HttpGet]
-		public ContentResult Action()
+		public ContentResult Action(string course_name)
 		{
 			try
 			{
-				if (VerifyToken())
-				{
-					InitApiConfigs(Global.GlobalDefines.SY_CONFIG_FILE);
-					ConnectDB(Global.GlobalDefines.DB_KEY_IKCODER_APPMAIN);
-					DataTable dtData = ExecuteSelect(Global.GlobalDefines.DB_KEY_IKCODER_APPMAIN, Global.MapStoreProcedures.ikcoder_appmain.spa_operation_course_basic);
-					return Content(Data_dbDataHelper.ActionConvertDTtoXMLString(dtData));
-				}
-				else
-				{
-					return Content(MessageHelper.ExecuteFalse(Global.MsgMap.MsgCodeMap[Global.MsgKeyMap.MsgKey_Login_Needed], Global.MsgMap.MsgContentMap[Global.MsgKeyMap.MsgKey_Login_Needed]));
-				}
+				Dictionary<string, string> paramsForBasic = new Dictionary<string, string>();
+				paramsForBasic.Add("@course_name", course_name);
+				List<string> lstCourses = new List<string>();
+				DataTable dtData = _appLoader.ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_APPMAIN, Global.MapStoreProcedures.ikcoder_appmain.spa_operation_course_basic, paramsForBasic);
+				return Content(Data_dbDataHelper.ActionConvertDTtoXMLString(dtData));
 			}
 			catch
 			{
 				return Content(MessageHelper.ExecuteFalse(Global.MsgMap.MsgCodeMap[Global.MsgKeyMap.MsgKey_Fetch_Error], Global.MsgMap.MsgContentMap[Global.MsgKeyMap.MsgKey_Fetch_Error]));
-			}
-			finally
-			{
-				CloseDB();
 			}
 		}
     }

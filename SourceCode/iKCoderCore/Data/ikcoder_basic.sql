@@ -30,8 +30,9 @@ CREATE TABLE `account_students` (
   `password` varchar(20) DEFAULT NULL,
   `status` varchar(2) DEFAULT '0',
   `type` varchar(2) DEFAULT '0',
+  `realname` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,8 +41,108 @@ CREATE TABLE `account_students` (
 
 LOCK TABLES `account_students` WRITE;
 /*!40000 ALTER TABLE `account_students` DISABLE KEYS */;
-INSERT INTO `account_students` VALUES (1,'test','12345678',NULL,NULL),(5,'test_1',NULL,NULL,NULL);
+INSERT INTO `account_students` VALUES (5,'test_1','12345678',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `account_students` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `groupmessages_students`
+--
+
+DROP TABLE IF EXISTS `groupmessages_students`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `groupmessages_students` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `from` varchar(45) DEFAULT NULL,
+  `title` varchar(45) DEFAULT NULL,
+  `tolist` longblob,
+  `isremoved` varchar(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `groupmessages_students`
+--
+
+LOCK TABLES `groupmessages_students` WRITE;
+/*!40000 ALTER TABLE `groupmessages_students` DISABLE KEYS */;
+/*!40000 ALTER TABLE `groupmessages_students` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `message_students`
+--
+
+DROP TABLE IF EXISTS `message_students`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `message_students` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `from` varchar(45) DEFAULT NULL,
+  `to` varchar(45) DEFAULT NULL,
+  `content` longblob,
+  `isremoved` varchar(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `message_students`
+--
+
+LOCK TABLES `message_students` WRITE;
+/*!40000 ALTER TABLE `message_students` DISABLE KEYS */;
+/*!40000 ALTER TABLE `message_students` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `messages_students`
+--
+
+DROP TABLE IF EXISTS `messages_students`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `messages_students` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `from` varchar(45) DEFAULT NULL,
+  `to` varchar(45) DEFAULT NULL,
+  `lastupdate` varchar(45) DEFAULT NULL,
+  `content` longblob,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `messages_students`
+--
+
+LOCK TABLES `messages_students` WRITE;
+/*!40000 ALTER TABLE `messages_students` DISABLE KEYS */;
+/*!40000 ALTER TABLE `messages_students` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payment_students`
+--
+
+DROP TABLE IF EXISTS `payment_students`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `payment_students` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `payment_students`
+--
+
+LOCK TABLES `payment_students` WRITE;
+/*!40000 ALTER TABLE `payment_students` DISABLE KEYS */;
+/*!40000 ALTER TABLE `payment_students` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -72,8 +173,59 @@ CREATE TABLE `profile_students` (
 
 LOCK TABLES `profile_students` WRITE;
 /*!40000 ALTER TABLE `profile_students` DISABLE KEYS */;
-INSERT INTO `profile_students` VALUES (1,'test_1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `profile_students` VALUES (1,'test_1','1','tom','1981-01-01',NULL,'china',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `profile_students` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `relations_students`
+--
+
+DROP TABLE IF EXISTS `relations_students`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `relations_students` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `puname` varchar(45) DEFAULT NULL,
+  `suname` varchar(45) DEFAULT NULL,
+  `accectped` varchar(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `relations_students`
+--
+
+LOCK TABLES `relations_students` WRITE;
+/*!40000 ALTER TABLE `relations_students` DISABLE KEYS */;
+/*!40000 ALTER TABLE `relations_students` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `signin_students`
+--
+
+DROP TABLE IF EXISTS `signin_students`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `signin_students` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uname` varchar(45) DEFAULT NULL,
+  `product` varchar(45) DEFAULT NULL,
+  `sdate` varchar(45) DEFAULT NULL,
+  `stime` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `signin_students`
+--
+
+LOCK TABLES `signin_students` WRITE;
+/*!40000 ALTER TABLE `signin_students` DISABLE KEYS */;
+/*!40000 ALTER TABLE `signin_students` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -181,6 +333,48 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `spa_operation_relations_students` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spa_operation_relations_students`(_operation varchar(40),_accectped varchar(1),_id int(11),_puname varchar(45),_suname varchar(45))
+BEGIN
+DECLARE tmpsql VARCHAR(800);
+if _operation='select' then
+select * from relations_students;
+elseif _operation='insert' then
+insert into ikcoder_basic.relations_students(accectped,puname,suname) values(_accectped,_puname,_suname);
+elseif _operation='update' and _accectped IS NOT NULL then
+update relations_students set accectped = _accectped where id = _id;
+elseif _operation='update' and _puname IS NOT NULL then
+update relations_students set puname = _puname where id = _id;
+elseif _operation='update' and _suname IS NOT NULL then
+update relations_students set suname = _suname where id = _id;
+elseif _operation='selectmixed'then
+select * from relations_students where accectped = IFNULL(_accectped,accectped) and id = IFNULL(_id,id) and puname = IFNULL(_puname,puname) and suname = IFNULL(_suname,suname);
+elseif _operation='delete' then
+delete from relations_students where id = _id;
+elseif _operation='deletecondition' then
+delete from relations_students where accectped = _accectped or id = _id or puname = _puname or suname = _suname;
+elseif _operation='deletemixed'then
+select * from relations_students where accectped = IFNULL(_accectped,accectped) and id = IFNULL(_id,id) and puname = IFNULL(_puname,puname) and suname = IFNULL(_suname,suname);
+elseif _operation='selectkey' then
+select * from relations_students where id = _id;
+elseif _operation='selectcondition' then
+select * from relations_students where accectped = _accectped or id = _id or puname = _puname or suname = _suname;
+END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -191,4 +385,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-07-09  0:32:11
+-- Dump completed on 2018-08-13 12:15:16

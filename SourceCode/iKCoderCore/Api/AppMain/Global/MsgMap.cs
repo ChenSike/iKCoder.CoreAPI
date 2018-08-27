@@ -10,6 +10,7 @@ namespace AppMain.Global
 	{
 		public static string MsgKey_Login_Needed = "MsgKey_Login_Needed";
 		public static string MsgKey_Fetch_Error = "MsgKey_Fetch_Error";
+		public static string MsgKey_Request_Invalidate = "MsgKey_Request_Invalidate";
 	}
 
     public class MsgMap
@@ -23,6 +24,9 @@ namespace AppMain.Global
 			MsgContentMap.Add(MsgKeyMap.MsgKey_Login_Needed, "Login Needed");
 			MsgCodeMap.Add(MsgKeyMap.MsgKey_Fetch_Error, "400");
 			MsgContentMap.Add(MsgKeyMap.MsgKey_Fetch_Error, "Fail to fetch data.");
+			MsgCodeMap.Add(MsgKeyMap.MsgKey_Request_Invalidate, "410");
+			MsgContentMap.Add(MsgKeyMap.MsgKey_Request_Invalidate, "Invalidate Request Data.");
+
 		}
 
     }

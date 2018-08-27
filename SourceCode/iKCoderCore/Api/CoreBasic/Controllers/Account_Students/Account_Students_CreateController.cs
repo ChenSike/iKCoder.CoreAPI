@@ -14,7 +14,9 @@ namespace CoreBasic.Controllers.Account_Students
     [Route("api/Account_Students_Create")]
     public class Account_Students_CreateController : ControllerBase_Std
 	{
-        [HttpGet]
+		[ServiceFilter(typeof(Filter.Filter_InitServices))]
+		[ServiceFilter(typeof(Filter.Filter_ConnectDB))]
+		[HttpGet]
         public ContentResult actionResult(string uid, string pwd, string status = "0", string level = "0")
         {
 			try
@@ -22,10 +24,7 @@ namespace CoreBasic.Controllers.Account_Students
 				Dictionary<string, string> activeParams = new Dictionary<string, string>();
 				activeParams.Add("@name", uid);
 				if (_appLoader.VerifyNotEmpty(activeParams))
-				{
-					_appLoader.InitApiConfigs(Global.GlobalDefines.SY_CONFIG_FILE);
-					_appLoader.ConnectDB(Global.GlobalDefines.DB_KEY_IKCODER_BASIC);
-					_appLoader.LoadSPS(Global.GlobalDefines.DB_SPSMAP_FILE);
+				{					
 					DataTable activeDataTable = _appLoader.ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams);
 					if (activeDataTable == null)
 						return Content(MessageHelper.ExecuteFalse());
@@ -61,11 +60,7 @@ namespace CoreBasic.Controllers.Account_Students
 			catch(Basic_Exceptions err)
 			{
 				return Content(MessageHelper.ExecuteFalse());
-			}
-			finally
-			{
-				_appLoader.CloseDB();
-			}
+			}			
         }
     }
 }

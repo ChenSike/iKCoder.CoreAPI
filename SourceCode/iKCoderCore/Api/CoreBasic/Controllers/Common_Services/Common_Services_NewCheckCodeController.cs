@@ -22,4 +22,5 @@ namespace CoreBasic.Controllers.Common_Services
 			return File(streamMem.ToArray(), @"image/png");
 		}
     }
+
 }

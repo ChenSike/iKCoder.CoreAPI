@@ -7,6 +7,9 @@ namespace iKCoderComps
 {
     public static class FileStore
     {
+
+		public const string LocalStoreDriver = "c:\\";
+
 		static FileStore()
 		{
 			if (!Directory.Exists("storepool"))
@@ -22,22 +25,22 @@ namespace iKCoderComps
 
 		public static void VerifyUserStorItem(string userid)
 		{
-			if (!Directory.Exists("storepool\\" + GetUerStoreName(userid)))
-				Directory.CreateDirectory("\\storepool\\" + GetUerStoreName(userid));
-			if (!Directory.Exists("storepool\\" + GetUerStoreName(userid) + "\\images"))
-				Directory.CreateDirectory("storepool\\" + GetUerStoreName(userid) + "\\images");
-			if (!Directory.Exists("storepool\\" + GetUerStoreName(userid) + "\\data"))
-				Directory.CreateDirectory("storepool\\" + GetUerStoreName(userid) + "\\data");
+			if (!Directory.Exists(LocalStoreDriver + "storepool\\" + GetUerStoreName(userid)))
+				Directory.CreateDirectory(LocalStoreDriver + "\\storepool\\" + GetUerStoreName(userid));
+			if (!Directory.Exists(LocalStoreDriver + "storepool\\" + GetUerStoreName(userid) + "\\images\\"))
+				Directory.CreateDirectory(LocalStoreDriver + "storepool\\" + GetUerStoreName(userid) + "\\images\\");
+			if (!Directory.Exists(LocalStoreDriver + "storepool\\" + GetUerStoreName(userid) + "\\data\\"))
+				Directory.CreateDirectory(LocalStoreDriver + "storepool\\" + GetUerStoreName(userid) + "\\data\\");
 		}
 
 		public static string GetImageStore(string userid)
 		{
-			return "storepool\\" + GetUerStoreName(userid) + "\\images";
+			return LocalStoreDriver + "storepool\\" + GetUerStoreName(userid) + "\\images\\";
 		}
 
 		public static string GetDataStore(string userid)
 		{
-			return "storepool\\" + GetUerStoreName(userid) + "\\data";
+			return LocalStoreDriver + "storepool\\" + GetUerStoreName(userid) + "\\data\\";
 		}
 
     }

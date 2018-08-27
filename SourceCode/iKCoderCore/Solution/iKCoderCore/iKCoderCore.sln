@@ -7,36 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iKCoderSDK", "..\..\Sdk\iKC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreInit", "..\..\CoreInit\CoreInit\CoreInit.csproj", "{96EC7F83-D9E5-4AB3-B46A-94466B65C50C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "..\..\Api\Core\Core\Core.csproj", "{F8F85DD7-1FF6-4DC6-A320-2B3727781FB7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreM", "..\..\CoreM\CoreM\CoreM.csproj", "{EC5D4CF4-249F-44FE-8C21-C8E9C44BDB2E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreBasic", "..\..\Api\CoreBasic\CoreBasic.csproj", "{91D187A1-8707-41D7-9DA8-2D7AC1970EBC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iKCoderComps", "..\..\Comp\iKCoderComps\iKCoderComps\iKCoderComps.csproj", "{14F76E0B-B29D-4D0F-AB18-77716A25C03C}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "iKCoder", "http://localhost/iKCoder", "{66460A43-5773-46AC-AF31-A0DC258ECB18}"
-	ProjectSection(WebsiteProperties) = preProject
-		UseIISExpress = "false"
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		Debug.AspNetCompiler.VirtualPath = "/iKCoder"
-		Debug.AspNetCompiler.PhysicalPath = "..\..\..\..\..\iKCoder.WebApplications_V4\WebSite\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\iKCoder\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/iKCoder"
-		Release.AspNetCompiler.PhysicalPath = "..\..\..\..\..\iKCoder.WebApplications_V4\WebSite\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\iKCoder\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		SlnRelativePath = "..\..\..\..\..\iKCoder.WebApplications_V4\WebSite\"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppMain", "..\..\Api\AppMain\AppMain.csproj", "{0B623326-A50C-429E-A96B-3E302D81CE24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppMain", "..\..\Api\AppMain\AppMain.csproj", "{0B623326-A50C-429E-A96B-3E302D81CE24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,10 +29,6 @@ Global
 		{96EC7F83-D9E5-4AB3-B46A-94466B65C50C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96EC7F83-D9E5-4AB3-B46A-94466B65C50C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96EC7F83-D9E5-4AB3-B46A-94466B65C50C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F8F85DD7-1FF6-4DC6-A320-2B3727781FB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8F85DD7-1FF6-4DC6-A320-2B3727781FB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8F85DD7-1FF6-4DC6-A320-2B3727781FB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8F85DD7-1FF6-4DC6-A320-2B3727781FB7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EC5D4CF4-249F-44FE-8C21-C8E9C44BDB2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EC5D4CF4-249F-44FE-8C21-C8E9C44BDB2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC5D4CF4-249F-44FE-8C21-C8E9C44BDB2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -68,10 +41,6 @@ Global
 		{14F76E0B-B29D-4D0F-AB18-77716A25C03C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14F76E0B-B29D-4D0F-AB18-77716A25C03C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14F76E0B-B29D-4D0F-AB18-77716A25C03C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{66460A43-5773-46AC-AF31-A0DC258ECB18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{66460A43-5773-46AC-AF31-A0DC258ECB18}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{66460A43-5773-46AC-AF31-A0DC258ECB18}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{66460A43-5773-46AC-AF31-A0DC258ECB18}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{0B623326-A50C-429E-A96B-3E302D81CE24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0B623326-A50C-429E-A96B-3E302D81CE24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B623326-A50C-429E-A96B-3E302D81CE24}.Release|Any CPU.ActiveCfg = Release|Any CPU

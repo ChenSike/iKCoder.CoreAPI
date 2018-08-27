@@ -148,7 +148,7 @@ namespace CoreBasic.Global
 
 		public static ItemAccountStudents Pull(string token)
 		{
-			if (!Pool_Logined.ContainsKey(token))
+			if (Pool_Logined.ContainsKey(token))
 				return Pool_Logined[token];
 			else
 				return null;

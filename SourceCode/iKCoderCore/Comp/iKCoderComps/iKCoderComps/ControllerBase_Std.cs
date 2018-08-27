@@ -16,7 +16,7 @@ namespace iKCoderComps
     public class ControllerBase_Std:Controller
     {
 
-		protected AppLoader _appLoader = new AppLoader();
+		public AppLoader _appLoader = new AppLoader();
 
 	}
 }

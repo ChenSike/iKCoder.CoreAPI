@@ -13,18 +13,14 @@ namespace CoreBasic.Controllers.Account_Students
 	[Route("api/Account_Students_Logout")]
 	public class Account_Students_LogoutController : ControllerBase_Std
 	{
+		[ServiceFilter(typeof(Filter.Filter_InitServices))]
+		[ServiceFilter(typeof(Filter.Filter_ConnectDB))]
+		[ServiceFilter(typeof(Filter.Filter_UserAuthrization))]
 		[HttpGet]
 		public ContentResult actionResult()
 		{
-			if (Global.LoginServices.verify_logined_token(_appLoader. get_ClientToken(Request,"student_token")))
-			{
-				Global.LoginServices.Clear();
-				return Content(MessageHelper.ExecuteSucessful());
-			}
-			else
-			{
-				return Content(MessageHelper.ExecuteFalse());
-			}
+			Global.LoginServices.Clear();
+			return Content(MessageHelper.ExecuteSucessful());
 		}
 	}
 }

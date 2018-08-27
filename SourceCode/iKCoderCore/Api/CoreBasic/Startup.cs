@@ -33,6 +33,9 @@ namespace CoreBasic
 			AppLoader.LoadConfiguration_AllowCros(ref services);
 			services.AddDistributedMemoryCache();
 			services.AddMvc();
+			services.AddScoped<Filter.Filter_UserAuthrization>();
+			services.AddScoped<Filter.Filter_InitServices>();
+			services.AddScoped<Filter.Filter_ConnectDB>();
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

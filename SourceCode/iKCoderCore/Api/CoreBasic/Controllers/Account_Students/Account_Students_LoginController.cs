@@ -14,7 +14,9 @@ namespace CoreBasic.Controllers.Account_Students
     [Route("api/Account_Students_Login")]
     public class Account_Students_LoginController : ControllerBase_Std
 	{
-        [HttpGet]
+		[ServiceFilter(typeof(Filter.Filter_InitServices))]
+		[ServiceFilter(typeof(Filter.Filter_ConnectDB))]
+		[HttpGet]
         public ContentResult actionResult(string name, string pwd)
         {
 			try
@@ -23,9 +25,6 @@ namespace CoreBasic.Controllers.Account_Students
 				activeParams.Add("name", name);
 				if (_appLoader.VerifyNotEmpty(activeParams))
 				{
-					_appLoader.InitApiConfigs(Global.GlobalDefines.SY_CONFIG_FILE);
-					_appLoader.ConnectDB(Global.GlobalDefines.DB_KEY_IKCODER_BASIC);
-					_appLoader.LoadSPS(Global.GlobalDefines.DB_SPSMAP_FILE);
 					DataTable dtUser = new DataTable();
 					dtUser = _appLoader.ExecuteSelectWithConditionsReturnDT(Global.GlobalDefines.DB_KEY_IKCODER_BASIC, Global.MapStoreProcedures.ikcoder_basic.spa_operation_account_students, activeParams);
 					if (dtUser != null && dtUser.Rows.Count == 1)
@@ -55,10 +54,6 @@ namespace CoreBasic.Controllers.Account_Students
 			catch(Basic_Exceptions err)
 			{
 				return Content(MessageHelper.ExecuteFalse());
-			}
-			finally
-			{
-				_appLoader.CloseDB();
 			}
         }
     }
