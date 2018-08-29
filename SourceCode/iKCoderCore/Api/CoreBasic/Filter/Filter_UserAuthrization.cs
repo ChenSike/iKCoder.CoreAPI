@@ -19,7 +19,7 @@ namespace CoreBasic.Filter
 		public void OnActionExecuting(ActionExecutingContext context)
 		{
 			ControllerBase_Std Base_Controller = context.Controller as ControllerBase_Std;
-			if (Global.LoginServices.verify_logined_token(Base_Controller._appLoader.get_ClientToken(Request, "student_token")))
+			if (Global.LoginServices.verify_logined_token(Base_Controller._appLoader.get_ClientToken(context.HttpContext.Request, "student_token")))
 			{
 				return;
 			}

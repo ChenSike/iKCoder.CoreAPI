@@ -15,6 +15,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iKCoderComps", "..\..\Comp\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppMain", "..\..\Api\AppMain\AppMain.csproj", "{0B623326-A50C-429E-A96B-3E302D81CE24}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "VueJS", "http://localhost/VueJS", "{7F93525E-5CE5-419F-A019-32EB4BDE621A}"
+	ProjectSection(WebsiteProperties) = preProject
+		UseIISExpress = "false"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/VueJS"
+		Debug.AspNetCompiler.PhysicalPath = "..\..\..\..\..\..\Workspace\VueJS\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\VueJS\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/VueJS"
+		Release.AspNetCompiler.PhysicalPath = "..\..\..\..\..\..\Workspace\VueJS\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\VueJS\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "..\..\..\..\..\..\Workspace\VueJS\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +66,10 @@ Global
 		{0B623326-A50C-429E-A96B-3E302D81CE24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B623326-A50C-429E-A96B-3E302D81CE24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B623326-A50C-429E-A96B-3E302D81CE24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F93525E-5CE5-419F-A019-32EB4BDE621A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F93525E-5CE5-419F-A019-32EB4BDE621A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F93525E-5CE5-419F-A019-32EB4BDE621A}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F93525E-5CE5-419F-A019-32EB4BDE621A}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
